@@ -53,12 +53,6 @@ for (v in numeric_vars) {
     if (is.na(df[i, v])) {
       cty <- df[i, "country"]
       cmean <- country_means[[as.character(cty)]]
-      
-      if (is.na(cmean)) {
-        df[i, v] <- global_mean     # fallback globale
-      } else {
-        df[i, v] <- cmean
-      }
     }
   }
 }
