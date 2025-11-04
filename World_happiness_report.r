@@ -6,7 +6,6 @@ length(df)
 
 # Numero di righe e colonne (dimensioni del dataset)
 dim(df)
-
 # Nomi delle colonne per capire che variabili abbiamo
 names(df)
 
