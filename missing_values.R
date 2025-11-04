@@ -40,8 +40,8 @@ for (v in numeric_vars) {
       n_non_na <- sum(!is.na(x))
       perc_non_na <- n_non_na / n_total
       
-      # se meno del 70% dei valori è presente → NON imputare
-      if (perc_non_na < 0.70){
+      # se meno del 50% dei valori è presente → NON imputare
+      if (perc_non_na < 0.50){
         return(NA_real_)
       }
       
