@@ -27,10 +27,10 @@ unique(df$country)
 # Numero totale di paesi unici
 length(unique(df$country))
 
-
-
 # Verifica valori mancanti
 colSums(is.na(df))
+rows_with_na <- mean(!complete.cases(df)) * 100
+message(sprintf("Percentuale righe con almeno un NA: %.2f%%", rows_with_na))
 #La percezione di corruzione è palese da levare, generosity anche troppi.
 
 # Statistiche descrittive, primo quartile, mediana, media, terzo quartile, min e max e relativi NA
