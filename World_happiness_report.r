@@ -67,6 +67,6 @@ descrittive <- data.frame(
   Massimo = sapply(num_df, max, na.rm = TRUE)
 ) ##Qui però sono rimossi i NA
 
-# Visualizza la tabella delle statistiche
+# Visualizza la tabella delle statistichee
 print(descrittive)
-
+s
