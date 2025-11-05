@@ -31,4 +31,3 @@ legend("topright",
        col = c("black", "red"),
        bty = "n",
        cex = 0.9)
-
