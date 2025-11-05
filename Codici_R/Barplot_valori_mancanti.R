@@ -55,44 +55,46 @@ for(val in unique_vals){
 
 
 
-# 1. Calcolo del numero di NA per ogni colonna
+#Calcolo del numero di NA per ogni colonna
 missing_counts <- colSums(is.na(df))
 
-# 2. Creazione di un dataframe
+#Creazione dataframe
 missing_df <- data.frame(
   Variabile = names(missing_counts),
   Valori_Mancanti = missing_counts
 )
 
-# 3. Esclusione delle variabili standardizzate (quelle con "_sc")
+#Esclusione variabili standardizzate e ordinamento decrescente
 missing_df <- missing_df[!grepl("_sc$", missing_df$Variabile), ]
-
-# 4. Ordinamento decrescente
 missing_df <- missing_df[order(-missing_df$Valori_Mancanti), ]
 
-# 5. Scala di colori verde
-colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_df))
 
-# 6. Creazione barplot e salvataggio delle posizioni
+#Barplot
 bp <- barplot(missing_df$Valori_Mancanti,
-              names.arg = NA,          # disattiva nomi di default
+              names.arg = NA,
+              ylim = c(0, 150),
               col = colors_green,
               border = NA,
               main = "Distribuzione dei valori mancanti per variabile",
               ylab = "Numero di valori mancanti")
-# 7. Etichette inclinate sotto le colonne
+
+
 par(xpd = TRUE)
 text(x = bp,
-     y = par("usr")[3] - max(missing_df$Valori_Mancanti) * 0.05,  # piccolo margine sotto l’asse
+     y = par("usr")[3] - 10,           
      labels = missing_df$Variabile,
-     srt = 45,          # rotazione di 45°
+     srt = 15,                         
      adj = 1,
      cex = 0.7)
 par(xpd = FALSE)
 
-# 8. Aggiunta dei valori numerici sopra le colonne
+
 text(x = bp,
-     y = missing_df$Valori_Mancanti,
+     y = missing_df$Valori_Mancanti + 3,  
      labels = missing_df$Valori_Mancanti,
-     pos = 3, cex = 0.8, col = "black", font = 2)
+     cex = 0.8, 
+     col = "black", 
+     font = 2)
+
+
 
