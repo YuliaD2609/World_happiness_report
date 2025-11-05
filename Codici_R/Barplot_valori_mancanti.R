@@ -26,15 +26,37 @@ missing_by_country_initial <- missing_by_country_initial[missing_by_country_init
 missing_by_country_initial <- missing_by_country_initial[order(-missing_by_country_initial$total_missing), ]
 
 #scala di colori
-colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5" ))(nrow(missing_by_country_initial))
+colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
 
-barplot(missing_by_country_initial$total_missing,
-        names.arg = missing_by_country_initial$country,
-        las = 2,
-        main = "Totale valori mancanti per Paese",
-        ylab = "Numero di NA",
-        cex.names = 0.7,
-        col = colors_green)
+#barplot
+bp <- barplot(missing_by_country_initial$total_missing,
+              names.arg = missing_by_country_initial$country,
+              las = 2,
+              main = expression(bold("Totale valori mancanti per Paese")),
+              ylab = "Numero di NA",
+              cex.names = 0.7,
+              col = colors_green)
+
+# valori unici sopra le barre
+unique_vals <- unique(missing_by_country_initial$total_missing)
+
+for(val in unique_vals){
+  idx <- which(missing_by_country_initial$total_missing == val)
+  
+  # posizione centrale 
+  central_idx <- idx[ceiling(length(idx)/2)]
+  
+  # numero sulla barra centrale
+  text(x = bp[central_idx],
+       y = missing_by_country_initial$total_missing[central_idx] + 1,
+       labels = val,
+       cex = 0.4,
+       col = "black")
+}
+
+
+
+
 
 
 
