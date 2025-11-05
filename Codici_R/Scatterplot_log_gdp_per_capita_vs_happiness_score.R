@@ -1,27 +1,33 @@
-#creazione dataframe
+# 1. Lettura del dataset
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-library(ggplot2)
-
-# 2. Facciamo un filtro base (escludere NAs)
+# 2. Rimozione dei valori mancanti
 df_plot <- df[!is.na(df$log_gdp_per_capita) & !is.na(df$happiness_score), ]
 
-# 3. Scatterplot con linea di regressione
-ggplot(df_plot, aes(x = log_gdp_per_capita, y = happiness_score)) +
-  geom_point(alpha = 0.3, color = "#2c7fb8") +
-  geom_smooth(method = "lm", se = TRUE, color = "#084594", linetype = "dashed") +
-  labs(title = "Relazione tra PIL pro capite (log) e punteggio di felicità",
-       x = "Log PIL pro capite",
-       y = "Punteggio felicità") +
-  theme_minimal(base_size = 10) +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+# 3. Creazione scatterplot base
+plot(df_plot$log_gdp_per_capita,
+     df_plot$happiness_score,
+     main = "Relazione tra PIL pro capite (log) e punteggio di felicità",
+     xlab = "Log PIL pro capite",
+     ylab = "Punteggio di felicità",
+     col = rgb(44/255, 127/255, 184/255, 0.4),  # blu semi-trasparente
+     pch = 16,
+     cex = 1.1)
 
-# 4. Calcolo della correlazione e della regressione lineare
-cor_val <- cor(df_plot$log_gdp_per_capita, df_plot$happiness_score, use = "complete.obs")
+# 4. Aggiunta linea di regressione lineare
 lm_model <- lm(happiness_score ~ log_gdp_per_capita, data = df_plot)
-summary(lm_model)
+abline(lm_model, col = "#084594", lwd = 2, lty = 2)
 
-# 5. Stampa dei risultati
+# 5. Aggiunta griglia per leggibilità
+grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+
+# 6. Calcolo della correlazione
+cor_val <- cor(df_plot$log_gdp_per_capita,
+               df_plot$happiness_score,
+               use = "complete.obs")
+
+# 7. Output dei risultati
 cat("Correlazione (Pearson) tra log_gdp_per_capita e happiness_score:", round(cor_val, 3), "\n")
 cat("Risultati del modello lineare:\n")
 print(summary(lm_model))
+
