@@ -13,10 +13,11 @@ boxplot(happiness_score ~ factor(year),
         pch = 16,                 
         main = "Distribuzione del punteggio di felicità per anno",
         xlab = "Anno",
-        ylab = "Punteggio di felicità (Happiness Score)",
+        ylab = "Punteggio di felicità",
         cex.lab = 1.1,
         cex.axis = 0.8,
         las = 2)              
 
 grid(nx = NA, ny = NULL, col = "gray80", lty = "dotted")
 title(main = "Distribuzione del punteggio di felicità per anno", font.main = 2)
+

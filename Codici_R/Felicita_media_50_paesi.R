@@ -28,7 +28,7 @@ y_max <- max(top50$max) + 0.5
 bar_positions <- barplot(top50$mean,
                          names.arg = top50$country,
                          las = 2,
-                         col = "lightblue",
+                         col = "#56B117",
                          ylim = c(min(top50$min) - 0.5, y_max),
                          main = "Top 50 Paesi per Felicità Media (2005–2023)",
                          ylab = "Happiness Score",
