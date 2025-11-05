@@ -71,7 +71,7 @@ ggplot(missing_df, aes(x = reorder(Variabile, -Valori_Mancanti),
   geom_bar(stat = "identity") +
   geom_text(aes(label = Valori_Mancanti), vjust = -0.3, size = 3.5) +
   scale_fill_gradient(low = "#56B1F7", high = "#132B43") +
-  labs(title = "Distribuzione dei valori mancanti per variabile (solo originali)",
+  labs(title = "Distribuzione dei valori mancanti per variabile",
        x = "Variabile",
        y = "Numero di valori mancanti") +
   theme_minimal(base_size = 13) +
