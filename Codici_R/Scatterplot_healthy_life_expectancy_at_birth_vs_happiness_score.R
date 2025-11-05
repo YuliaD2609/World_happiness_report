@@ -10,7 +10,7 @@ plot(df_health$healthy_life_expectancy_at_birth,
      main = "Relazione tra aspettativa di vita sana e punteggio di felicità",
      xlab = "Aspettativa di vita sana alla nascita",
      ylab = "Punteggio di felicità",
-     col = rgb(27/255, 158/255, 119/255, 0.4),  # colore semi-trasparente
+     col = rgb(27/255, 158/255, 119/255, 0.4),
      pch = 16,
      cex = 0.5)
 
