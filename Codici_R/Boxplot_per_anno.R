@@ -1,20 +1,22 @@
-# Caricamento librerie
-library(ggplot2)
-
-#creazione dataframe
+# 1. Caricamento del dataset
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-# Rimuovo eventuali valori mancanti per sicurezza
+# 2. Rimuovo eventuali valori mancanti
 df_box <- df[!is.na(df$happiness_score) & !is.na(df$year), ]
 
-# Creazione del boxplot
-ggplot(df_box, aes(x = factor(year), y = happiness_score)) +
-  geom_boxplot(fill = "#5611F7", color = "#132B43", outlier.color = "red", outlier.shape = 16) +
-  labs(title = "Distribuzione del punteggio di felicità per anno",
-       x = "Anno",
-       y = "Punteggio di felicità (Happiness Score)") +
-  theme_minimal(base_size = 14) +
-  theme(
-    plot.title = element_text(face = "bold", hjust = 0.5),
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
+# 3. Creazione del boxplot base
+boxplot(happiness_score ~ factor(year),
+        data = df_box,
+        col = "#5611F7",
+        border = "#132B43",
+        outcol = "red",           # colore punti outlier
+        pch = 16,                 # forma outlier (punto pieno)
+        main = "Distribuzione del punteggio di felicità per anno",
+        xlab = "Anno",
+        ylab = "Punteggio di felicità (Happiness Score)",
+        cex.lab = 1.1,
+        cex.axis = 0.8,
+        las = 2)                  # ruota etichette anni per leggibilità
+
+grid(nx = NA, ny = NULL, col = "gray80", lty = "dotted")
+title(main = "Distribuzione del punteggio di felicità per anno", font.main = 2)
