@@ -1,7 +1,7 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 #skewness e curtosi per l'asimmetria
 #install.packages("moments")
-#library(moments)
+library(moments)
 
 sk <- skewness(df$happiness_score, na.rm = TRUE)
 kt <- kurtosis(df$happiness_score, na.rm = TRUE)
