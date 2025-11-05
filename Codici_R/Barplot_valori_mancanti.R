@@ -10,7 +10,7 @@ numeric_vars <- c("log_gdp_per_capita",
                   "negative_affect"
 )
 
-# Numero totale di NA per paese
+# Numero totale di missing values per paese
 na_mat <- is.na(df[, numeric_vars])
 
 missing_by_country_initial <- aggregate(na_mat,
@@ -18,10 +18,10 @@ missing_by_country_initial <- aggregate(na_mat,
                                         FUN=sum)
 missing_by_country_initial
 
-# somma NA su tutte le variabili numeriche
+# somma di missing values su tutte le variabili numeriche
 missing_by_country_initial$total_missing <- rowSums(missing_by_country_initial[numeric_vars])
 
-# ordine decrescente eliminando i paesi con 0 valori mancanti
+# ordine decrescente eliminando i paesi con 0 missing values
 missing_by_country_initial <- missing_by_country_initial[missing_by_country_initial$total_missing > 0, ]
 missing_by_country_initial <- missing_by_country_initial[order(-missing_by_country_initial$total_missing), ]
 
@@ -45,8 +45,6 @@ for(val in unique_vals){
   
   # posizione centrale 
   central_idx <- idx[ceiling(length(idx)/2)]
-  
-  # numero sulla barra centrale
   text(x = bp[central_idx],
        y = missing_by_country_initial$total_missing[central_idx] + 1,
        labels = val,
