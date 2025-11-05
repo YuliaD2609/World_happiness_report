@@ -57,47 +57,44 @@ for(val in unique_vals){
 
 
 
-
-
-
-
-
-
-
-
-# 1. Creazione dataframe
-df <- read.csv(file.choose(), header = TRUE, sep = ",")
-
-# 2. Caricamento librerie
-library(dplyr)
-library(ggplot2)
-
-# 3. Calcolo dei valori mancanti per colonna
+# 1. Calcolo del numero di NA per ogni colonna
 missing_counts <- colSums(is.na(df))
 
-# 4. Creazione del dataframe e rimozione delle colonne con "_sc"
+# 2. Creazione di un dataframe
 missing_df <- data.frame(
   Variabile = names(missing_counts),
   Valori_Mancanti = missing_counts
-) %>%
-  filter(!grepl("_sc$", Variabile)) %>%       # <-- Esclude le colonne standardizzate
-  arrange(desc(Valori_Mancanti))
+)
 
-# 5. Visualizzazione tabellare di controllo
-print(missing_df)
+# 3. Esclusione delle variabili standardizzate (quelle con "_sc")
+missing_df <- missing_df[!grepl("_sc$", missing_df$Variabile), ]
 
-# 6. Creazione del barplot
-ggplot(missing_df, aes(x = reorder(Variabile, -Valori_Mancanti),
-                       y = Valori_Mancanti,
-                       fill = Valori_Mancanti)) +
-  geom_bar(stat = "identity") +
-  geom_text(aes(label = Valori_Mancanti), vjust = -0.3, size = 3.5) +
-  scale_fill_gradient(low = "#56B1F7", high = "#132B43") +
-  labs(title = "Distribuzione dei valori mancanti per variabile",
-       x = "Variabile",
-       y = "Numero di valori mancanti") +
-  theme_minimal(base_size = 13) +
-  theme(axis.text.x = element_text(angle = 60, hjust = 1),
-        legend.position = "none",
-        plot.title = element_text(face = "bold", hjust = 0.5))
+# 4. Ordinamento decrescente
+missing_df <- missing_df[order(-missing_df$Valori_Mancanti), ]
+
+# 5. Scala di colori verde
+colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_df))
+
+# 6. Creazione barplot e salvataggio delle posizioni
+bp <- barplot(missing_df$Valori_Mancanti,
+              names.arg = NA,          # disattiva nomi di default
+              col = colors_green,
+              border = NA,
+              main = "Distribuzione dei valori mancanti per variabile",
+              ylab = "Numero di valori mancanti")
+# 7. Etichette inclinate sotto le colonne
+par(xpd = TRUE)
+text(x = bp,
+     y = par("usr")[3] - max(missing_df$Valori_Mancanti) * 0.05,  # piccolo margine sotto l’asse
+     labels = missing_df$Variabile,
+     srt = 45,          # rotazione di 45°
+     adj = 1,
+     cex = 0.7)
+par(xpd = FALSE)
+
+# 8. Aggiunta dei valori numerici sopra le colonne
+text(x = bp,
+     y = missing_df$Valori_Mancanti,
+     labels = missing_df$Valori_Mancanti,
+     pos = 3, cex = 0.8, col = "black", font = 2)
 
