@@ -14,11 +14,10 @@ plot(df_plot$log_gdp_per_capita,
      pch = 16,
      cex = 0.5)
 
-#Aggiunta linea di regressione lineare
+#regressione lineare
 lm_model <- lm(happiness_score ~ log_gdp_per_capita, data = df_plot)
 abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
 
-#Aggiunta griglia per leggibilità
 grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
 
 #Calcolo della correlazione
@@ -26,7 +25,6 @@ cor_val <- cor(df_plot$log_gdp_per_capita,
                df_plot$happiness_score,
                use = "complete.obs")
 
-#Output dei risultati
 cat("Correlazione (Pearson) tra log_gdp_per_capita e happiness_score:", round(cor_val, 3), "\n")
 cat("Risultati del modello lineare:\n")
 print(summary(lm_model))
