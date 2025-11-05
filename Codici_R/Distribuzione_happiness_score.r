@@ -1,25 +1,34 @@
-# ---------------------------------------------------------
-# ANALISI DELLA DISTRIBUZIONE DI HAPPINESS_SCORE
-# ---------------------------------------------------------
-#creazione dataframe
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-# 1. Controllo base dei dati
+#Controllo con summary
 summary(df$happiness_score)
 
-# 2. Istogramma della distribuzione della variabile target
-library(ggplot2)
+#Istogramma
+hist_data <- hist(df$happiness_score,
+                  breaks = 40,                         
+                  col = "#56B117",                     
+                  border = "white",                    
+                  main = "Distribuzione della variabile Happiness Score",
+                  xlab = "Punteggio di felicità",
+                  ylab = "Frequenza",
+                  cex.main = 1.3,
+                  cex.lab = 1,
+                  cex.axis = 0.9)
 
-ggplot(df, aes(x = happiness_score)) +
-  geom_histogram(binwidth = 0.3, 
-                 fill = "#56B117", 
-                 color = "white",
-                 alpha = 0.9) +
-  geom_density(aes(y = ..count.. * 0.3),   # sovrappone la densità all’istogramma
-               color = "red",
-               linewidth = 1) +
-  labs(title = "Distribuzione della variabile Happiness Score",
-       x = "Punteggio di felicità",
-       y = "Frequenza") +
-  theme_minimal(base_size = 13) +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+#Aggiunta curva 
+dens <- density(df$happiness_score)
+scale_factor <- max(hist_data$counts) / max(dens$y)     
+
+lines(dens$x, dens$y * scale_factor, 
+      col = "red", 
+      lwd = 2)
+
+legend("topright",
+       legend = c("Istogramma", "Densità"),
+       fill = c("#56B117", NA),
+       border = c("white", NA),
+       lty = c(NA, 1),
+       col = c("black", "red"),
+       bty = "n",
+       cex = 0.9)
+
