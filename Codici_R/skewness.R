@@ -18,3 +18,10 @@ plot(years, skew_by_year, type="b", pch=19, col="#238b45",
      xlab="Anno", ylab="Skewness")
 
 axis(1, at=years, labels=years, las=2, cex.axis=0.7)
+
+boxplot(skew_by_year,
+        main = "Boxplot della Skewness della felicità nel tempo",
+        ylab = "Skewness",
+        col = "#74c476",
+        border = "#00441b",
+        notch = TRUE)
