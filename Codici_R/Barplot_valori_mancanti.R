@@ -1,6 +1,47 @@
-# ---------------------------------------------------------
-# ANALISI DEI VALORI MANCANTI NEL DATASET
-# ---------------------------------------------------------
+df <- read.csv(file.choose(), header = TRUE, sep = ",")
+
+numeric_vars <- c("log_gdp_per_capita",
+                  "social_support",
+                  "healthy_life_expectancy_at_birth",
+                  "freedom_to_make_life_choices",
+                  "generosity",
+                  "perceptions_of_corruption",
+                  "positive_affect",
+                  "negative_affect"
+)
+
+# Numero totale di NA per paese
+na_mat <- is.na(df[, numeric_vars])
+
+missing_by_country_initial <- aggregate(na_mat,
+                                        by=list(country=df$country),
+                                        FUN=sum)
+missing_by_country_initial
+
+# somma NA su tutte le variabili numeriche
+missing_by_country_initial$total_missing <- rowSums(missing_by_country_initial[numeric_vars])
+
+# ordine decrescente eliminando i paesi con 0 valori mancanti
+missing_by_country_initial <- missing_by_country_initial[missing_by_country_initial$total_missing > 0, ]
+missing_by_country_initial <- missing_by_country_initial[order(-missing_by_country_initial$total_missing), ]
+
+#scala di colori
+colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5" ))(nrow(missing_by_country_initial))
+
+barplot(missing_by_country_initial$total_missing,
+        names.arg = missing_by_country_initial$country,
+        las = 2,
+        main = "Totale valori mancanti per Paese",
+        ylab = "Numero di NA",
+        cex.names = 0.7,
+        col = colors_green)
+
+
+
+
+
+
+
 
 # 1. Creazione dataframe
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
