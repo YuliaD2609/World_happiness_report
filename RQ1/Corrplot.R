@@ -22,6 +22,7 @@ corrplot(mat_corr, method = "color", type = "full", tl.srt = 30, tl.col = "black
 title("Heatmap della correlazione", line = 7)
 
 #matrice di scatterplot
-pairs(df[numeric_vars], cex = 0.2, pch = 20,
+pairs(df[vars], cex = 0.1, pch = 16, col="darkgreen",
       main = "Scatterplot matrix delle variabili")
+
 
