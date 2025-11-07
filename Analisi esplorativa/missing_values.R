@@ -62,6 +62,21 @@ post_n_missing <- sapply(df_imputed[numeric_vars], function(x) sum(is.na(x)))
 post_missing_df <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
 print(post_missing_df)
 
+
+df_gen <- read.csv(file.choose(), header = TRUE, sep = ",")
+
+#ricostruzione sc new csv
+df_gen$log_gdp_per_capita_sc <- scale(df_gen$log_gdp_per_capita)
+df_gen$social_support_sc <- scale(df_gen$social_support)
+df_gen$healthy_life_expectancy_at_birth_sc <- scale(df_gen$healthy_life_expectancy_at_birth)
+df_gen$freedom_to_make_life_choices_sc <- scale(df_gen$freedom_to_make_life_choices)
+df_gen$generosity_sc <- scale(df_gen$generosity)
+df_gen$perceptions_of_corruption_sc <- scale(df_gen$perceptions_of_corruption)
+df_gen$positive_affect_sc <- scale(df_gen$positive_affect)
+df_gen$negative_affect_sc <- scale(df_gen$negative_affect)
+
+sapply(df_gen[c(numeric_vars)], function(x) sum(is.na(x)))
+
 #ricostruzione sc
 df$log_gdp_per_capita_sc <- scale(df$log_gdp_per_capita)
 df$social_support_sc <- scale(df$social_support)
