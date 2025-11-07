@@ -51,3 +51,110 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
+
+
+
+bottom50 <- happiness_summary[order(happiness_summary$mean), ][1:50, ]
+
+# Imposta margini e intervallo Y
+par(mar = c(10, 5, 4, 2))
+y_min <- min(bottom50$min) - 0.2
+y_max <- max(bottom50$max) + 0.5
+
+# Barplot (dal più basso al più alto)
+bar_positions <- barplot(bottom50$mean,
+                         names.arg = bottom50$country,
+                         las = 2,
+                         col = colors_green,
+                         ylim = c(0, 9),
+                         main = expression(bold("Bottom 50 Paesi per Felicità Media (2005–2023)")),
+                         ylab = "Happiness Score",
+                         cex.names = 0.8)
+
+# Linee min/max
+lines(bar_positions, bottom50$min, type = "o", col = "red", lwd = 2, pch = 19)
+lines(bar_positions, bottom50$max, type = "o", col = "blue", lwd = 2, pch = 19)
+
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
+
+
+# -------------------------------------------------------------
+# 2️⃣ Analisi del log_gdp_per_capita per paese
+# -------------------------------------------------------------
+
+gdp_summary <- aggregate(log_gdp_per_capita ~ country, data = df,
+                         FUN = function(x) c(mean = mean(x, na.rm = TRUE),
+                                             min = min(x, na.rm = TRUE),
+                                             max = max(x, na.rm = TRUE)))
+
+# Trasformazione in dataframe leggibile
+gdp_summary <- data.frame(
+  country = gdp_summary$country,
+  mean = gdp_summary$log_gdp_per_capita[, "mean"],
+  min = gdp_summary$log_gdp_per_capita[, "min"],
+  max = gdp_summary$log_gdp_per_capita[, "max"]
+)
+
+# -------------------------------------------------------------
+# 3️⃣ 50 Paesi con log_gdp_per_capita medio più alto
+# -------------------------------------------------------------
+
+top50_gdp <- gdp_summary[order(-gdp_summary$mean), ][1:50, ]
+
+par(mar = c(10, 5, 4, 2))
+
+bar_positions <- barplot(top50_gdp$mean,
+                         names.arg = top50_gdp$country,
+                         las = 2,
+                         col = colors_green,
+                         ylim = c(0,14),
+                         main = expression(bold("Top 50 Paesi per log(GDP pro capite) medio")),
+                         ylab = "log(GDP pro capite)",
+                         cex.names = 0.8)
+
+lines(bar_positions, top50_gdp$min, type = "o", col = "red", lwd = 2, pch = 19)
+lines(bar_positions, top50_gdp$max, type = "o", col = "blue", lwd = 2, pch = 19)
+
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
+
+
+# -------------------------------------------------------------
+# 4️⃣ 50 Paesi con log_gdp_per_capita medio più basso
+# -------------------------------------------------------------
+
+bottom50_gdp <- gdp_summary[order(gdp_summary$mean), ][1:50, ]
+
+par(mar = c(10, 5, 4, 2))
+
+bar_positions <- barplot(bottom50_gdp$mean,
+                         names.arg = bottom50_gdp$country,
+                         las = 2,
+                         col = colors_green,
+                         ylim = c(0,15),
+                         main = expression(bold("Bottom 50 Paesi per log(GDP pro capite) medio")),
+                         ylab = "log(GDP pro capite)",
+                         cex.names = 0.8)
+
+lines(bar_positions, bottom50_gdp$min, type = "o", col = "red", lwd = 2, pch = 19)
+lines(bar_positions, bottom50_gdp$max, type = "o", col = "blue", lwd = 2, pch = 19)
+
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
+
