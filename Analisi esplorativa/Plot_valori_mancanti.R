@@ -98,3 +98,17 @@ text(x = bp,
 
 
 
+
+
+cor_df <- df %>% select(all_of(numeric_vars)) %>% cor(use="pairwise.complete.obs")
+print(cor_df)
+
+# heatmap della correlazione
+library(corrplot)
+corrplot::corrplot(cor_df, method="color", tl.cex=0.8)
+
+# scatter GDP vs happiness con smoothing
+plot(df$log_gdp_per_capita, df$happiness_score); lines(lowess(df$log_gdp_per_capita, df$happiness_score), col="red")
+
+
+
