@@ -354,7 +354,7 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
-# generosity bottom 50
+# generosity bottom
 par(mar = c(10, 5, 4, 2))
 
 bar_positions <- barplot(bottom50_generosity$mean,
