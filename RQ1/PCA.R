@@ -18,6 +18,10 @@ X_scaled <- scale(X_complete)
 
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
+#per determinare il contributo delle componenti
+round(pca$rotation, 3)
+
 summary(pca)
 # screeplot
-plot(pca_res, type = "l")
+plot(pca, type = "l")
+
