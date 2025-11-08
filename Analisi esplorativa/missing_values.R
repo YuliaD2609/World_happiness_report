@@ -76,3 +76,6 @@ df$positive_affect_sc <- scale(df$positive_affect)
 df$negative_affect_sc <- scale(df$negative_affect)
 
 sapply(df[c(numeric_vars)], function(x) sum(is.na(x)))
+
+
+#write.csv(df, "path/world_happiness_clean.csv", row.names = FALSE)
