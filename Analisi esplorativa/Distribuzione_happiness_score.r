@@ -6,6 +6,9 @@ freq_ass
 #frequenza relativa
 freq_rel <- prop.table(freq_abs)
 freq_rel
+#frequenza relativa cumulata
+freq_rel_cum <- cumsum(freq_rel)
+freq_rel_cum
 
 #Minimo, media, mediana, quantili
 summary(df$happiness_score)
@@ -23,6 +26,17 @@ barplot(freq_rel,
         ylab = "Frequenza relativa",
         las = 2,
         col = "#56B117")
+
+plot(freq_rel_cum,
+     type = "b",
+     pch = 19,
+     col = "#238B45",
+     xaxt = "n",
+     xlab = "Classi di Happiness Score",
+     ylab = "Frequenza relativa cumulata",
+     main = "Funzione di distribuzione empirica continua della Felicità")
+
+axis(1, at = 1:length(freq_rel_cum), labels = names(freq_rel_cum), las = 2, cex.axis = 0.6)
 
 
 #Istogramma
