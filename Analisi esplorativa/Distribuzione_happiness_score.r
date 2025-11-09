@@ -1,7 +1,29 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-#Controllo con summary
+#frequenza assoluta
+freq_ass <- table(cut(df$happiness_score, breaks = 40, right = FALSE))
+freq_ass
+#frequenza relativa
+freq_rel <- prop.table(freq_abs)
+freq_rel
+
+#Minimo, media, mediana, quantili
 summary(df$happiness_score)
+
+barplot(freq_ass,
+        main = "Distribuzione di frequenza assoluta del punteggio di felicità",
+        xlab = "Classi di Happiness Score",
+        ylab = "Frequenza assoluta",
+        las = 2,
+        col = "#56B117")
+
+barplot(freq_rel,
+        main = "Distribuzione di frequenza assoluta relativa del punteggio di felicità",
+        xlab = "Classi di Happiness Score",
+        ylab = "Frequenza relativa",
+        las = 2,
+        col = "#56B117")
+
 
 #Istogramma
 hist_data <- hist(df$happiness_score,
