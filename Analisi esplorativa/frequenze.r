@@ -4,7 +4,7 @@ df <- read.csv(file.choose(), header = TRUE, sep = ",")
 freq_ass <- table(cut(df$happiness_score, breaks = 40, right = FALSE))
 freq_ass
 #frequenza relativa
-freq_rel <- prop.table(freq_abs)
+freq_rel <- prop.table(freq_ass)
 freq_rel
 #frequenza relativa cumulata
 freq_rel_cum <- cumsum(freq_rel)
