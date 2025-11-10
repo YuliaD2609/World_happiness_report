@@ -25,3 +25,9 @@ boxplot(skew_by_year,
         col = "#74c476",
         border = "#00441b",
         notch = TRUE)
+
+boxplot(df$happiness_score,
+        main = "Boxplot della felicità",
+        col = "#74c476", axes = FALSE)
+axis(side=2, 3:12, cex.axis=0.80)
+box()
