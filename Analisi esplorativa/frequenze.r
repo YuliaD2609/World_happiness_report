@@ -13,19 +13,24 @@ freq_rel_cum
 #Minimo, media, mediana, quantili
 summary(df$happiness_score)
 
+par(mgp = c(4, 0, -1))  # aumenta mgp[2] per separare etichette e titolo asse
+
 barplot(freq_ass,
         main = "Distribuzione di frequenza assoluta del punteggio di felicità",
         xlab = "Classi di Happiness Score",
         ylab = "Frequenza assoluta",
         las = 2,
+        ylim = c(-10,150),
         col = "#56B117")
 
 barplot(freq_rel,
-        main = "Distribuzione di frequenza assoluta relativa del punteggio di felicità",
+        main = "Distribuzione di frequenza relativa del punteggio di felicità",
         xlab = "Classi di Happiness Score",
         ylab = "Frequenza relativa",
         las = 2,
         col = "#56B117")
+
+par(mgp = c(3, 0.5, 0))
 
 plot(freq_rel_cum,
      type = "b",
@@ -35,6 +40,8 @@ plot(freq_rel_cum,
      xlab = "Classi di Happiness Score",
      ylab = "Frequenza relativa cumulata",
      main = "Funzione di distribuzione empirica continua della Felicità")
+
+
 
 axis(1, at = 1:length(freq_rel_cum), labels = names(freq_rel_cum), las = 2, cex.axis = 0.6)
 
@@ -67,3 +74,4 @@ legend("topright",
        col = c("black", "red"),
        bty = "n",
        cex = 0.9)
+
