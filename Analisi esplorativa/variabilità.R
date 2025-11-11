@@ -8,6 +8,6 @@ var
 sd <- sd(df$happiness_score, na.rm = TRUE)
 sd
 
-# Coefficiente di variazione (%)
-cv <- (sd_h / mean(df$happiness_score, na.rm = TRUE)) * 100
+# Coefficiente di variazione
+cv <- (sd_h / mean(df$happiness_score, na.rm = TRUE))
 cv
