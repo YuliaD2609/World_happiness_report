@@ -1,5 +1,13 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
+vars <- c("log_gdp_per_capita",
+          "social_support",
+          "healthy_life_expectancy_at_birth",
+          "freedom_to_make_life_choices",
+          "generosity",
+          "perceptions_of_corruption",
+          "positive_affect",
+          "negative_affect")
 
 # Ciclo per generare scatterplot + grafico dei residui
 for (var in vars) {
@@ -20,6 +28,7 @@ for (var in vars) {
   # Modello lineare
   lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
   abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
+  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
   
   # Calcolo e stampa informazioni sintetiche
   cat("lm model: \n")

@@ -149,3 +149,93 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
+
+#Serie temporale della felicità
+
+media_annuale_gen <- aggregate(happiness_score ~ year, df_gen, mean)
+
+ts_media_gen <- ts(media_annuale_gen$happiness_score,
+               start = min(media_annuale_gen$year),
+               end   = max(media_annuale_gen$year),
+               frequency = 1)
+
+plot(ts_media_gen,
+     type = "o",
+     pch = 19,
+     col = "#238B45",
+     xlab = "Anno",
+     ylab = "Felicità (media annuale)",
+     main = "Serie Temporale della Felicità")
+
+
+trend <- lm(media_annuale_gen$happiness_score ~ media_annuale_gen$year)
+summary(trend)
+
+
+
+#Scatterplots
+
+vars <- c("log_gdp_per_capita",
+          "social_support",
+          "healthy_life_expectancy_at_birth",
+          "freedom_to_make_life_choices",
+          "generosity",
+          "perceptions_of_corruption",
+          "positive_affect",
+          "negative_affect")
+
+# Ciclo per generare scatterplot + grafico dei residui
+for (var in vars) {
+  
+  # Rimozione valori mancanti
+  df_gen_plot <- df_gen[!is.na(df_gen[[var]]) & !is.na(df_gen$happiness_score), ]
+  
+  # --- SCATTERPLOT PRINCIPALE ---
+  plot(df_gen_plot[[var]],
+       df_gen_plot$happiness_score,
+       main = paste("Relazione tra", var, "e punteggio di felicità generato"),
+       xlab = var,
+       ylab = "Punteggio di felicità",
+       col = rgb(27/255, 158/255, 119/255, 0.4),
+       pch = 16,
+       cex = 0.5)
+  
+  # Modello lineare
+  lm_model_gen <- lm(happiness_score ~ df_gen_plot[[var]], data = df_gen_plot)
+  abline(lm_model_gen, col = "#00441b", lwd = 2, lty = 2)
+  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  
+  # Calcolo e stampa informazioni sintetiche
+  cat("lm model: \n")
+  print(lm_model_gen$coefficients)
+  cat("\n")
+  
+  cat("Media residui:\n")
+  print(median(lm_model_gen$residuals))
+  cat("\nVarianza residui:\n")
+  print(var(lm_model_gen$residuals))
+  cat("\nDeviazione standard residui:\n")
+  print(sd(lm_model_gen$residuals))
+  cat("\n")
+  
+  cor_val <- cor(df_gen_plot[[var]], df_gen_plot$happiness_score, use = "complete.obs")
+  cov_val <- cov(df_gen_plot[[var]], df_gen_plot$happiness_score, use = "complete.obs")
+  
+  cat("Variabile:", var, "\n")
+  cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
+  print(summary(lm_model_gen))
+  
+  # --- GRAFICO DEI RESIDUI ---
+#  maintext <- paste("Diagramma dei residui generato ", var)
+#  maintext
+#  plot(lm_model_gen$fitted.values, lm_model_gen$residuals,
+#       main = maintext,
+#       xlab = "Valori stimati (Medie)",
+#       ylab = "Residui",
+#       col = rgb(1, 0, 0, 0.6),
+#       pch = 4,   # crocette
+#       cex = 1.2)
+  
+#  abline(h = 0, col = "blue", lty = 2, lwd = 2)  # linea orizzontale a 0
+#  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+}
