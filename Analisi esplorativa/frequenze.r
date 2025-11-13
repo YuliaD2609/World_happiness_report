@@ -13,7 +13,7 @@ freq_rel_cum
 #Minimo, media, mediana, quantili
 summary(df$happiness_score)
 
-par(mgp = c(4, 0, -1))  # aumenta mgp[2] per separare etichette e titolo asse
+par(mgp = c(4, 0, -1))
 
 barplot(freq_ass,
         main = "Distribuzione di frequenza assoluta del punteggio di felicità",

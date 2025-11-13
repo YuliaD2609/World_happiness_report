@@ -190,7 +190,7 @@ for (var in vars) {
   # Rimozione valori mancanti
   df_gen_plot <- df_gen[!is.na(df_gen[[var]]) & !is.na(df_gen$happiness_score), ]
   
-  # --- SCATTERPLOT PRINCIPALE ---
+  #scatterplot
   plot(df_gen_plot[[var]],
        df_gen_plot$happiness_score,
        main = paste("Relazione tra", var, "e punteggio di felicità generato"),
@@ -225,7 +225,7 @@ for (var in vars) {
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
   print(summary(lm_model_gen))
   
-  # --- GRAFICO DEI RESIDUI ---
+  #Grafico residui
 #  maintext <- paste("Diagramma dei residui generato ", var)
 #  maintext
 #  plot(lm_model_gen$fitted.values, lm_model_gen$residuals,

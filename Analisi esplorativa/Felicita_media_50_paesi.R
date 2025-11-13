@@ -18,12 +18,7 @@ happiness_summary <- data.frame(
 #Selezione dei 50 paesi con felicità media più alta
 top50 <- happiness_summary[order(-happiness_summary$mean), ][1:50, ]
 
-#Imposta margini (più spazio per i nomi sotto)
 par(mar = c(10, 5, 4, 2))   # margine inferiore aumentato
-
-#Definizione dell'intervallo Y (nessun overflow)
-y_min <- min(top50$min) - 0.2
-y_max <- max(top50$max) + 0.5
 
 colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
 
@@ -42,7 +37,7 @@ bap_positions <- barplot(top50$mean,
 lines(bar_positions, top50$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
-#Legenda chiara e compatta
+#Legenda
 legend("topleft",
        legend = c("Minimo", "Massimo"),
        col = c("red", "blue"),
@@ -56,12 +51,9 @@ legend("topleft",
 
 bottom50 <- happiness_summary[order(happiness_summary$mean), ][1:50, ]
 
-# Imposta margini e intervallo Y
 par(mar = c(10, 5, 4, 2))
-y_min <- min(bottom50$min) - 0.2
-y_max <- max(bottom50$max) + 0.5
 
-# Barplot (dal più basso al più alto)
+# Barplot
 bar_positions <- barplot(bottom50$mean,
                          names.arg = bottom50$country,
                          las = 2,
@@ -84,9 +76,9 @@ legend("topleft",
        bty = "n")
 
 
-# -------------------------------------------------------------
-# 2️⃣ Analisi del log_gdp_per_capita per paese
-# -------------------------------------------------------------
+
+# Analisi log_gdp_per_capita per paese
+
 
 gdp_summary <- aggregate(log_gdp_per_capita ~ country, data = df,
                          FUN = function(x) c(mean = mean(x, na.rm = TRUE),
@@ -101,9 +93,9 @@ gdp_summary <- data.frame(
   max = gdp_summary$log_gdp_per_capita[, "max"]
 )
 
-# -------------------------------------------------------------
-# 3️⃣ 50 Paesi con log_gdp_per_capita medio più alto
-# -------------------------------------------------------------
+
+# 50 Paesi log_gdp_per_capita medio più alto
+
 
 top50_gdp <- gdp_summary[order(-gdp_summary$mean), ][1:50, ]
 
@@ -130,9 +122,8 @@ legend("topleft",
        bty = "n")
 
 
-# -------------------------------------------------------------
-# 4️⃣ 50 Paesi con log_gdp_per_capita medio più basso
-# -------------------------------------------------------------
+
+# 50 Paesi log_gdp_per_capita medio più basso
 
 bottom50_gdp <- gdp_summary[order(gdp_summary$mean), ][1:50, ]
 
