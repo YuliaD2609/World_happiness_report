@@ -3,6 +3,8 @@ df <- read.csv(file.choose(), header = TRUE, sep = ",")
 #frequenza assoluta
 freq_ass <- table(cut(df$happiness_score, breaks = 40, right = FALSE))
 freq_ass
+sum(freq_ass)
+table(freq_ass)
 #frequenza relativa
 freq_rel <- prop.table(freq_ass)
 freq_rel
