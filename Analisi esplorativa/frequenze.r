@@ -26,13 +26,25 @@ summary(df$happiness_score)
 
 par(mgp = c(4, 0, -1))
 
-barplot(freq_ass,
-        main = "Distribuzione di frequenza assoluta del punteggio di felicità",
-        xlab = "Classi di Happiness Score",
-        ylab = "Frequenza assoluta",
-        las = 2,
-        ylim = c(-10,150),
-        col = "#56B117")
+bp <- barplot(freq_ass,
+              main = "Distribuzione di frequenza assoluta del punteggio di felicità",
+              xlab = "Classi di Happiness Score",
+              ylab = "Frequenza assoluta",
+              las = 2,
+              ylim = c(-10,150),
+              col = "#56B117")
+
+dens <- density(df$happiness_score)
+
+dens_scaled <- dens$y / max(dens$y) * max(freq_ass)
+
+lines(
+  x = seq(bp[1], bp[length(bp)], length.out = length(dens$y)),
+  y = dens_scaled,
+  col = "red",
+  lwd = 2
+)
+
 
 barplot(freq_rel,
         main = "Distribuzione di frequenza relativa del punteggio di felicità",
