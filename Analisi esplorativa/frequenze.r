@@ -45,6 +45,41 @@ lines(
   lwd = 2
 )
 
+#istogramma felicità frequenza assoluta
+hist_data <- hist(df$happiness_score,
+                  breaks = 40,
+                  freq = TRUE,
+                  main = "Istogramma della felicità",
+                  xlab = "Happiness Score",
+                  ylab = "Frequenza assoluta",
+                  col  = "#56B117",
+                  border = "white")
+
+# Curva di densità (scalata)
+dens <- density(df$happiness_score)
+scale_factor <- max(hist_data$counts) / max(dens$y)
+
+lines(dens$x, dens$y * scale_factor,
+      col = "red",
+      lwd = 2)
+
+# Istogramma della felicità frequenza relativa
+hist_data <- hist(df$happiness_score,
+                  breaks = 40,
+                  freq = FALSE,
+                  main = "Istogramma della felicità",
+                  xlab = "Happiness Score",
+                  ylab = "Frequenza relativa",
+                  col  = "#56B117",
+                  border = "white")
+
+# Curva di densità
+dens <- density(df$happiness_score)
+
+lines(dens$x, dens$y,
+      col = "red",
+      lwd = 2)
+
 
 barplot(freq_rel,
         main = "Distribuzione di frequenza relativa del punteggio di felicità",
