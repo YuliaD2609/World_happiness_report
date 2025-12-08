@@ -41,12 +41,7 @@ barplot(coef,
         cex.names = 0.7,)
 abline(h=0, col="black")
 
-plot(model$fitted.values, model$residuals,
-     xlab="Valori predetti",
-     ylab="Residui",
-     main="Valori residui vs predetti",
-     pch = 16,
-     cex = 0.5)
-abline(h=0, col="red")
+confint(model)
+
 
 
