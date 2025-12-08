@@ -9,13 +9,11 @@ vars <- c("log_gdp_per_capita",
           "positive_affect",
           "negative_affect")
 
-# Ciclo per generare scatterplot + grafico dei residui
 for (var in vars) {
   
-  # Rimozione valori mancanti
+  #rimozione valori mancanti
   df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
   
-  # --- SCATTERPLOT PRINCIPALE ---
   plot(df_plot[[var]],
        df_plot$happiness_score,
        main = paste("Relazione tra", var, "e punteggio di felicità"),
@@ -50,7 +48,7 @@ for (var in vars) {
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
   print(summary(lm_model))
   
-  # --- GRAFICO DEI RESIDUI ---
+  #residui
   maintext <- paste("Diagramma dei residui ", var)
   maintext
   plot(lm_model$fitted.values, lm_model$residuals,
