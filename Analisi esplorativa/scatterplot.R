@@ -58,8 +58,8 @@ for (var in vars) {
        xlab = "Valori stimati (Medie)",
        ylab = "Residui",
        col = rgb(1, 0, 0, 0.6),
-       pch = 4,   # crocette
-       cex = 1.2)
+       pch = 19,
+       cex = 0.5)
   
   abline(h = 0, col = "blue", lty = 2, lwd = 2)  # linea orizzontale a 0
   grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
