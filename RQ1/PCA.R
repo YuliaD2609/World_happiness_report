@@ -31,6 +31,8 @@ pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 summary(pca)
 # per determinare il contributo delle componenti
 round(pca$rotation, 3)
+# screeplot
+plot(pca, type = "l",  main="Screeplot PCA")
 
 # si prendono in considerazione i primi
 scores <- pca$x[,1:3]
@@ -47,9 +49,10 @@ pheatmap(mat_dist,
          fontsize = 7,
          angle_col = 45)
 
-
 # matrice di similarità
 mat_similarity <- 1 - mat_dist / max(mat_dist)
+rownames(mat_similarity) <- rownames(X_scaled)
+colnames(mat_similarity) <- rownames(X_scaled)
 round(mat_similarity[1:5, 1:5], 3)
 
 pheatmap(mat_similarity,
@@ -58,10 +61,23 @@ pheatmap(mat_similarity,
          fontsize = 7,
          angle_col = 45)
 
+# matrice di varianza
+mat_cov <- cov(X_scaled)
+round(mat_cov, 3)
 
-# screeplot
-plot(pca, type = "l",  main="Screeplot PCA")
+# matrice di non omogeneità
+non_omogeneity <- apply(X_scaled, 1, var)
+summary(non_omogeneity)
 
+
+# clustering gerarchico
+hc <- hclust(dist_euclidea, method="ward.D2")
+
+# dendrogramma
+plot(hc, main="Dendrogramma", cex=0.4)
+
+# taglio a 3 cluster
+clusters <- cutree(hc, k=3)
 
 
 
