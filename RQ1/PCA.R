@@ -23,7 +23,33 @@ round(pca$rotation, 3)
 
 summary(pca)
 # screeplot
-plot(pca, type = "l")
+plot(pca, type = "l",  main="Screeplot PCA")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # CLUSTERING

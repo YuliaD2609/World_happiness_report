@@ -11,7 +11,7 @@ vars <- c("log_gdp_per_capita",
 
 for (var in vars) {
   
-  #rimozione valori mancanti
+  # Rimozione valori mancanti
   df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
   
   plot(df_plot[[var]],
@@ -48,7 +48,7 @@ for (var in vars) {
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
   print(summary(lm_model))
   
-  #residui
+  # Residui
   maintext <- paste("Diagramma dei residui ", var)
   maintext
   plot(lm_model$fitted.values, lm_model$residuals,
