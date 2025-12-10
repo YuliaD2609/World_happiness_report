@@ -1,5 +1,6 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
+library(pheatmap)
 vars_sc <- c("log_gdp_per_capita_sc",
              "social_support_sc",
              "positive_affect_sc",
@@ -16,12 +17,48 @@ X <- df[vars_sc]
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
 
+# matrice di correlazione
+mat_cor <- cor(X_scaled)
+round(mat_cor, 3)
+pheatmap(mat_cor,
+         main = "Matrice di correlazione",
+         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
+         fontsize = 7,
+         angle_col = 45)
+
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
-#per determinare il contributo delle componenti
+summary(pca)
+# per determinare il contributo delle componenti
 round(pca$rotation, 3)
 
-summary(pca)
+# si prendono in considerazione i primi
+scores <- pca$x[,1:3]
+# matrice delle distanze
+dist_euclidea <- dist(scores, method = "euclidean")
+dist_euclidea[1:10] # si stampano solo le prime 10 per avere una visione iniziale dei valori
+mat_dist <- as.matrix(dist_euclidea)
+rownames(mat_dist) <- rownames(X_scaled)
+colnames(mat_dist) <- rownames(X_scaled)
+
+pheatmap(mat_dist,
+         main = "Matrice delle distanze",
+         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
+         fontsize = 7,
+         angle_col = 45)
+
+
+# matrice di similarità
+mat_similarity <- 1 - mat_dist / max(mat_dist)
+round(mat_similarity[1:5, 1:5], 3)
+
+pheatmap(mat_similarity,
+         main = "Matrice delle similarità",
+         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
+         fontsize = 7,
+         angle_col = 45)
+
+
 # screeplot
 plot(pca, type = "l",  main="Screeplot PCA")
 
