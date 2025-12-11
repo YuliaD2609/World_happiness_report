@@ -1,6 +1,17 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
 library(pheatmap)
+all_sc <- c("log_gdp_per_capita_sc",
+             "social_support_sc",
+             "positive_affect_sc",
+             "negative_affect_sc",
+             "healthy_life_expectancy_at_birth_sc",
+             "freedom_to_make_life_choices_sc",
+             "generosity_sc",
+             "perceptions_of_corruption_sc",
+             "happiness_score_sc"
+)
+
 vars_sc <- c("log_gdp_per_capita_sc",
              "social_support_sc",
              "positive_affect_sc",
@@ -11,7 +22,7 @@ vars_sc <- c("log_gdp_per_capita_sc",
              "perceptions_of_corruption_sc"
 )
 
-X <- df[vars_sc]
+X <- df[all_sc]
 
 # rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
@@ -22,10 +33,14 @@ mat_cor <- cor(X_scaled)
 round(mat_cor, 3)
 pheatmap(mat_cor,
          main = "Matrice di correlazione",
-         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
          fontsize = 7,
          angle_col = 45)
 
+X <- df[vars_sc]
+
+# rimozione di righe con NA
+X_complete <- X[complete.cases(X), ]
+X_scaled <- scale(X_complete)
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 summary(pca)
@@ -42,6 +57,7 @@ dist_euclidea[1:10] # si stampano solo le prime 10 per avere una visione inizial
 mat_dist <- as.matrix(dist_euclidea)
 rownames(mat_dist) <- rownames(X_scaled)
 colnames(mat_dist) <- rownames(X_scaled)
+round(mat_dist[1:10, 1:10], 3)
 
 pheatmap(mat_dist,
          main = "Matrice delle distanze",
@@ -53,7 +69,7 @@ pheatmap(mat_dist,
 mat_similarity <- 1 - mat_dist / max(mat_dist)
 rownames(mat_similarity) <- rownames(X_scaled)
 colnames(mat_similarity) <- rownames(X_scaled)
-round(mat_similarity[1:5, 1:5], 3)
+round(mat_similarity[1:10, 1:10], 3)
 
 pheatmap(mat_similarity,
          main = "Matrice delle similarità",
@@ -61,23 +77,29 @@ pheatmap(mat_similarity,
          fontsize = 7,
          angle_col = 45)
 
-# matrice di varianza
+# matrice di covarianza
 mat_cov <- cov(X_scaled)
 round(mat_cov, 3)
+pheatmap(mat_cov,
+         main = "Matrice di covarianza",
+         fontsize = 7,
+         angle_col = 45)
 
 # matrice di non omogeneità
 non_omogeneity <- apply(X_scaled, 1, var)
 summary(non_omogeneity)
 
-
 # clustering gerarchico
-hc <- hclust(dist_euclidea, method="ward.D2")
+dist_vars <- dist(1 - mat_cor) 
+hc <- hclust(dist_vars, method="complete")
 
 # dendrogramma
-plot(hc, main="Dendrogramma", cex=0.4)
+plot(hc, main="Dendrogramma",
+     xlab="Variabili", ylab="Distanza", cex=0.6)
 
 # taglio a 3 cluster
 clusters <- cutree(hc, k=3)
+clusters
 
 
 
@@ -87,6 +109,12 @@ clusters <- cutree(hc, k=3)
 
 
 
+
+wcss <- sapply(1:10, function(k){kmeans(X_complete, center=k, nstart=10)$tot.withinss})
+plot(1:10, wcss, type="b", pch=19, frame=FALSE,
+     main = "Elbow method",
+     ylab="wcss",
+     xlab="clusters")
 
 
 
