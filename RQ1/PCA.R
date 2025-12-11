@@ -33,7 +33,7 @@ mat_cor <- cor(X_scaled)
 round(mat_cor, 3)
 pheatmap(mat_cor,
          main = "Matrice di correlazione",
-         fontsize = 7,
+         fontsize = 10,
          angle_col = 45)
 
 X <- df[vars_sc]
@@ -82,7 +82,7 @@ mat_cov <- cov(X_scaled)
 round(mat_cov, 3)
 pheatmap(mat_cov,
          main = "Matrice di covarianza",
-         fontsize = 7,
+         fontsize = 10,
          angle_col = 45)
 
 # matrice di non omogeneità
