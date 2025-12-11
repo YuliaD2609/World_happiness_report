@@ -101,6 +101,12 @@ plot(hc, main="Dendrogramma",
 clusters <- cutree(hc, k=3)
 clusters
 
+#scatterplot con tutti i cluster
+pairs(scores[,1:3], col=df$cluster_pc[complete.cases(X)], pch=19, cex = 0.4)
+
+# scatterplot dei cluster
+plot(scores[,1], scores[,2], col=df$cluster_pc[complete.cases(X)],
+     pch=19, cex = 0.4, xlab="PC1", ylab="PC2", main="Clusters")
 
 
 
