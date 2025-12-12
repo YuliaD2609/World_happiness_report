@@ -2,14 +2,14 @@ df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
 library(pheatmap)
 all_sc <- c("log_gdp_per_capita_sc",
-             "social_support_sc",
-             "positive_affect_sc",
-             "negative_affect_sc",
-             "healthy_life_expectancy_at_birth_sc",
-             "freedom_to_make_life_choices_sc",
-             "generosity_sc",
-             "perceptions_of_corruption_sc",
-             "happiness_score_sc"
+            "social_support_sc",
+            "positive_affect_sc",
+            "negative_affect_sc",
+            "healthy_life_expectancy_at_birth_sc",
+            "freedom_to_make_life_choices_sc",
+            "generosity_sc",
+            "perceptions_of_corruption_sc",
+            "happiness_score_sc"
 )
 
 vars_sc <- c("log_gdp_per_capita_sc",
@@ -95,6 +95,8 @@ dist_vars <- dist(1 - mat_cor)
 hc <- hclust(dist_vars, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
+
+par(mfrow = c(1, 2)) 
 # dendrogramma
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.6)
