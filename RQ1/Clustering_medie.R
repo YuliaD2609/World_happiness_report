@@ -1,7 +1,6 @@
-library(pheatmap)
-
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
+library(pheatmap)
 vars_sc <- c("log_gdp_per_capita_sc",
              "social_support_sc",
              "positive_affect_sc",
@@ -11,23 +10,19 @@ vars_sc <- c("log_gdp_per_capita_sc",
              "generosity_sc",
              "perceptions_of_corruption_sc"
 )
+X <- df[vars_sc]
 
-# medie per paese
-df_media <- aggregate(df[vars_sc],
-                      by = list(country = df$country, cntry_code=df$cntry_code),
-                      FUN = mean, na.rm = TRUE)
-
-# matrice dei dati
-X <- scale(df_media[, vars_sc])
-rownames(X) <- df_media$cntry_code
+# rimozione di righe con NA
+X_complete <- X[complete.cases(X), ]
+X_scaled <- scale(X_complete)
 
 # matrice delle distanze
 dist_euclidea <- dist(X, method = "euclidean")
 dist_euclidea[1:10] #si stampano solo le prime 10 per avere una visione iniziale dei valori
 mat_dist <- as.matrix(dist_euclidea)
 
-pheatmap(mat_similarity,
-         main = "Matrice delle distanze tra Paesi",
+pheatmap(mat_dist,
+         main = "Matrice delle distanze",
          color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
          fontsize_row = 4, fontsize_col = 4)
 
@@ -36,9 +31,12 @@ mat_similarity <- 1 - mat_dist / max(mat_dist)
 round(mat_similarity[1:5, 1:5], 3)
 
 pheatmap(mat_similarity,
-         main = "Matrice delle dimilarità tra Paesi",
+         main = "Matrice delle similarità",
          color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
          fontsize_row = 4, fontsize_col = 4)
+
+# Clustering gerarchico
+hc_var <- hclust(dist_var, method = "ward.D2")
 
 # calcolo PCA
 pca <- prcomp(X, center = TRUE, scale. = TRUE)
@@ -48,3 +46,20 @@ summary(pca)
 
 # screeplot
 plot(pca, type = "l", main = "Screeplot PCA (medie per Paese e anno)")
+
+# Dendrogramma
+plot(hc_var, main = "Cluster delle variabili (in base alla correlazione con la felicità)",
+     xlab = "Variabili", sub = "", cex = 0.9)
+
+clusters_var <- cutree(hc_var, k = 3)
+print(clusters_var)
+
+# --- Heatmap per visualizzare la correlazione tra le variabili ---
+pheatmap(mat_corr,
+         main = "Heatmap di correlazione tra le variabili",
+         color = colorRampPalette(c("white", "#74c476", "#00441b"))(100),
+         display_numbers = TRUE,
+         number_format = "%.2f")
+
+cor_happiness <- cor(X_complete$happiness_score, X_complete[, -which(names(X_complete) == "happiness_score")])
+print(round(cor_happiness, 3))

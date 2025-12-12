@@ -41,6 +41,7 @@ X <- df[vars_sc]
 # rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
+
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 summary(pca)
@@ -92,17 +93,59 @@ summary(non_omogeneity)
 # clustering gerarchico
 dist_vars <- dist(1 - mat_cor) 
 hc <- hclust(dist_vars, method="complete")
+str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.6)
+rect.hclust(hc, k=2, border="red")
+rect.hclust(hc, k=3, border="green")
 
-# taglio a 3 cluster
 clusters <- cutree(hc, k=3)
 clusters
 
-#scatterplot con tutti i cluster
-pairs(scores[,1:3], col=df$cluster_pc[complete.cases(X)], pch=19, cex = 0.4)
+cutree(hc, k=3, h=NULL)
+
+
+
+
+
+
+# funzione per calcolare la dimensione di ogni cluster durante l'agglomerazione
+cluster_sizes <- function(hc) {
+  n <- length(hc$order)
+  sizes <- rep(1, n)
+  size_vec <- numeric(n - 1)
+  
+  for (i in 1:(n - 1)) {
+    left <- hc$merge[i, 1]
+    right <- hc$merge[i, 2]
+    
+    size_left <- ifelse(left < 0, 1, size_vec[left])
+    size_right <- ifelse(right < 0, 1, size_vec[right])
+    
+    size_vec[i] <- size_left + size_right
+  }
+  
+  return(size_vec)
+}
+
+# calcolo dimensioni dei cluster
+sizes <- cluster_sizes(hc)
+
+# costruzione tabella
+aggl_table <- data.frame(
+  Passo = 1:(nrow(hc$merge)),
+  Unione = apply(hc$merge, 1, paste, collapse = "  "),
+  Distanza = round(hc$height, 4),
+  Dimensione_Cluster = sizes
+)
+
+print(aggl_table)
+
+
+
+
 
 # scatterplot dei cluster
 plot(scores[,1], scores[,2], col=df$cluster_pc[complete.cases(X)],

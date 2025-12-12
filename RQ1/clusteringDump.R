@@ -14,7 +14,7 @@ X <- df[vars_sc]
 
 # matrice delle distanze
 dist_euclidea <- dist(X, method = "euclidean")
-dist_euclidea[1:10] #si stampano solo le prime 10 per avere una visione iniziale dei valori
+dist_euclidea[1:10] # si stampano solo le prime 10 per avere una visione iniziale dei valori
 mat_dist <- as.matrix(dist_euclidea)
 
 # matrice di similarità
