@@ -91,7 +91,7 @@ non_omogeneity <- apply(X_scaled, 1, var)
 summary(non_omogeneity)
 
 # clustering gerarchico
-dist_vars <- dist(1 - mat_cor) 
+dist_var <- dist(scores)
 hc <- hclust(dist_vars, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
@@ -101,10 +101,78 @@ plot(hc, main="Dendrogramma",
 rect.hclust(hc, k=2, border="red")
 rect.hclust(hc, k=3, border="green")
 
+# calcolo cluster
 clusters <- cutree(hc, k=3)
 clusters
 
-cutree(hc, k=3, h=NULL)
+plot(scores[,1], scores[,2],
+     col=clusters, pch=19, cex=0.4,
+     xlab="PC1", ylab="PC2",
+     main="Clusters")
+
+# aggiunta dei paesi ai cluster creati tramite il metodo del centroide
+group1 <- names(clusters[clusters == 1])
+group2 <- names(clusters[clusters == 2])
+group3 <- names(clusters[clusters == 3])
+list(group1, group2, group3)
+
+# centroidi
+centroid1 <- colMeans(X_scaled[, group1])
+centroid2 <- colMeans(X_scaled[, group2])
+centroid3 <- colMeans(X_scaled[, group3])
+
+# assegnamento dei paesi
+country_clusters <- apply(X_scaled, 1, function(row){
+  d1 <- dist(rbind(row, centroid1))
+  d2 <- dist(rbind(row, centroid2))
+  d3 <- dist(rbind(row, centroid3))
+  return(which.min(c(d1, d2, d3)))
+})
+
+country_clusters <- as.factor(country_clusters)
+
+
+
+centroids <- aggregate(scores, by=list(cluster=clusters), mean)
+scores_country <- X_scaled %*% pca_var$rotation[,1:3]
+country_clusters <- apply(scores_country, 1, function(row){
+  d <- apply(centroids[,-1], 1, function(c) dist(rbind(row, c)))
+  which.min(d)
+})
+
+
+
+
+
+
+
+
+
+
+# Clustering tra paesi
+X <- df[vars_sc]
+X_complete <- X[complete.cases(X), ]
+X_scaled <- scale(X_complete)
+
+# PCA sui paesi
+pca <- prcomp(X_scaled, scale.=TRUE)
+scores <- pca$x[,1:3]
+
+# distanza sui paesi
+dist_p <- dist(scores)
+
+# clustering gerarchico
+hc_p <- hclust(dist_p, method="complete")
+
+plot(hc_p, main="Dendrogramma dei Paesi")
+rect.hclust(hc_p, k=3, border="red")
+
+clusters_paesi <- cutree(hc_p, k=3)
+
+
+
+
+
 
 
 
