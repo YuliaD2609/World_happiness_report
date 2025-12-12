@@ -41,6 +41,7 @@ X <- df[vars_sc]
 # rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
+
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 summary(pca)
@@ -92,13 +93,22 @@ summary(non_omogeneity)
 # clustering gerarchico
 dist_vars <- dist(1 - mat_cor) 
 hc <- hclust(dist_vars, method="complete")
+str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.6)
+rect.hclust(hc, k=2, border="red")
+rect.hclust(hc, k=3, border="green")
 
 clusters <- cutree(hc, k=3)
 clusters
+
+cutree(hc, k=3, h=NULL)
+
+
+
+
 
 
 # funzione per calcolare la dimensione di ogni cluster durante l'agglomerazione
