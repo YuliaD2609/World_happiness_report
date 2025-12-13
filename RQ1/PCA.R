@@ -24,7 +24,7 @@ vars_sc <- c("log_gdp_per_capita_sc",
 df_country <- aggregate(df[, all_sc],
                         by = list(country = df$country),
                         FUN = mean)
-
+df_country <- df_country[complete.cases(X), ]
 X <- df_country[all_sc]
 
 # rimozione di righe con NA
@@ -87,9 +87,15 @@ hc <- hclust(dist_euclidea, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
+<<<<<<< HEAD
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.8)
 rect.hclust(hc, k=4, border="red")
+=======
+plot(hc, main="Dendrogramma clutering per paese",
+     xlab="Variabili", ylab="Distanza", cex=0.4)
+rect.hclust(hc, k=3, border="red")
+>>>>>>> a9e55f5195039cfef93f6c2b998656e4a20eb36c
 
 # calcolo cluster
 clusters <- cutree(hc, k=3)
@@ -99,6 +105,45 @@ plot(scores[,1], scores[,2],
      col=clusters, pch=19, cex=0.9,
      xlab="PC1", ylab="PC2",
      main="Clusters")
+
+# aggiunta cluster
+df_country$cluster <- clusters
+# raggruppamento dei paesi in base al cluster di appartenenza
+aggregate(df_country$happiness_score_sc,
+          by = list(cluster = df_country$cluster),
+          FUN = mean)
+
+cluster_means <- aggregate(
+  df_country[, vars_sc],
+  by = list(cluster = df_country$cluster),
+  FUN = mean
+)
+
+round(cluster_means, 3)
+
+overall_means <- colMeans(df_country[, vars_sc])
+cluster_diff <- sweep(cluster_means[, -1], 2, overall_means)
+
+round(cluster_diff, 3)
+
+clusters <- unique(df_country$cluster)
+
+for (k in clusters) {
+  cat("\nCluster", k, "\n")
+  
+  df_k <- df_country[df_country$cluster == k, ]
+  
+  cors <- cor(df_k[, vars_sc], df_k$happiness_score_sc)
+  print(round(cors, 3))
+}
+
+non_omogeneity_cluster <- aggregate(
+  apply(df_country[, vars_sc], 1, var),
+  by = list(cluster = df_country$cluster),
+  FUN = mean
+)
+
+non_omogeneity_cluster
 
 
 
