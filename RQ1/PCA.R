@@ -87,9 +87,9 @@ hc <- hclust(dist_euclidea, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
-plot(hc, main="Dendrogramma",
+plot(hc, main="Dendrogramma clutering per paese",
      xlab="Variabili", ylab="Distanza", cex=0.4)
-rect.hclust(hc, k=4, border="red")
+rect.hclust(hc, k=3, border="red")
 
 # calcolo cluster
 clusters <- cutree(hc, k=3)
@@ -99,6 +99,14 @@ plot(scores[,1], scores[,2],
      col=clusters, pch=19, cex=0.9,
      xlab="PC1", ylab="PC2",
      main="Clusters")
+
+# aggiunta cluster
+df_country$cluster <- clusters
+
+# media felicità per cluster
+aggregate(df_country$happiness_score_sc,
+          by = list(cluster = df_country$cluster),
+          FUN = mean)
 
 
 
