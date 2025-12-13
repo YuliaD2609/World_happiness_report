@@ -78,17 +78,7 @@ legend("topright",
 
 #kernel density plot
 
-x <- df$happiness_score
-x <- x[!is.na(x)]
-
-n <- length(x)
-sigma <- sd(x)
-iqr <- IQR(x)
-
-h_silverman <- 0.9 * min(sigma, iqr / 1.34) * n^(-1/5)
-h_silverman
-
-dens <- density(x, bw = h_silverman)
+dens <- density(df$happiness_score)
 
 plot(dens,
      main = "Stima kernel density plot del Happiness Score",
