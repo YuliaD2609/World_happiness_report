@@ -81,13 +81,22 @@ summary(non_omogeneity)
 dist_vars <- dist(1 - mat_cor) 
 hc <- hclust(dist_vars, method="complete")
 
+par(mfrow = c(1, 2)) 
 # dendrogramma
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.6)
+rect.hclust(hc, k=4, border="red")
+rect.hclust(hc, k=3, border="green")
+par(mfrow = c(1, 1))
 
 # taglio a 3 cluster
 clusters <- cutree(hc, k=3)
 clusters
+
+plot(scores[,1], scores[,2],
+     col=clusters, pch=19, cex=0.7,
+     xlab="PC1", ylab="PC2",
+     main="Clusters")
 
 
 

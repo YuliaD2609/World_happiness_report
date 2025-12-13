@@ -21,8 +21,11 @@ vars_sc <- c("log_gdp_per_capita_sc",
              "generosity_sc",
              "perceptions_of_corruption_sc"
 )
+df_country <- aggregate(df[, all_sc],
+                        by = list(country = df$country),
+                        FUN = mean)
 
-X <- df[all_sc]
+X <- df_country[all_sc]
 
 # rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
@@ -37,7 +40,8 @@ pheatmap(mat_cor,
          angle_col = 45)
 
 # senza la variabile happiness score
-X <- df[vars_sc]
+X <- df_country[vars_sc]
+rownames(X) <- df_country$country
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
 mat_cor <- cor(X_scaled)
@@ -79,27 +83,30 @@ non_omogeneity <- apply(X_scaled, 1, var)
 summary(non_omogeneity)
 
 # clustering gerarchico
-dist_var <- dist(scores)
 hc <- hclust(dist_euclidea, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
-
-par(mfrow = c(1, 2)) 
 # dendrogramma
 plot(hc, main="Dendrogramma",
-     xlab="Variabili", ylab="Distanza", cex=0.6)
-rect.hclust(hc, k=2, border="red")
-rect.hclust(hc, k=3, border="green")
-par(mfrow = c(1, 1)) 
+     xlab="Variabili", ylab="Distanza", cex=0.4)
+rect.hclust(hc, k=4, border="red")
 
 # calcolo cluster
 clusters <- cutree(hc, k=3)
 clusters
 
 plot(scores[,1], scores[,2],
-     col=clusters, pch=19, cex=0.4,
+     col=clusters, pch=19, cex=0.9,
      xlab="PC1", ylab="PC2",
      main="Clusters")
+
+
+
+
+
+
+
+
 
 # aggiunta dei paesi ai cluster creati tramite il metodo del centroide
 group1 <- names(clusters[clusters == 1])
@@ -150,7 +157,7 @@ pca <- prcomp(X_scaled, scale.=TRUE)
 scores <- pca$x[,1:3]
 
 # distanza sui paesi
-dist_p <- dist(scores)
+dist_p <- dist(scores, method="euclidean")
 
 # clustering gerarchico
 hc_p <- hclust(dist_p, method="complete")
@@ -158,7 +165,17 @@ hc_p <- hclust(dist_p, method="complete")
 plot(hc_p, main="Dendrogramma dei Paesi")
 rect.hclust(hc_p, k=3, border="red")
 
+
 clusters_paesi <- cutree(hc_p, k=3)
+country_clusters <- factor(country_clusters)
+plot(scores,
+     col = country_clusters,
+     pch = 19, cex = 0.6,
+     xlab = "PC1", ylab = "PC2",
+     main = "Cluster dei paesi nello spazio PCA")
+legend("topright", legend=levels(country_clusters),
+       col=1:3, pch=19)
+
 
 
 
