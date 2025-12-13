@@ -88,7 +88,7 @@ str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
 plot(hc, main="Dendrogramma clutering per paese",
-     xlab="Variabili", ylab="Distanza", cex=0.4)
+     xlab="Variabili", ylab="Distanza", cex=0.7)
 rect.hclust(hc, k=3, border="red")
 
 # calcolo cluster
