@@ -21,8 +21,11 @@ vars_sc <- c("log_gdp_per_capita_sc",
              "generosity_sc",
              "perceptions_of_corruption_sc"
 )
-
-X <- df[all_sc]
+df_country <- aggregate(df[, all_sc],
+                        by = list(country = df$country),
+                        FUN = mean)
+df_country <- df_country[complete.cases(X), ]
+X <- df_country[all_sc]
 
 # rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
@@ -33,16 +36,18 @@ mat_cor <- cor(X_scaled)
 round(mat_cor, 3)
 pheatmap(mat_cor,
          main = "Matrice di correlazione",
-         fontsize = 7,
+         fontsize = 10,
          angle_col = 45,
          display_numbers = TRUE,
          number_format = "%.2f")
 
-X <- df[vars_sc]
-
-# rimozione di righe con NA
+# senza la variabile happiness score
+X <- df_country[vars_sc]
+rownames(X) <- df_country$country
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
+mat_cor <- cor(X_scaled)
+
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 summary(pca)
@@ -72,7 +77,7 @@ mat_cov <- cov(X_scaled)
 round(mat_cov, 3)
 pheatmap(mat_cov,
          main = "Matrice di covarianza",
-         fontsize = 8,
+         fontsize = 10,
          angle_col = 45,
          display_numbers = TRUE,
          number_format = "%.2f")
@@ -82,35 +87,55 @@ non_omogeneity <- apply(X_scaled, 1, var)
 summary(non_omogeneity)
 
 # clustering gerarchico
-dist_vars <- dist(1 - mat_cor) 
-hc <- hclust(dist_vars, method="complete")
+hc <- hclust(dist_euclidea, method="complete")
+str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
-par(mfrow = c(1, 2)) 
 # dendrogramma
-plot(hc, main="Dendrogramma",
-     xlab="Variabili", ylab="Distanza", cex=0.6)
-rect.hclust(hc, k=2, border="red")
-rect.hclust(hc, k=3, border="green")
-par(mfrow = c(1, 1))
+plot(hc, main="Dendrogramma clutering per paese",
+     xlab="Variabili", ylab="Distanza", cex=0.4)
+rect.hclust(hc, k=3, border="red")
 
-silhouette <-function(k){
-  km <- kmeans(scores, centers = k, nstart = 25)
-  sil <- silhouette(km$cluster, dist(scores))
-  sil_width[k] <- mean(sil[, 3])
-}
-k_values <- 2:8
-silhouette_scores <- sapply(k_values, silhouette)
-plot(k_values, silhouette_scores, type = "b",
-     xlab = "Numero di cluster (k)",
-     ylab = "Silhouette media",
-     main = "Metodo della Silhouette")
-
-# taglio a 3 cluster
+# calcolo cluster
 clusters <- cutree(hc, k=3)
 clusters
 
 plot(scores[,1], scores[,2],
-     col=clusters, pch=19, cex=0.7,
+     col=clusters, pch=19, cex=0.6,
      xlab="PC1", ylab="PC2",
      main="Clusters")
 
+# aggiunta cluster
+df_country$cluster <- clusters
+# raggruppamento dei paesi in base al cluster di appartenenza
+# media di felicità per ogni cluster
+aggregate(df_country$happiness_score_sc,
+          by = list(cluster = df_country$cluster),
+          FUN = mean)
+
+# kmeans a 3 cluster
+kmeans_res <- kmeans(scores, centers = 3, nstart = 1)
+kmeans_res
+clusters_km <- kmeans_res$cluster
+
+par(mfrow = c(1,2))
+plot(scores[,1], scores[,2],
+     col = clusters, pch = 19,cex=0.6,
+     main = "Clustering gerarchico",
+     xlab = "PC1", ylab = "PC2")
+plot(scores[,1], scores[,2],
+     col = clusters_km, pch = 19, cex=0.6,
+     main = "k-means",
+     xlab = "PC1", ylab = "PC2")
+par(mfrow = c(1,1))
+
+# Within-Cluster Sum of Squares
+wcss <- kmeans_res$tot.withinss
+wcss
+# Between-Cluster Sum of Squares
+bcssm <- kmeans_res$betweenss
+bcss
+n <- nrow(scores)
+k <- 3
+# Calinski–Harabasz
+ch <- (bcss / (k - 1)) / (wcss / (n - k))
+ch
