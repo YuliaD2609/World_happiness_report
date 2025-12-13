@@ -70,8 +70,10 @@ mat_cov <- cov(X_scaled)
 round(mat_cov, 3)
 pheatmap(mat_cov,
          main = "Matrice di covarianza",
-         fontsize = 7,
-         angle_col = 45)
+         fontsize = 8,
+         angle_col = 45,
+         display_numbers = TRUE,
+         number_format = "%.2f")
 
 # matrice di non omogeneità
 non_omogeneity <- apply(X_scaled, 1, var)
