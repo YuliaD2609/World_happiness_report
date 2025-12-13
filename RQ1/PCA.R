@@ -96,16 +96,90 @@ clusters <- cutree(hc, k=3)
 clusters
 
 plot(scores[,1], scores[,2],
-     col=clusters, pch=19, cex=0.9,
+     col=clusters, pch=19, cex=0.6,
      xlab="PC1", ylab="PC2",
      main="Clusters")
 
 # aggiunta cluster
 df_country$cluster <- clusters
 # raggruppamento dei paesi in base al cluster di appartenenza
+# media di felicità per ogni cluster
 aggregate(df_country$happiness_score_sc,
           by = list(cluster = df_country$cluster),
           FUN = mean)
+
+# kmeans
+kmeans_res <- kmeans(scores, centers = 3, nstart = 1)
+
+clusters_km <- kmeans_res$cluster
+par(mfrow = c(1,2))
+
+plot(scores[,1], scores[,2],
+     col = clusters, pch = 19,cex=0.6,
+     main = "Clustering gerarchico",
+     xlab = "PC1", ylab = "PC2")
+
+plot(scores[,1], scores[,2],
+     col = clusters_km, pch = 19, cex=0.6,
+     main = "k-means",
+     xlab = "PC1", ylab = "PC2")
+
+par(mfrow = c(1,1))
+
+
+
+
+
+
+# calcolo dei centroidi
+centroids <- aggregate(X_scaled,
+                       by = list(cluster = clusters),
+                       FUN = mean)
+centroids
+
+#wcss
+wcss <- 0
+for (k in unique(clusters)) {
+  cluster_points <- X_scaled[clusters == k, ]
+  centroid_k <- as.numeric(centroids[centroids$cluster == k, -1])
+  
+  wcss <- wcss + sum(rowSums((cluster_points - centroid_k)^2))
+}
+wcss
+
+#bcss
+global_centroid <- colMeans(X_scaled)
+bcss <- 0
+for (k in unique(clusters)) {
+  nk <- sum(clusters == k)
+  centroid_k <- as.numeric(centroids[centroids$cluster == k, -1])
+  
+  bcss <- bcss + nk * sum((centroid_k - global_centroid)^2)
+}
+bcss
+
+# indice di Calinski Harabasz
+n <- nrow(X_scaled)
+k <- length(unique(clusters))
+calinski_harabasz <- (bcss / (k - 1)) / (wcss / (n - k))
+calinski_harabasz
+
+
+
+
+
+
+
+
+
+wcss <- sapply(1:10, function(k){kmeans(X_complete, center=k, nstart=10)$tot.withinss})
+plot(1:10, wcss, type="b", pch=19, frame=FALSE,
+     main = "Elbow method",
+     ylab="wcss",
+     xlab="clusters")
+
+
+
 
 
 
@@ -246,11 +320,7 @@ plot(scores[,1], scores[,2], col=df$cluster_pc[complete.cases(X)],
 
 
 
-wcss <- sapply(1:10, function(k){kmeans(X_complete, center=k, nstart=10)$tot.withinss})
-plot(1:10, wcss, type="b", pch=19, frame=FALSE,
-     main = "Elbow method",
-     ylab="wcss",
-     xlab="clusters")
+
 
 
 
