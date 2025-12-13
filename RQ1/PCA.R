@@ -87,15 +87,9 @@ hc <- hclust(dist_euclidea, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
-<<<<<<< HEAD
-plot(hc, main="Dendrogramma",
-     xlab="Variabili", ylab="Distanza", cex=0.8)
-rect.hclust(hc, k=4, border="red")
-=======
 plot(hc, main="Dendrogramma clutering per paese",
      xlab="Variabili", ylab="Distanza", cex=0.4)
 rect.hclust(hc, k=3, border="red")
->>>>>>> a9e55f5195039cfef93f6c2b998656e4a20eb36c
 
 # calcolo cluster
 clusters <- cutree(hc, k=3)
@@ -112,6 +106,8 @@ df_country$cluster <- clusters
 aggregate(df_country$happiness_score_sc,
           by = list(cluster = df_country$cluster),
           FUN = mean)
+
+
 
 cluster_means <- aggregate(
   df_country[, vars_sc],
@@ -151,37 +147,6 @@ non_omogeneity_cluster
 
 
 
-
-
-# aggiunta dei paesi ai cluster creati tramite il metodo del centroide
-group1 <- names(clusters[clusters == 1])
-group2 <- names(clusters[clusters == 2])
-group3 <- names(clusters[clusters == 3])
-list(group1, group2, group3)
-
-# centroidi
-centroid1 <- colMeans(X_scaled[, group1])
-centroid2 <- colMeans(X_scaled[, group2])
-centroid3 <- colMeans(X_scaled[, group3])
-
-# assegnamento dei paesi
-country_clusters <- apply(X_scaled, 1, function(row){
-  d1 <- dist(rbind(row, centroid1))
-  d2 <- dist(rbind(row, centroid2))
-  d3 <- dist(rbind(row, centroid3))
-  return(which.min(c(d1, d2, d3)))
-})
-
-country_clusters <- as.factor(country_clusters)
-
-
-
-centroids <- aggregate(scores, by=list(cluster=clusters), mean)
-scores_country <- X_scaled %*% pca_var$rotation[,1:3]
-country_clusters <- apply(scores_country, 1, function(row){
-  d <- apply(centroids[,-1], 1, function(c) dist(rbind(row, c)))
-  which.min(d)
-})
 
 
 

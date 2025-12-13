@@ -76,7 +76,7 @@ legend("topright",
        cex = 0.9)
 
 
-#kernel density plot
+# kernel density plot
 
 x <- df$happiness_score
 x <- x[!is.na(x)]
