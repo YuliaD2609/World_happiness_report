@@ -59,3 +59,7 @@ for (var in vars) {
   grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
 }
 
+#matrice di scatterplot
+pairs(df[vars], cex = 0.1, pch = 16, col="darkgreen",
+      main = "Scatterplot matrix delle variabili")
+

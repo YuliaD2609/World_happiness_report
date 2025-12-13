@@ -34,7 +34,9 @@ round(mat_cor, 3)
 pheatmap(mat_cor,
          main = "Matrice di correlazione",
          fontsize = 7,
-         angle_col = 45)
+         angle_col = 45,
+         display_numbers = TRUE,
+         number_format = "%.2f")
 
 X <- df[vars_sc]
 
