@@ -2,7 +2,7 @@ df <- read.csv(file.choose(), header = TRUE, sep = ",")
 #skewness e curtosi per l'asimmetria
 #install.packages("moments")
 library(moments)
-
+par(mfrow = c(1,1))
 sk <- skewness(df$happiness_score, na.rm = TRUE)
 kt <- kurtosis(df$happiness_score, na.rm = TRUE)
 sk
@@ -26,8 +26,4 @@ boxplot(skew_by_year,
         border = "#00441b",
         notch = TRUE)
 
-boxplot(df$happiness_score,
-        main = "Boxplot della felicità",
-        col = "#74c476", axes = FALSE)
-axis(side=2, 3:12, cex.axis=0.80)
-box()
+summary(df$happiness_score)
