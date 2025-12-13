@@ -21,25 +21,15 @@ dist_euclidea <- dist(X, method = "euclidean")
 dist_euclidea[1:10] #si stampano solo le prime 10 per avere una visione iniziale dei valori
 mat_dist <- as.matrix(dist_euclidea)
 
-pheatmap(mat_dist,
-         main = "Matrice delle distanze",
-         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
-         fontsize_row = 4, fontsize_col = 4)
-
 # matrice di similarità
 mat_similarity <- 1 - mat_dist / max(mat_dist)
 round(mat_similarity[1:5, 1:5], 3)
 
-pheatmap(mat_similarity,
-         main = "Matrice delle similarità",
-         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
-         fontsize_row = 4, fontsize_col = 4)
-
 # Clustering gerarchico
-hc_var <- hclust(dist_var, method = "ward.D2")
+hc_var <- hclust(dist_var, method = "complete")
 
 # calcolo PCA
-pca <- prcomp(X, center = TRUE, scale. = TRUE)
+pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 #per determinare il contributo delle componenti
 round(pca$rotation, 3)
 summary(pca)

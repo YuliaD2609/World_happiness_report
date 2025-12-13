@@ -36,11 +36,11 @@ pheatmap(mat_cor,
          fontsize = 10,
          angle_col = 45)
 
+# senza la variabile happiness score
 X <- df[vars_sc]
-
-# rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
+mat_cor <- cor(X_scaled)
 
 # calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
@@ -60,23 +60,11 @@ rownames(mat_dist) <- rownames(X_scaled)
 colnames(mat_dist) <- rownames(X_scaled)
 round(mat_dist[1:10, 1:10], 3)
 
-pheatmap(mat_dist,
-         main = "Matrice delle distanze",
-         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
-         fontsize = 7,
-         angle_col = 45)
-
 # matrice di similarità
 mat_similarity <- 1 - mat_dist / max(mat_dist)
 rownames(mat_similarity) <- rownames(X_scaled)
 colnames(mat_similarity) <- rownames(X_scaled)
 round(mat_similarity[1:10, 1:10], 3)
-
-pheatmap(mat_similarity,
-         main = "Matrice delle similarità",
-         color = colorRampPalette(c("white", "#a1d99b", "#006d2c"))(100),
-         fontsize = 7,
-         angle_col = 45)
 
 # matrice di covarianza
 mat_cov <- cov(X_scaled)
@@ -92,7 +80,7 @@ summary(non_omogeneity)
 
 # clustering gerarchico
 dist_var <- dist(scores)
-hc <- hclust(dist_vars, method="complete")
+hc <- hclust(dist_euclidea, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 
@@ -102,6 +90,7 @@ plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.6)
 rect.hclust(hc, k=2, border="red")
 rect.hclust(hc, k=3, border="green")
+par(mfrow = c(1, 1)) 
 
 # calcolo cluster
 clusters <- cutree(hc, k=3)
