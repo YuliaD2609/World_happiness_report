@@ -109,6 +109,7 @@ aggregate(df_country$happiness_score_sc,
 
 
 
+
 cluster_means <- aggregate(
   df_country[, vars_sc],
   by = list(cluster = df_country$cluster),
