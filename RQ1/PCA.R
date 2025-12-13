@@ -88,7 +88,7 @@ str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
 # dendrogramma
 plot(hc, main="Dendrogramma clutering per paese",
-     xlab="Variabili", ylab="Distanza", cex=0.7)
+     xlab="Variabili", ylab="Distanza", cex=0.4)
 rect.hclust(hc, k=3, border="red")
 
 # calcolo cluster
@@ -110,10 +110,9 @@ aggregate(df_country$happiness_score_sc,
 
 # kmeans
 kmeans_res <- kmeans(scores, centers = 3, nstart = 1)
-
+kmeans_res
 clusters_km <- kmeans_res$cluster
 par(mfrow = c(1,2))
-
 plot(scores[,1], scores[,2],
      col = clusters, pch = 19,cex=0.6,
      main = "Clustering gerarchico",
@@ -126,43 +125,20 @@ plot(scores[,1], scores[,2],
 
 par(mfrow = c(1,1))
 
+wcss_km <- kmeans_res$tot.withinss
+wcss_km
+bcss_km <- kmeans_res$betweenss
+bcss_km
+n <- nrow(scores)
+k <- 3
+
+ch_km <- (bcss_km / (k - 1)) / (wcss_km / (n - k))
+ch_km
 
 
 
 
 
-# calcolo dei centroidi
-centroids <- aggregate(X_scaled,
-                       by = list(cluster = clusters),
-                       FUN = mean)
-centroids
-
-#wcss
-wcss <- 0
-for (k in unique(clusters)) {
-  cluster_points <- X_scaled[clusters == k, ]
-  centroid_k <- as.numeric(centroids[centroids$cluster == k, -1])
-  
-  wcss <- wcss + sum(rowSums((cluster_points - centroid_k)^2))
-}
-wcss
-
-#bcss
-global_centroid <- colMeans(X_scaled)
-bcss <- 0
-for (k in unique(clusters)) {
-  nk <- sum(clusters == k)
-  centroid_k <- as.numeric(centroids[centroids$cluster == k, -1])
-  
-  bcss <- bcss + nk * sum((centroid_k - global_centroid)^2)
-}
-bcss
-
-# indice di Calinski Harabasz
-n <- nrow(X_scaled)
-k <- length(unique(clusters))
-calinski_harabasz <- (bcss / (k - 1)) / (wcss / (n - k))
-calinski_harabasz
 
 
 
