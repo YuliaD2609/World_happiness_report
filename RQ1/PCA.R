@@ -107,6 +107,40 @@ aggregate(df_country$happiness_score_sc,
           by = list(cluster = df_country$cluster),
           FUN = mean)
 
+cluster_means <- aggregate(
+  df_country[, vars_sc],
+  by = list(cluster = df_country$cluster),
+  FUN = mean
+)
+
+round(cluster_means, 3)
+
+overall_means <- colMeans(df_country[, vars_sc])
+cluster_diff <- sweep(cluster_means[, -1], 2, overall_means)
+
+round(cluster_diff, 3)
+
+clusters <- unique(df_country$cluster)
+
+for (k in clusters) {
+  cat("\nCluster", k, "\n")
+  
+  df_k <- df_country[df_country$cluster == k, ]
+  
+  cors <- cor(df_k[, vars_sc], df_k$happiness_score_sc)
+  print(round(cors, 3))
+}
+
+non_omogeneity_cluster <- aggregate(
+  apply(df_country[, vars_sc], 1, var),
+  by = list(cluster = df_country$cluster),
+  FUN = mean
+)
+
+non_omogeneity_cluster
+
+
+
 
 
 
