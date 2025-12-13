@@ -109,8 +109,8 @@ plot(2:8, sil_width[2:8], type = "b",
      main = "Silhouette Method")
 
 
-# taglio a 3 cluster
-clusters <- cutree(hc, k=3)
+# taglio a 2 cluster
+clusters <- cutree(hc, k=2)
 clusters
 
 plot(scores[,1], scores[,2],

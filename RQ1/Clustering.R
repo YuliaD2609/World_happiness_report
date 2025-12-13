@@ -93,10 +93,10 @@ str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 # dendrogramma
 plot(hc, main="Dendrogramma clutering per paese",
      xlab="Variabili", ylab="Distanza", cex=0.4)
-rect.hclust(hc, k=3, border="red")
+rect.hclust(hc, k=2, border="red")
 
 # calcolo cluster
-clusters <- cutree(hc, k=3)
+clusters <- cutree(hc, k=2)
 clusters
 
 plot(scores[,1], scores[,2],
@@ -112,8 +112,8 @@ aggregate(df_country$happiness_score_sc,
           by = list(cluster = df_country$cluster),
           FUN = mean)
 
-# kmeans a 3 cluster
-kmeans_res <- kmeans(scores, centers = 3, nstart = 1)
+# kmeans a 2 cluster
+kmeans_res <- kmeans(scores, centers = 2, nstart = 1)
 kmeans_res
 clusters_km <- kmeans_res$cluster
 
@@ -132,10 +132,10 @@ par(mfrow = c(1,1))
 wcss <- kmeans_res$tot.withinss
 wcss
 # Between-Cluster Sum of Squares
-bcssm <- kmeans_res$betweenss
+bcss <- kmeans_res$betweenss
 bcss
 n <- nrow(scores)
-k <- 3
+k <- 2
 # Calinski–Harabasz
 ch <- (bcss / (k - 1)) / (wcss / (n - k))
 ch
