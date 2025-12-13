@@ -93,17 +93,21 @@ rect.hclust(hc, k=2, border="red")
 rect.hclust(hc, k=3, border="green")
 par(mfrow = c(1, 1))
 
-silhouette <-function(k){
+library(cluster)
+
+sil_width <- numeric()
+
+for (k in 2:8) {
   km <- kmeans(scores, centers = k, nstart = 25)
   sil <- silhouette(km$cluster, dist(scores))
   sil_width[k] <- mean(sil[, 3])
 }
-k_values <- 2:8
-silhouette_scores <- sapply(k_values, silhouette)
-plot(k_values, silhouette_scores, type = "b",
+
+plot(2:8, sil_width[2:8], type = "b",
      xlab = "Numero di cluster (k)",
      ylab = "Silhouette media",
-     main = "Metodo della Silhouette")
+     main = "Silhouette Method")
+
 
 # taglio a 3 cluster
 clusters <- cutree(hc, k=3)
