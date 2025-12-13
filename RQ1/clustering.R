@@ -37,7 +37,9 @@ round(mat_cor, 3)
 pheatmap(mat_cor,
          main = "Matrice di correlazione",
          fontsize = 10,
-         angle_col = 45)
+         angle_col = 45,
+         display_numbers = TRUE,
+         number_format = "%.2f")
 
 # senza la variabile happiness score
 X <- df_country[vars_sc]
@@ -114,6 +116,7 @@ aggregate(df_country$happiness_score_sc,
 kmeans_res <- kmeans(scores, centers = 3, nstart = 1)
 kmeans_res
 clusters_km <- kmeans_res$cluster
+
 par(mfrow = c(1,2))
 plot(scores[,1], scores[,2],
      col = clusters, pch = 19,cex=0.6,
@@ -124,18 +127,19 @@ plot(scores[,1], scores[,2],
      col = clusters_km, pch = 19, cex=0.6,
      main = "k-means",
      xlab = "PC1", ylab = "PC2")
-
 par(mfrow = c(1,1))
 
-wcss_km <- kmeans_res$tot.withinss
-wcss_km
-bcss_km <- kmeans_res$betweenss
-bcss_km
+# Within-Cluster Sum of Squares
+wcss <- kmeans_res$tot.withinss
+wcss
+# Between-Cluster Sum of Squares
+bcssm <- kmeans_res$betweenss
+bcss
 n <- nrow(scores)
 k <- 3
-
-ch_km <- (bcss_km / (k - 1)) / (wcss_km / (n - k))
-ch_km
+# Calinski–Harabasz
+ch <- (bcss / (k - 1)) / (wcss / (n - k))
+ch
 
 
 
