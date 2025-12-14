@@ -24,14 +24,14 @@ vars_sc <- c("log_gdp_per_capita_sc",
 df_country <- aggregate(df[, all_sc],
                         by = list(country = df$country),
                         FUN = mean)
-df_country_cc <- df_country[complete.cases(df_country[, all_sc]), ]
+df_country <- df_country[complete.cases(X), ]
 X <- df_country[all_sc]
 
-# Rimozione di righe con NA
+# rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
 
-# Matrice di correlazione
+# matrice di correlazione
 mat_cor <- cor(X_scaled)
 round(mat_cor, 3)
 pheatmap(mat_cor,
@@ -41,40 +41,38 @@ pheatmap(mat_cor,
          display_numbers = TRUE,
          number_format = "%.2f")
 
-# Senza la variabile happiness score
+# senza la variabile happiness score
 X <- df_country[vars_sc]
 rownames(X) <- df_country$country
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
 mat_cor <- cor(X_scaled)
 
-# Calcolo PCA
+# calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
 summary(pca)
-# Per determinare il contributo delle componenti
+# per determinare il contributo delle componenti
 round(pca$rotation, 3)
-# Screeplot
+# screeplot
 plot(pca, type = "l",  main="Screeplot PCA")
 
-# Si prendono in considerazione i primi
+# si prendono in considerazione i primi
 scores <- pca$x[,1:3]
-# Matrice delle distanze
-cat("Matrice delle distanze: ")
+# matrice delle distanze
 dist_euclidea <- dist(scores, method = "euclidean")
-dist_euclidea[1:10] # Si stampano solo le prime 10 per avere una visione iniziale dei valori
+dist_euclidea[1:10] # si stampano solo le prime 10 per avere una visione iniziale dei valori
 mat_dist <- as.matrix(dist_euclidea)
 rownames(mat_dist) <- rownames(X_scaled)
 colnames(mat_dist) <- rownames(X_scaled)
 round(mat_dist[1:10, 1:10], 3)
 
-# Matrice di similarità
-cat("Matrice di similarità: ")
+# matrice di similarità
 mat_similarity <- 1 - mat_dist / max(mat_dist)
 rownames(mat_similarity) <- rownames(X_scaled)
 colnames(mat_similarity) <- rownames(X_scaled)
 round(mat_similarity[1:10, 1:10], 3)
 
-# Matrice di covarianza
+# matrice di covarianza
 mat_cov <- cov(X_scaled)
 round(mat_cov, 3)
 pheatmap(mat_cov,
@@ -84,20 +82,20 @@ pheatmap(mat_cov,
          display_numbers = TRUE,
          number_format = "%.2f")
 
-# Matrice di non omogeneità
+# matrice di non omogeneità
 non_omogeneity <- apply(X_scaled, 1, var)
 summary(non_omogeneity)
 
-# Clustering gerarchico
+# clustering gerarchico
 hc <- hclust(dist_euclidea, method="complete")
 str(hc, list.len = nrow(hc$merge)*2, max.level = 5)
 
-# Dendrogramma
+# dendrogramma
 plot(hc, main="Dendrogramma clutering per paese",
      xlab="Variabili", ylab="Distanza", cex=0.4)
 rect.hclust(hc, k=2, border="red")
 
-# Calcolo cluster
+# calcolo cluster
 clusters <- cutree(hc, k=2)
 clusters
 
@@ -106,18 +104,15 @@ plot(scores[,1], scores[,2],
      xlab="PC1", ylab="PC2",
      main="Clusters")
 
-# Aggiunta cluster
-rows_cluster <- complete.cases(df_country[, all_sc])
-df_country <- df_country[rows_cluster, ]
+# aggiunta cluster
 df_country$cluster <- clusters
-
-# Raggruppamento dei paesi in base al cluster di appartenenza
-# Media di felicità per ogni cluster
+# raggruppamento dei paesi in base al cluster di appartenenza
+# media di felicità per ogni cluster
 aggregate(df_country$happiness_score_sc,
           by = list(cluster = df_country$cluster),
           FUN = mean)
 
-# Kmeans a 2 cluster
+# kmeans a 2 cluster
 kmeans_res <- kmeans(scores, centers = 2, nstart = 1)
 kmeans_res
 clusters_km <- kmeans_res$cluster
@@ -135,13 +130,12 @@ par(mfrow = c(1,1))
 
 # Within-Cluster Sum of Squares
 wcss <- kmeans_res$tot.withinss
-cat("Within-Cluster Sum of Squares: ", wcss)
+wcss
 # Between-Cluster Sum of Squares
 bcss <- kmeans_res$betweenss
-cat("Between-Cluster Sum of Squares: ", bcss)
 bcss
 n <- nrow(scores)
 k <- 2
 # Calinski–Harabasz
 ch <- (bcss / (k - 1)) / (wcss / (n - k))
-cat("Calinski-Harabasz: ", ch)
+ch
