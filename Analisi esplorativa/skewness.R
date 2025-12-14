@@ -10,8 +10,7 @@ kt
 
 # Divisione per anno per l'asimmetria calcolata sugli anni
 skew_by_year <- tapply(df$happiness_score, df$year, skewness, na.rm = TRUE)
-cat("Skewness per anno: ")
-print(skew_by_year)
+cat("Skewness per anno: " , skew_by_year)
 years <- as.numeric(names(skew_by_year))
 plot(years, skew_by_year, type="b", pch=19, col="#238b45",
      xaxt="n",
