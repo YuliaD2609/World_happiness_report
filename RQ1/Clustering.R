@@ -24,7 +24,7 @@ vars_sc <- c("log_gdp_per_capita_sc",
 df_country <- aggregate(df[, all_sc],
                         by = list(country = df$country),
                         FUN = mean)
-df_country <- df_country[complete.cases(X), ]
+df_country_cc <- df_country[complete.cases(df_country[, all_sc]), ]
 X <- df_country[all_sc]
 
 # Rimozione di righe con NA
@@ -107,7 +107,10 @@ plot(scores[,1], scores[,2],
      main="Clusters")
 
 # Aggiunta cluster
+rows_cluster <- complete.cases(df_country[, all_sc])
+df_country <- df_country[rows_cluster, ]
 df_country$cluster <- clusters
+
 # Raggruppamento dei paesi in base al cluster di appartenenza
 # Media di felicità per ogni cluster
 aggregate(df_country$happiness_score_sc,

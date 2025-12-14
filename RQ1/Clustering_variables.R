@@ -97,10 +97,9 @@ rect.hclust(hc, k=2, border="red")
 rect.hclust(hc, k=3, border="green")
 par(mfrow = c(1, 1))
 
+# Metodo della silhouette
 library(cluster)
-
 sil_width <- numeric()
-
 for (k in 2:8) {
   km <- kmeans(scores, centers = k, nstart = 25)
   sil <- silhouette(km$cluster, dist(scores))
