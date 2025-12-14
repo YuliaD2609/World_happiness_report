@@ -43,17 +43,14 @@ lines(x, f_H1, lwd=2, col="red")
 
 abline(v = x_int, col="black", lty=2)
 
-# Area alpha
-x_alpha <- x[x > x_int]
-polygon(c(x_int, x_alpha, max(x)),
-        c(0, dnorm(x_alpha,0,sigma), 0),
-        col=rgb(0,0,1,0.2), border=NA)
+polygon(c(x_int, x[x > x_int], max(x)),
+        c(0, dnorm(x[x > x_int],0,sigma), 0),
+        col=rgb(0,0,1,0.25), border=NA)
 
-# Area beta
-x_beta <- x[x < x_int]
-polygon(c(min(x), x_beta, x_int),
-        c(0, dnorm(x_beta,beta_true,sigma), 0),
-        col=rgb(1,0,0,0.2), border=NA)
+# Errore di Tipo II (β)
+polygon(c(min(x), x[x < x_int], x_int),
+        c(0, dnorm(x[x < x_int],beta_true,sigma), 0),
+        col=rgb(1,0,0,0.25), border=NA)
 
 legend("topright",
        legend=c("H0", "H1", "Regione critica"),
