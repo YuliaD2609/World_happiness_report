@@ -62,3 +62,59 @@ for (var in vars) {
   abline(h = 0, col = "blue", lty = 2, lwd = 2)  # linea orizzontale a 0
   grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
 }
+
+# Modello di regressione lineare
+model <- lm(
+  happiness_score ~ log_gdp_per_capita +
+    social_support +
+    healthy_life_expectancy_at_birth +
+    freedom_to_make_life_choices +
+    generosity +
+    perceptions_of_corruption +
+    positive_affect +
+    negative_affect,
+  data = df
+)
+
+# Distribuzione normale
+# stima parametri
+res <- residuals(model)
+
+# Sequenza di valori
+x <- seq(min(res), max(res), length = 200)
+mu <- mean(res)
+sigma <- sd(res)
+
+hist(res, prob=TRUE, col="lightgray", main="Residui")
+lines(dnorm(x, mean(res), sd(res)), col="red", lwd=2)
+
+# Densità normale
+dn=dnorm(x, mu, sigma)
+curve(dnorm(x,mean=0, sd =0.5) ,from=-4, to=4, xlab="x",
+      ylab="f(x)",main="Distribuzione di densità normale", col = "blue")
+curve(dnorm(x,mean=0, sd=1) ,from=-4, to=4, xlab="x",ylab="f(x)",
+      add=TRUE,col="red")
+curve(dnorm(x,mean=0, sd =1.5) ,from=-4, to=4, xlab="x",ylab="f(x)",
+      add=TRUE,col="green")
+legend("topright",
+       legend = c("sigma=0,5", "sigma=1", "sigma=1,5"),
+       col = c("blue", "red", "green"),
+       lwd = 2,
+       lty = c(1, 2))
+
+# Funzione di distribuzione normale
+fdn=pnorm(x, mu, sigma)
+curve(pnorm(x,mean=0, sd =0.5) ,from=-4, to=4, xlab="x",
+      ylab="f(x)",main="Funzione di distribuzione normale",col = "blue")
+curve(pnorm(x,mean=0, sd=1) ,from=-4, to=4, xlab="x",ylab="f(x)",
+      add=TRUE,col="red")
+curve(pnorm(x,mean=0, sd =1.5) ,from=-4, to=4, xlab="x",ylab="f(x)",
+      add=TRUE,col="green")
+legend("bottomright",
+       legend = c("sigma=0,5", "sigma=1", "sigma=1,5"),
+       col = c("blue", "red", "green"),
+       lwd = 2,
+       lty = c(1, 2))
+
+
+
