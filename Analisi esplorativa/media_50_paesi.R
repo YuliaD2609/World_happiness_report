@@ -139,8 +139,6 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
-
-
 # Social_support
 social_summary <- aggregate(social_support ~ country, data = df,
                             FUN = function(x) c(mean = mean(x, na.rm = TRUE),
@@ -166,8 +164,13 @@ bar_positions <- barplot(top50_social$mean,
                          cex.names = 0.8)
 lines(bar_positions, top50_social$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50_social$max, type = "o", col = "blue", lwd = 2, pch = 19)
-legend("topleft", legend = c("Minimo", "Massimo"),
-       col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
 
 # Social_support bottom 50
 bottom50_social <- social_summary[order(social_summary$mean), ][1:50, ]
@@ -183,8 +186,13 @@ bar_positions <- barplot(bottom50_social$mean,
                          cex.names = 0.8)
 lines(bar_positions, bottom50_social$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, bottom50_social$max, type = "o", col = "blue", lwd = 2, pch = 19)
-legend("topleft", legend = c("Minimo", "Massimo"),
-       col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
 
 # Healthn summary
 health_summary <- aggregate(healthy_life_expectancy_at_birth ~ country, data = df,
@@ -211,8 +219,13 @@ bar_positions <- barplot(top50_health$mean,
                          cex.names = 0.8)
 lines(bar_positions, top50_health$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50_health$max, type = "o", col = "blue", lwd = 2, pch = 19)
-legend("topleft", legend = c("Minimo", "Massimo"),
-       col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
 
 # Health bottom 50
 bottom50_health <- health_summary[order(health_summary$mean), ][1:50, ]
@@ -227,8 +240,13 @@ bar_positions <- barplot(bottom50_health$mean,
                          cex.names = 0.8)
 lines(bar_positions, bottom50_health$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, bottom50_health$max, type = "o", col = "blue", lwd = 2, pch = 19)
-legend("topleft", legend = c("Minimo", "Massimo"),
-       col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
+legend("topleft",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n"))
 
 # Freedom summary
 freedom_summary <- aggregate(freedom_to_make_life_choices ~ country, data = df,
