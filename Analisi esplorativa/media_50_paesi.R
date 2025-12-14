@@ -7,7 +7,7 @@ happiness_summary <- aggregate(happiness_score ~ country, data = df,
                                                    min = min(x, na.rm = TRUE),
                                                    max = max(x, na.rm = TRUE)))
 
-# Trasformazione in dataframe leggibile
+# Trasformazione in dataframe
 happiness_summary <- data.frame(
   country = happiness_summary$country,
   mean = happiness_summary$happiness_score[, "mean"],
@@ -18,7 +18,7 @@ happiness_summary <- data.frame(
 # Selezione dei 50 paesi con felicità media più alta
 top50 <- happiness_summary[order(-happiness_summary$mean), ][1:50, ]
 
-# Imposta margini
+# Margini
 par(mar = c(10, 5, 4, 2))
 
 y_min <- min(top50$min) - 0.2
@@ -37,11 +37,11 @@ bap_positions <- barplot(top50$mean,
               cex.names = 0.8,
               )
 
-# Aggiungi linee per min e max
+# Aggiunta linee per min e max
 lines(bar_positions, top50$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
-# Legenda chiara e compatta
+# Legenda 
 legend("topleft",
        legend = c("Minimo", "Massimo"),
        col = c("red", "blue"),
@@ -50,12 +50,9 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
-
-
-
 bottom50 <- happiness_summary[order(happiness_summary$mean), ][1:50, ]
 
-# Imposta margini e intervallo Y
+# Margini e intervallo Y
 par(mar = c(10, 5, 4, 2))
 y_min <- min(bottom50$min) - 0.2
 y_max <- max(bottom50$max) + 0.5
@@ -84,7 +81,6 @@ legend("topleft",
 
 
 # Log_gdp_per_capita
-
 gdp_summary <- aggregate(log_gdp_per_capita ~ country, data = df,
                          FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                              min = min(x, na.rm = TRUE),
@@ -98,11 +94,8 @@ gdp_summary <- data.frame(
 )
 
 # Log_gdp_per_capita top
-
 top50_gdp <- gdp_summary[order(-gdp_summary$mean), ][1:50, ]
-
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(top50_gdp$mean,
                          names.arg = top50_gdp$country,
                          las = 2,
@@ -125,11 +118,8 @@ legend("topleft",
 
 
 # Log_gdp_per_capita bottom
-
 bottom50_gdp <- gdp_summary[order(gdp_summary$mean), ][1:50, ]
-
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(bottom50_gdp$mean,
                          names.arg = bottom50_gdp$country,
                          las = 2,
@@ -138,7 +128,6 @@ bar_positions <- barplot(bottom50_gdp$mean,
                          main = expression(bold("Bottom 50 Paesi per log(GDP pro capite) medio")),
                          ylab = "log(GDP pro capite)",
                          cex.names = 0.8)
-
 lines(bar_positions, bottom50_gdp$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, bottom50_gdp$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
@@ -153,12 +142,10 @@ legend("topleft",
 
 
 # Social_support
-
 social_summary <- aggregate(social_support ~ country, data = df,
                             FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                 min = min(x, na.rm = TRUE),
                                                 max = max(x, na.rm = TRUE)))
-
 social_summary <- data.frame(
   country = social_summary$country,
   mean = social_summary$social_support[, "mean"],
@@ -168,9 +155,7 @@ social_summary <- data.frame(
 
 # Social_ support top 50
 top50_social <- social_summary[order(-social_summary$mean), ][1:50, ]
-
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(top50_social$mean,
                          names.arg = top50_social$country,
                          las = 2,
@@ -184,7 +169,7 @@ lines(bar_positions, top50_social$max, type = "o", col = "blue", lwd = 2, pch = 
 legend("topleft", legend = c("Minimo", "Massimo"),
        col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
 
-# social_support bottom 50
+# Social_support bottom 50
 bottom50_social <- social_summary[order(social_summary$mean), ][1:50, ]
 par(mar = c(10, 5, 4, 2))
 
@@ -201,7 +186,6 @@ lines(bar_positions, bottom50_social$max, type = "o", col = "blue", lwd = 2, pch
 legend("topleft", legend = c("Minimo", "Massimo"),
        col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
 
-
 # Healthn summary
 health_summary <- aggregate(healthy_life_expectancy_at_birth ~ country, data = df,
                             FUN = function(x) c(mean = mean(x, na.rm = TRUE),
@@ -217,7 +201,6 @@ health_summary <- data.frame(
 # Health top 50
 top50_health <- health_summary[order(-health_summary$mean), ][1:50, ]
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(top50_health$mean,
                          names.arg = top50_health$country,
                          las = 2,
@@ -234,7 +217,6 @@ legend("topleft", legend = c("Minimo", "Massimo"),
 # Health bottom 50
 bottom50_health <- health_summary[order(health_summary$mean), ][1:50, ]
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(bottom50_health$mean,
                          names.arg = bottom50_health$country,
                          las = 2,
@@ -247,7 +229,6 @@ lines(bar_positions, bottom50_health$min, type = "o", col = "red", lwd = 2, pch 
 lines(bar_positions, bottom50_health$max, type = "o", col = "blue", lwd = 2, pch = 19)
 legend("topleft", legend = c("Minimo", "Massimo"),
        col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
-
 
 # Freedom summary
 freedom_summary <- aggregate(freedom_to_make_life_choices ~ country, data = df,
@@ -262,13 +243,11 @@ freedom_summary <- data.frame(
   max = freedom_summary$freedom_to_make_life_choices[, "max"]
 )
 
-
 top50_freedom <- freedom_summary[order(-freedom_summary$mean), ][1:50, ]
 bottom50_freedom <- freedom_summary[order(freedom_summary$mean), ][1:50, ]
 
 # Top 50 Freedom 
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(top50_freedom$mean,
                          names.arg = top50_freedom$country,
                          las = 2,
@@ -277,7 +256,6 @@ bar_positions <- barplot(top50_freedom$mean,
                          main = expression(bold("Top 50 Paesi per Libertà di Scelta nella Vita")),
                          ylab = "Freedom to make life choices",
                          cex.names = 0.8)
-
 lines(bar_positions, top50_freedom$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50_freedom$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
@@ -291,7 +269,6 @@ legend("topleft",
 
 # Bottom 50 summary
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(bottom50_freedom$mean,
                          names.arg = bottom50_freedom$country,
                          las = 2,
@@ -300,7 +277,6 @@ bar_positions <- barplot(bottom50_freedom$mean,
                          main = expression(bold("Bottom 50 Paesi per Libertà di Scelta nella Vita")),
                          ylab = "Freedom to make life choices",
                          cex.names = 0.8)
-
 lines(bar_positions, bottom50_freedom$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, bottom50_freedom$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
@@ -311,8 +287,6 @@ legend("topleft",
        lty = 1,
        lwd = 2,
        bty = "n")
-
-
 
 # Generosity
 generosity_summary <- aggregate(generosity ~ country, data = df,
@@ -332,7 +306,6 @@ bottom50_generosity <- generosity_summary[order(generosity_summary$mean), ][1:50
 
 # Generosity top 50
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(top50_generosity$mean,
                          names.arg = top50_generosity$country,
                          las = 2,
@@ -341,7 +314,6 @@ bar_positions <- barplot(top50_generosity$mean,
                          main = expression(bold("Top 50 Paesi per Generosità Media")),
                          ylab = "Generosity",
                          cex.names = 0.8)
-
 lines(bar_positions, top50_generosity$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50_generosity$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
@@ -355,7 +327,6 @@ legend("topleft",
 
 # Generosity bottom
 par(mar = c(10, 5, 4, 2))
-
 bar_positions <- barplot(bottom50_generosity$mean,
                          names.arg = bottom50_generosity$country,
                          las = 2,
@@ -364,7 +335,6 @@ bar_positions <- barplot(bottom50_generosity$mean,
                          main = expression(bold("Bottom 50 Paesi per Generosità Media")),
                          ylab = "Generosity",
                          cex.names = 0.8)
-
 lines(bar_positions, bottom50_generosity$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, bottom50_generosity$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
