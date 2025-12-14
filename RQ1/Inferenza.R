@@ -45,7 +45,7 @@ abline(v = x_int, col="black", lty=2)
 
 # Area alpha
 x_alpha <- x[x > x_int]
-polygon(c(x_int, x_alpha, max(x)),s
+polygon(c(x_int, x_alpha, max(x)),
         c(0, dnorm(x_alpha,0,sigma), 0),
         col=rgb(0,0,1,0.2), border=NA)
 
