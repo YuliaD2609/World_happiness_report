@@ -75,10 +75,13 @@ model <- lm(
     negative_affect,
   data = df
 )
+# residual standard error
+summary(model)$sigma
 
 # Distribuzione normale
 # stima parametri
 res <- residuals(model)
+
 
 # Sequenza di valori
 x <- seq(min(res), max(res), length = 200)
