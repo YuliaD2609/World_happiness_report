@@ -24,11 +24,12 @@ vars_sc <- c("log_gdp_per_capita_sc",
 
 X <- df[all_sc]
 
-# rimozione di righe con NA
+# Rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
 
-# matrice di correlazione
+# Matrice di correlazione
+cat("Matrice di correlazione: ")
 mat_cor <- cor(X_scaled)
 round(mat_cor, 3)
 pheatmap(mat_cor,
@@ -40,20 +41,23 @@ pheatmap(mat_cor,
 
 X <- df[vars_sc]
 
-# rimozione di righe con NA
+# Rimozione di righe con NA
 X_complete <- X[complete.cases(X), ]
 X_scaled <- scale(X_complete)
-# calcolo PCA
+# Calcolo PCA
 pca <- prcomp(X_scaled, center = TRUE, scale. = TRUE)
+cat("PCA: ")
 summary(pca)
-# per determinare il contributo delle componenti
+# Per determinare il contributo delle componenti
+cat("Contributo componenti: ")
 round(pca$rotation, 3)
-# screeplot
+# Screeplot
 plot(pca, type = "l",  main="Screeplot PCA")
 
-# si prendono in considerazione i primi
+# Si prendono in considerazione i primi
 scores <- pca$x[,1:3]
-# matrice delle distanze
+# Matrice delle distanze
+cat("Matrice distanze: ")
 dist_euclidea <- dist(scores, method = "euclidean")
 dist_euclidea[1:10] # si stampano solo le prime 10 per avere una visione iniziale dei valori
 mat_dist <- as.matrix(dist_euclidea)
@@ -61,13 +65,13 @@ rownames(mat_dist) <- rownames(X_scaled)
 colnames(mat_dist) <- rownames(X_scaled)
 round(mat_dist[1:10, 1:10], 3)
 
-# matrice di similarità
+# Matrice di similarità
 mat_similarity <- 1 - mat_dist / max(mat_dist)
 rownames(mat_similarity) <- rownames(X_scaled)
 colnames(mat_similarity) <- rownames(X_scaled)
 round(mat_similarity[1:10, 1:10], 3)
 
-# matrice di covarianza
+# Matrice di covarianza
 mat_cov <- cov(X_scaled)
 round(mat_cov, 3)
 pheatmap(mat_cov,
@@ -77,16 +81,16 @@ pheatmap(mat_cov,
          display_numbers = TRUE,
          number_format = "%.2f")
 
-# matrice di non omogeneità
+# Matrice di non omogeneità
 non_omogeneity <- apply(X_scaled, 1, var)
 summary(non_omogeneity)
 
-# clustering gerarchico
+# Clustering gerarchico
 dist_vars <- dist(1 - mat_cor) 
 hc <- hclust(dist_vars, method="complete")
 
 par(mfrow = c(1, 2)) 
-# dendrogramma
+# Dendrogramma
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=0.6)
 rect.hclust(hc, k=2, border="red")

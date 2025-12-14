@@ -1,7 +1,7 @@
 #Caricamento del dataset
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-#Rimuovo eventuali valori mancanti
+# Rimozione eventuali valori mancanti
 df_box <- df[!is.na(df$happiness_score) & !is.na(df$year), ]
 
 #Boxplot

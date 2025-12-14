@@ -1,6 +1,6 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
-#skewness e curtosi per l'asimmetria
-#install.packages("moments")
+# Skewness e curtosi per l'asimmetria
+# install.packages("moments")
 library(moments)
 par(mfrow = c(1,1))
 sk <- skewness(df$happiness_score, na.rm = TRUE)
@@ -8,8 +8,9 @@ kt <- kurtosis(df$happiness_score, na.rm = TRUE)
 sk
 kt
 
-#divisione per anno per l'asimmetria calcolata sugli anni
+# Divisione per anno per l'asimmetria calcolata sugli anni
 skew_by_year <- tapply(df$happiness_score, df$year, skewness, na.rm = TRUE)
+cat("Skewness per anno: ")
 print(skew_by_year)
 years <- as.numeric(names(skew_by_year))
 plot(years, skew_by_year, type="b", pch=19, col="#238b45",

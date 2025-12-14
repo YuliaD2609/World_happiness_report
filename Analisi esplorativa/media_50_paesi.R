@@ -7,7 +7,7 @@ happiness_summary <- aggregate(happiness_score ~ country, data = df,
                                                    min = min(x, na.rm = TRUE),
                                                    max = max(x, na.rm = TRUE)))
 
-#Trasformazione in dataframe leggibile
+# Trasformazione in dataframe leggibile
 happiness_summary <- data.frame(
   country = happiness_summary$country,
   mean = happiness_summary$happiness_score[, "mean"],
@@ -15,19 +15,18 @@ happiness_summary <- data.frame(
   max = happiness_summary$happiness_score[, "max"]
 )
 
-#Selezione dei 50 paesi con felicità media più alta
+# Selezione dei 50 paesi con felicità media più alta
 top50 <- happiness_summary[order(-happiness_summary$mean), ][1:50, ]
 
-#Imposta margini (più spazio per i nomi sotto)
-par(mar = c(10, 5, 4, 2))   # margine inferiore aumentato
+# Imposta margini
+par(mar = c(10, 5, 4, 2))
 
-#Definizione dell'intervallo Y (nessun overflow)
 y_min <- min(top50$min) - 0.2
 y_max <- max(top50$max) + 0.5
 
 colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
 
-#barplot
+# Barplot
 bap_positions <- barplot(top50$mean,
               names.arg = top50$country,
               las = 2,
@@ -38,11 +37,11 @@ bap_positions <- barplot(top50$mean,
               cex.names = 0.8,
               )
 
-#Aggiungi linee per min e max
+# Aggiungi linee per min e max
 lines(bar_positions, top50$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
-#Legenda chiara e compatta
+# Legenda chiara e compatta
 legend("topleft",
        legend = c("Minimo", "Massimo"),
        col = c("red", "blue"),
@@ -61,7 +60,7 @@ par(mar = c(10, 5, 4, 2))
 y_min <- min(bottom50$min) - 0.2
 y_max <- max(bottom50$max) + 0.5
 
-# Barplot (dal più basso al più alto)
+# Barplot
 bar_positions <- barplot(bottom50$mean,
                          names.arg = bottom50$country,
                          las = 2,
@@ -84,7 +83,7 @@ legend("topleft",
        bty = "n")
 
 
-#log_gdp_per_capita
+# Log_gdp_per_capita
 
 gdp_summary <- aggregate(log_gdp_per_capita ~ country, data = df,
                          FUN = function(x) c(mean = mean(x, na.rm = TRUE),
@@ -98,7 +97,7 @@ gdp_summary <- data.frame(
   max = gdp_summary$log_gdp_per_capita[, "max"]
 )
 
-#log_gdp_per_capita top
+# Log_gdp_per_capita top
 
 top50_gdp <- gdp_summary[order(-gdp_summary$mean), ][1:50, ]
 
@@ -125,7 +124,7 @@ legend("topleft",
        bty = "n")
 
 
-#log_gdp_per_capita bottom
+# Log_gdp_per_capita bottom
 
 bottom50_gdp <- gdp_summary[order(gdp_summary$mean), ][1:50, ]
 
@@ -153,7 +152,7 @@ legend("topleft",
 
 
 
-#social_support
+# Social_support
 
 social_summary <- aggregate(social_support ~ country, data = df,
                             FUN = function(x) c(mean = mean(x, na.rm = TRUE),
@@ -167,7 +166,7 @@ social_summary <- data.frame(
   max = social_summary$social_support[, "max"]
 )
 
-# social_ support top 50
+# Social_ support top 50
 top50_social <- social_summary[order(-social_summary$mean), ][1:50, ]
 
 par(mar = c(10, 5, 4, 2))
@@ -203,7 +202,7 @@ legend("topleft", legend = c("Minimo", "Massimo"),
        col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
 
 
-# healthn summary
+# Healthn summary
 health_summary <- aggregate(healthy_life_expectancy_at_birth ~ country, data = df,
                             FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                 min = min(x, na.rm = TRUE),
@@ -215,7 +214,7 @@ health_summary <- data.frame(
   max = health_summary$healthy_life_expectancy_at_birth[, "max"]
 )
 
-# # health top 50
+# Health top 50
 top50_health <- health_summary[order(-health_summary$mean), ][1:50, ]
 par(mar = c(10, 5, 4, 2))
 
@@ -232,7 +231,7 @@ lines(bar_positions, top50_health$max, type = "o", col = "blue", lwd = 2, pch = 
 legend("topleft", legend = c("Minimo", "Massimo"),
        col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
 
-# health bottom 50
+# Health bottom 50
 bottom50_health <- health_summary[order(health_summary$mean), ][1:50, ]
 par(mar = c(10, 5, 4, 2))
 
@@ -250,7 +249,7 @@ legend("topleft", legend = c("Minimo", "Massimo"),
        col = c("red", "blue"), pch = 19, lty = 1, lwd = 2, bty = "n")
 
 
-# freedom summary
+# Freedom summary
 freedom_summary <- aggregate(freedom_to_make_life_choices ~ country, data = df,
                              FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                  min = min(x, na.rm = TRUE),
@@ -290,7 +289,7 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
-# bottom 50 summary
+# Bottom 50 summary
 par(mar = c(10, 5, 4, 2))
 
 bar_positions <- barplot(bottom50_freedom$mean,
@@ -315,7 +314,7 @@ legend("topleft",
 
 
 
-#generosity
+# Generosity
 generosity_summary <- aggregate(generosity ~ country, data = df,
                                 FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                     min = min(x, na.rm = TRUE),
@@ -331,7 +330,7 @@ generosity_summary <- data.frame(
 top50_generosity <- generosity_summary[order(-generosity_summary$mean), ][1:50, ]
 bottom50_generosity <- generosity_summary[order(generosity_summary$mean), ][1:50, ]
 
-# generosity top 50
+# Generosity top 50
 par(mar = c(10, 5, 4, 2))
 
 bar_positions <- barplot(top50_generosity$mean,
@@ -354,7 +353,7 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
-# generosity bottom
+# Generosity bottom
 par(mar = c(10, 5, 4, 2))
 
 bar_positions <- barplot(bottom50_generosity$mean,

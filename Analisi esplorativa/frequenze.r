@@ -1,16 +1,16 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-#frequenza assoluta
+# Frequenza assoluta
 freq_ass <- table(cut(df$happiness_score, breaks = 40, right = FALSE))
-freq_ass
-#frequenza relativa
+cat("Frequenza assoluta: ", freq_ass)
+# Frequenza relativa
 freq_rel <- prop.table(freq_ass)
-freq_rel
-#frequenza relativa cumulata
+cat("Frequenza relativa: ", freq_rel)
+# Frequenza relativa cumulata
 freq_rel_cum <- cumsum(freq_rel)
-freq_rel_cum
+cat("Frequenza relativa cumulata: ", freq_rel_cum)
 
-#Minimo, media, mediana, quantili
+# Minimo, media, mediana, quantili
 summary(df$happiness_score)
 
 par(mgp = c(4, 0, -1))
@@ -46,7 +46,7 @@ plot(freq_rel_cum,
 axis(1, at = 1:length(freq_rel_cum), labels = names(freq_rel_cum), las = 2, cex.axis = 0.6)
 
 
-#Istogramma
+# Istogramma
 hist_data <- hist(df$happiness_score,
                   breaks = 40,                         
                   col = "#56B117",                     
@@ -58,7 +58,7 @@ hist_data <- hist(df$happiness_score,
                   cex.lab = 1,
                   cex.axis = 0.9)
 
-#Aggiunta curva 
+# Aggiunta curva 
 dens <- density(df$happiness_score)
 scale_factor <- max(hist_data$counts) / max(dens$y)     
 
@@ -76,7 +76,7 @@ legend("topright",
        cex = 0.9)
 
 
-# kernel density plot
+# Kernel density plot
 
 dens <- density(df$happiness_score)
 

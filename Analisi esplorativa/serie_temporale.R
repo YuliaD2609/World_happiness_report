@@ -1,6 +1,6 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-# media annuale della felicità
+# Media annuale della felicità
 media_annuale <- aggregate(happiness_score ~ year, df, mean)
 
 ts_media <- ts(media_annuale$happiness_score,

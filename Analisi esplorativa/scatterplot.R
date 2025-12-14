@@ -9,7 +9,7 @@ vars <- c("log_gdp_per_capita",
           "positive_affect",
           "negative_affect")
 
-#scatterplot
+# Scatterplot
 for (var in vars) {
   
   df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
@@ -23,20 +23,20 @@ for (var in vars) {
        pch = 16,
        cex = 0.5)
   
-  # modello lineare
+  # Modello lineare
   lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
   abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
   grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
   
-  # statistiche sintetiche
-  cat("=== MODELLO PER:", var, "===\n")
+  # Statistiche sintetiche
+  cat("Modello per:", var, "\n")
   print(summary(lm_model))
   
   cor_val <- cor(df_plot[[var]], df_plot$happiness_score)
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
 }
 
-#residui
+# Residui
 
 for (var in vars) {
   
@@ -59,7 +59,7 @@ for (var in vars) {
   grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
 }
 
-#matrice di scatterplot
+# Matrice di scatterplot
 pairs(df[vars], cex = 0.1, pch = 16, col="darkgreen",
       main = "Scatterplot matrix delle variabili")
 

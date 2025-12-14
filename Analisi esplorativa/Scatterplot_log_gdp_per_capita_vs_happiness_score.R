@@ -1,10 +1,10 @@
-#Lettura del dataset
+# Lettura del dataset
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-#Rimozione dei valori mancanti
+# Rimozione dei valori mancanti
 df_plot <- df[!is.na(df$log_gdp_per_capita) & !is.na(df$happiness_score), ]
 
-#Scatterplot
+# Scatterplot
 plot(df_plot$log_gdp_per_capita,
      df_plot$happiness_score,
      main = "Relazione tra PIL pro capite (log) e punteggio di felicità",
@@ -14,13 +14,13 @@ plot(df_plot$log_gdp_per_capita,
      pch = 16,
      cex = 0.5)
 
-#regressione lineare
+# Regressione lineare
 lm_model <- lm(happiness_score ~ log_gdp_per_capita, data = df_plot)
 abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
 
 grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
 
-#Calcolo della correlazione
+# Calcolo della correlazione
 cor_val <- cor(df_plot$log_gdp_per_capita,
                df_plot$happiness_score,
                use = "complete.obs")

@@ -16,19 +16,20 @@ na_mat <- is.na(df[, numeric_vars])
 missing_by_country_initial <- aggregate(na_mat,
                                         by=list(country=df$country),
                                         FUN=sum)
+cat("Numero di missing values per paese")
 missing_by_country_initial
 
-# somma di missing values su tutte le variabili numeriche
+# Somma di missing values su tutte le variabili numeriche
 missing_by_country_initial$total_missing <- rowSums(missing_by_country_initial[numeric_vars])
 
-# ordine decrescente eliminando i paesi con 0 missing values
+# Ordine decrescente eliminando i paesi con 0 missing values
 missing_by_country_initial <- missing_by_country_initial[missing_by_country_initial$total_missing > 0, ]
 missing_by_country_initial <- missing_by_country_initial[order(-missing_by_country_initial$total_missing), ]
 
-#scala di colori
+# Scala di colori
 colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
 
-#barplot
+# Barplot
 bp <- barplot(missing_by_country_initial$total_missing,
               names.arg = missing_by_country_initial$country,
               las = 2,
@@ -43,7 +44,7 @@ unique_vals <- unique(missing_by_country_initial$total_missing)
 for(val in unique_vals){
   idx <- which(missing_by_country_initial$total_missing == val)
   
-  # posizione centrale 
+  # Posizione centrale 
   central_idx <- idx[ceiling(length(idx)/2)]
   text(x = bp[central_idx],
        y = missing_by_country_initial$total_missing[central_idx] + 1,
@@ -55,21 +56,21 @@ for(val in unique_vals){
 
 
 
-#Calcolo del numero di NA per ogni colonna
+# Calcolo del numero di NA per ogni colonna
 missing_counts <- colSums(is.na(df))
 
-#Creazione dataframe
+# Creazione dataframe
 missing_df <- data.frame(
   Variabile = names(missing_counts),
   Valori_Mancanti = missing_counts
 )
 
-#Esclusione variabili standardizzate e ordinamento decrescente
+# Esclusione variabili standardizzate e ordinamento decrescente
 missing_df <- missing_df[!grepl("_sc$", missing_df$Variabile), ]
 missing_df <- missing_df[order(-missing_df$Valori_Mancanti), ]
 
 
-#Barplot
+# Barplot
 bp <- barplot(missing_df$Valori_Mancanti,
               names.arg = NA,
               ylim = c(0, 150),

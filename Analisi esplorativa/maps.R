@@ -8,7 +8,7 @@ library(rnaturalearthdata)
 library(sf)
 library(tmap)
 
-#Calcolo della media di felicità per paese
+# Calcolo media felicità per paese
 
 
 library(dplyr)
@@ -44,7 +44,7 @@ world_happiness <- world %>%
 setdiff(happiness_mean$country, world$name)
 
 
-#mappa interattiva
+# Mappa interattiva
 tmap_mode("view")  # modalità interattiva
 
 map_dynamic <- tm_shape(world_happiness) +
@@ -55,13 +55,13 @@ map_dynamic <- tm_shape(world_happiness) +
     alpha = 0.85
   ) +
   tm_layout(
-    legend.title.size = 0.7,  # legenda più piccola anche in view
+    legend.title.size = 0.7,
     legend.text.size = 0.55
   )
 
 map_dynamic
 
-#mappa statica
+# Mappa statica
 tmap_mode("plot") 
 map_static <- tm_shape(world_happiness) +
   tm_polygons(

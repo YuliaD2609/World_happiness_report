@@ -7,7 +7,7 @@ happiness_summary <- aggregate(happiness_score ~ country, data = df,
                                                    min = min(x, na.rm = TRUE),
                                                    max = max(x, na.rm = TRUE)))
 
-#Trasformazione in dataframe leggibile
+# Trasformazione in dataframe leggibile
 happiness_summary <- data.frame(
   country = happiness_summary$country,
   mean = happiness_summary$happiness_score[, "mean"],
@@ -15,7 +15,7 @@ happiness_summary <- data.frame(
   max = happiness_summary$happiness_score[, "max"]
 )
 
-#Selezione dei 50 paesi con felicità media più alta
+# Selezione dei 50 paesi con felicità media più alta
 top50 <- happiness_summary[order(-happiness_summary$mean), ][1:50, ]
 
 par(mar = c(10, 5, 4, 2))   # margine inferiore aumentato
@@ -33,7 +33,7 @@ bap_positions <- barplot(top50$mean,
               cex.names = 0.8,
               )
 
-#Aggiungi linee per min e max
+# Aggiunta linee per min e max
 lines(bar_positions, top50$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50$max, type = "o", col = "blue", lwd = 2, pch = 19)
 

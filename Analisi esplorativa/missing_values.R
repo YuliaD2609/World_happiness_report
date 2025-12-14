@@ -10,24 +10,24 @@ numeric_vars <- c("log_gdp_per_capita",
                   "negative_affect"
                   )
 
-# numero massimo consentito di NA per riga
+# Numero massimo consentito di NA per riga
 df <- df[rowSums(is.na(df)) <= 3, ]
 
-# numero di osservazioni per paese
+# Numero di osservazioni per paese
 country_counts <- table(df$country)
 
-# si tolgono i paesi con meno di due righe
+# Si tolgono i paesi con meno di due righe
 valid_countries <- names(country_counts[country_counts >= 2])
 setdiff(names(country_counts), valid_countries)
 
 df <- df[df$country %in% valid_countries, ]
 
-# paesi
+# Paesi
 countries <- unique(df$country)
 
 for (v in numeric_vars) {
   
-  # media globale per fallback
+  # Media globale per fallback
   global_mean <- mean(df[[v]], na.rm = TRUE)
   
   country_means <- tapply(
@@ -61,9 +61,10 @@ for (v in numeric_vars) {
 post_n_missing <- sapply(df[numeric_vars], function(x) sum(is.na(x)))
 post_missing_df <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
 print(post_missing_df)
+cat("Variabili con n missing")
 View(df)
 
-#ricostruzione sc
+# Ricostruzione sc
 df$log_gdp_per_capita_sc <- as.numeric(scale(df$log_gdp_per_capita))
 df$social_support_sc <- as.numeric(scale(df$social_support))
 df$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df$healthy_life_expectancy_at_birth))
