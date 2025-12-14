@@ -1,7 +1,19 @@
-df_country <- aggregate(df[, all_sc],
+df <- read.csv(file.choose(), header = TRUE, sep = ",")
+
+Allvars <- c("log_gdp_per_capita",
+          "social_support",
+          "healthy_life_expectancy_at_birth",
+          "freedom_to_make_life_choices",
+          "generosity",
+          "perceptions_of_corruption",
+          "positive_affect",
+          "negative_affect",
+          "happiness_score")
+
+df_country <- aggregate(df[, Allvars],
                         by = list(country = df$country),
                         FUN = mean)
-df_country_cc <- df_country[complete.cases(df_country[, all_sc]), ]
+df_country_cc <- df_country[complete.cases(df_country[, Allvars]), ]
 
 # Parametri
 alpha <- 0.05
@@ -33,13 +45,13 @@ abline(v = x_int, col="black", lty=2)
 
 # Area alpha
 x_alpha <- x[x > x_int]
-polygon(c(z_alpha*sigma, x_alpha, max(x)),
+polygon(c(x_int, x_alpha, max(x)),s
         c(0, dnorm(x_alpha,0,sigma), 0),
         col=rgb(0,0,1,0.2), border=NA)
 
 # Area beta
 x_beta <- x[x < x_int]
-polygon(c(min(x), x_beta, z_alpha*sigma),
+polygon(c(min(x), x_beta, x_int),
         c(0, dnorm(x_beta,beta_true,sigma), 0),
         col=rgb(1,0,0,0.2), border=NA)
 
@@ -48,3 +60,28 @@ legend("topright",
        col=c("blue","red","black"),
        lwd=c(2,2,1),
        lty=c(1,1,2))
+
+
+vars <- c("log_gdp_per_capita",
+          "social_support",
+          "healthy_life_expectancy_at_birth",
+          "freedom_to_make_life_choices",
+          "generosity",
+          "perceptions_of_corruption",
+          "positive_affect",
+          "negative_affect")
+
+results <- list()
+
+for (v in vars) {
+  
+  df_tmp <- df_country[!is.na(df_country[[v]]) & !is.na(df_country$happiness_score), ]
+  
+  model <- lm(df_tmp$happiness_score ~ df_tmp[[v]])
+  
+  results[[v]] <- list(
+    summary = summary(model),
+    confint = confint(model, level = 0.95),
+    residuals = residuals(model)
+  )
+}
