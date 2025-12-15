@@ -13,22 +13,73 @@ cat("Frequenza relativa cumulata: ", freq_rel_cum)
 # Minimo, media, mediana, quantili
 summary(df$happiness_score)
 
+
+# Classi usate nei barplot
+breaks <- attr(freq_ass, "dimnames")[[1]]
+
+# Estrazione dei limiti numerici delle classi
+break_limits <- do.call(rbind,
+                        lapply(strsplit(gsub("\\[|\\)|\\]", "", breaks), ","), as.numeric))
+
+class_centers <- rowMeans(break_limits)
+
+# Kernel density
+dens <- density(df$happiness_score)
+
+
+
 par(mgp = c(4, 0, -1))
 
-barplot(freq_ass,
-        main = "Distribuzione di frequenza assoluta del punteggio di felicità",
-        xlab = "Classi di Happiness Score",
-        ylab = "Frequenza assoluta",
-        las = 2,
-        ylim = c(-10,150),
-        col = "#56B117")
+bp_abs <- barplot(freq_ass,
+                  main = "Distribuzione di frequenza assoluta del punteggio di felicità",
+                  xlab = "Classi di Happiness Score",
+                  ylab = "Frequenza assoluta",
+                  las = 2,
+                  ylim = c(0, max(freq_ass) * 1.2),
+                  col = "#56B117")
 
-barplot(freq_rel,
-        main = "Distribuzione di frequenza relativa del punteggio di felicità",
-        xlab = "Classi di Happiness Score",
-        ylab = "Frequenza relativa",
-        las = 2,
-        col = "#56B117")
+# Scala la densità
+scale_abs <- max(freq_ass) / max(dens$y)
+dens_centers <- approx(x = dens$x,
+                       y = dens$y,
+                       xout = class_centers)$y
+lines(bp_abs,
+      dens_centers * scale_abs,
+      col = "red",
+      lwd = 2)
+
+legend("topright",
+       legend = c("Frequenza assoluta", "Densità"),
+       fill = c("#56B117", NA),
+       lty = c(NA, 1),
+       col = c("black", "red"),
+       bty = "n")
+
+
+
+bp_rel <- barplot(freq_rel,
+                  main = "Distribuzione di frequenza relativa del punteggio di felicità",
+                  xlab = "Classi di Happiness Score",
+                  ylab = "Frequenza relativa",
+                  las = 2,
+                  ylim = c(0, max(freq_rel) * 1.2),
+                  col = "#56B117")
+
+# Scala densità
+scale_rel <- max(freq_rel) / max(dens_centers)
+
+lines(bp_rel,
+      dens_centers * scale_rel,
+      col = "red",
+      lwd = 2)
+
+legend("topright",
+       legend = c("Frequenza relativa", "Densità"),
+       fill = c("#56B117", NA),
+       lty = c(NA, 1),
+       col = c("black", "red"),
+       bty = "n")
+
 
 par(mgp = c(3, 0.5, 0))
 
