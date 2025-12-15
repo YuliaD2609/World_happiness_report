@@ -1,4 +1,9 @@
 df_gen_chatgpt <- read.csv(file.choose(), header = TRUE, sep = ",")
+names(df_gen_chatgpt) <- gsub(" ", "_", names(df_gen_chatgpt))
+
+vars_sc
+vars_sc %in% names(df_gen_chatgpt)
+
 
 post_n_missing <- sapply(df_gen_chatgpt[numeric_vars], function(x) sum(is.na(x)))
 post_missing_df_gen_chatgpt <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
@@ -152,11 +157,11 @@ legend("topleft",
 
 #Serie temporale della felicità
 
-media_annuale_gen <- aggregate(happiness_score ~ year, df_gen_chatgpt, mean)
+media_annuale_chatgpt_gen <- aggregate(happiness_score ~ year, df_gen_chatgpt, mean)
 
-ts_media_gen <- ts(media_annuale_gen$happiness_score,
-               start = min(media_annuale_gen$year),
-               end   = max(media_annuale_gen$year),
+ts_media_gen <- ts(media_annuale_chatgpt_gen$happiness_score,
+               start = min(media_annuale_chatgpt_gen$year),
+               end   = max(media_annuale_chatgpt_gen$year),
                frequency = 1)
 
 plot(ts_media_gen,
@@ -168,7 +173,7 @@ plot(ts_media_gen,
      main = "Serie Temporale della Felicità")
 
 
-trend <- lm(media_annuale_gen$happiness_score ~ media_annuale_gen$year)
+trend <- lm(media_annuale_chatgpt_gen$happiness_score ~ media_annuale_chatgpt_gen$year)
 summary(trend)
 
 
@@ -244,4 +249,82 @@ plot_scatter_gen(df_gen_chatgpt, vars)
 
 # Grafici dei residui (2x4)
 plot_residuals_gen(df_gen_chatgpt, vars)
+
+
+
+#multivariata
+vars_sc <- c(
+  "happiness_score_sc",
+  "log_gdp_per_capita_sc",
+  "social_support_sc",
+  "generosity_sc",
+  "positive_affect_sc",
+  "negative_affect_sc",
+  "freedom_to_make_life_choices_sc",
+  "healthy_life_expectancy_at_birth_sc",
+  "perceptions_of_corruption_sc"
+)
+
+media_annuale_chatgpt <- aggregate(
+  df_gen_chatgpt[, vars_sc],
+  by = list(year = df_gen_chatgpt$year),
+  FUN = mean,
+  na.rm = TRUE
+)
+
+
+plot(media_annuale_chatgpt$year,
+     media_annuale_chatgpt$happiness_score_sc,
+     type = "o",
+     pch = 16,
+     lwd = 2,
+     col = "darkgreen",
+     ylim = range(media_annuale_chatgpt[, vars_sc]),
+     xlab = "Anno",
+     ylab = "Valori medi (standardizzati)",
+     main = "Serie temporali delle variabili (2005–2022) chatgpt")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$log_gdp_per_capita_sc,
+      type = "o", pch = 16, col = "blue")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$social_support_sc,
+      type = "o", pch = 16, col = "orange")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$generosity_sc,
+      type = "o", pch = 16, col = "purple")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$positive_affect_sc,
+      type = "o", pch = 16, col = "red")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$negative_affect_sc,
+      type = "o", pch = 16, col = "brown")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$freedom_to_make_life_choices_sc,
+      type = "o", pch = 16, col = "darkolivegreen")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$healthy_life_expectancy_at_birth_sc,
+      type = "o", pch = 16, col = "darkcyan")
+
+lines(media_annuale_chatgpt$year, media_annuale_chatgpt$perceptions_of_corruption_sc,
+      type = "o", pch = 16, col = "grey40")
+
+legend("topright",
+       inset = c(0.25, 0),
+       cex = (0.7),
+       legend = c("Happiness Score",
+                  "Log GDP",
+                  "Social Support",
+                  "Generosity",
+                  "Positive Affect",
+                  "Negative Affect",
+                  "Freedom of Choice",
+                  "Healthy Life Expectancy",
+                  "Perception of Corruption"),
+       col = c("darkgreen", "blue", "orange", "purple",
+               "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
+       pch = c(16, 17, 15, 18, 16, 16, 17, 15, 18),
+       lty = 1,
+       lwd = 2,
+       bty = "n")
+
 
