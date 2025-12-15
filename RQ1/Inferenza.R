@@ -71,14 +71,28 @@ vars <- c("log_gdp_per_capita",
 results <- list()
 
 for (v in vars) {
-  
+  cat("\nVariabile:", v, "\n")
   df_tmp <- df_country[!is.na(df_country[[v]]) & !is.na(df_country$happiness_score), ]
   
   model <- lm(df_tmp$happiness_score ~ df_tmp[[v]])
   
   results[[v]] <- list(
     summary = summary(model),
-    confint = confint(model, level = 0.95),
+    confint = confint(model, level = 0.95), # stima dell'incertezza
     residuals = residuals(model)
   )
+  
+  # Intervallo di confidenza
+  ci <- confint(model, level = 0.95)[2,]
+  cat("IC 95%: [", round(ci[1],3), ",", round(ci[2],3), "]\n")
+  
+  beta_hat <- results[[v]]$summary$coefficients[2,1]
+  se <- results[[v]]$summary$coefficients[2,2]
+  pval <- results[[v]]$summary$coefficients[2,4]
+  ci <- results[[v]]$confint[2,]
+  
+  cat("Beta stimato:", round(beta_hat, 3), "\n")
+  cat("Errore standard:", round(se, 3), "\n")
+  cat("p-value:", round(pval, 5), "\n")
+  cat("IC 95%: [", round(ci[1],3), ",", round(ci[2],3), "]\n")
 }
