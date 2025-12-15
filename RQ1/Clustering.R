@@ -139,3 +139,4 @@ k <- 2
 # Calinski–Harabasz
 ch <- (bcss / (k - 1)) / (wcss / (n - k))
 ch
+

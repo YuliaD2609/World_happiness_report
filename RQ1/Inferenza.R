@@ -82,3 +82,4 @@ for (v in vars) {
     residuals = residuals(model)
   )
 }
+

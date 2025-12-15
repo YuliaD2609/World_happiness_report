@@ -185,58 +185,63 @@ vars <- c("log_gdp_per_capita",
           "negative_affect")
 
 # Ciclo per generare scatterplot + grafico dei residui
-for (var in vars) {
+plot_scatter_gen <- function(df, vars) {
   
-  # Rimozione valori mancanti
-  df_gen_chatgpt_plot <- df_gen_chatgpt[!is.na(df_gen_chatgpt[[var]]) & !is.na(df_gen_chatgpt$happiness_score), ]
+  par(mfrow = c(2, 4),       # 2 righe x 4 colonne
+      mar = c(4, 4, 3, 1))   # margini compatti
   
-  #scatterplot
-  plot(df_gen_chatgpt_plot[[var]],
-       df_gen_chatgpt_plot$happiness_score,
-       main = paste("Relazione tra", var, "e punteggio di felicità generato"),
-       xlab = var,
-       ylab = "Punteggio di felicità",
-       col = rgb(27/255, 158/255, 119/255, 0.4),
-       pch = 16,
-       cex = 0.5)
+  for (var in vars) {
+    
+    df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
+    
+    plot(df_plot[[var]],
+         df_plot$happiness_score,
+         main = var,
+         xlab = var,
+         ylab = "Happiness Score",
+         col = rgb(27/255, 158/255, 119/255, 0.4),
+         pch = 16,
+         cex = 0.5)
+    
+    lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
+    abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
+    
+    grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  }
   
-  # Modello lineare
-  lm_model_gen <- lm(happiness_score ~ df_gen_chatgpt_plot[[var]], data = df_gen_chatgpt_plot)
-  abline(lm_model_gen, col = "#00441b", lwd = 2, lty = 2)
-  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
-  
-  # Calcolo e stampa informazioni sintetiche
-  cat("lm model: \n")
-  print(lm_model_gen$coefficients)
-  cat("\n")
-  
-  cat("Media residui:\n")
-  print(median(lm_model_gen$residuals))
-  cat("\nVarianza residui:\n")
-  print(var(lm_model_gen$residuals))
-  cat("\nDeviazione standard residui:\n")
-  print(sd(lm_model_gen$residuals))
-  cat("\n")
-  
-  cor_val <- cor(df_gen_chatgpt_plot[[var]], df_gen_chatgpt_plot$happiness_score, use = "complete.obs")
-  cov_val <- cov(df_gen_chatgpt_plot[[var]], df_gen_chatgpt_plot$happiness_score, use = "complete.obs")
-  
-  cat("Variabile:", var, "\n")
-  cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
-  print(summary(lm_model_gen))
-  
-  #Grafico residui
-#  maintext <- paste("Diagramma dei residui generato ", var)
-#  maintext
-#  plot(lm_model_gen$fitted.values, lm_model_gen$residuals,
-#       main = maintext,
-#       xlab = "Valori stimati (Medie)",
-#       ylab = "Residui",
-#       col = rgb(1, 0, 0, 0.6),
-#       pch = 4,   # crocette
-#       cex = 1.2)
-  
-#  abline(h = 0, col = "blue", lty = 2, lwd = 2)  # linea orizzontale a 0
-#  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  par(mfrow = c(1, 1))  # reset layout
 }
+
+plot_residuals_gen <- function(df, vars) {
+  
+  par(mfrow = c(2, 4),
+      mar = c(4, 4, 3, 1))
+  
+  for (var in vars) {
+    
+    df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
+    
+    lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
+    
+    plot(lm_model$fitted.values,
+         lm_model$residuals,
+         main = paste("Residui:", var),
+         xlab = "Valori stimati",
+         ylab = "Residui",
+         col = rgb(1, 0, 0, 0.6),
+         pch = 16,
+         cex = 0.5)
+    
+    abline(h = 0, col = "blue", lty = 2, lwd = 2)
+    grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  }
+  
+  par(mfrow = c(1, 1))
+}
+
+# Scatterplot (2x4)
+plot_scatter_gen(df_gen_chatgpt, vars)
+
+# Grafici dei residui (2x4)
+plot_residuals_gen(df_gen_chatgpt, vars)
 
