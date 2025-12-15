@@ -1,37 +1,37 @@
-df_gen <- read.csv(file.choose(), header = TRUE, sep = ",")
+df_gen_chatgpt <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-post_n_missing <- sapply(df_gen[numeric_vars], function(x) sum(is.na(x)))
-post_missing_df_gen <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
-print(post_missing_df_gen)
-View(df_gen)
+post_n_missing <- sapply(df_gen_chatgpt[numeric_vars], function(x) sum(is.na(x)))
+post_missing_df_gen_chatgpt <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
+print(post_missing_df_gen_chatgpt)
+View(df_gen_chatgpt)
 
 #ricostruzione sc
-df_gen$log_gdp_per_capita_sc <- as.numeric(scale(df_gen$log_gdp_per_capita))
-df_gen$social_support_sc <- as.numeric(scale(df_gen$social_support))
-df_gen$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_gen$healthy_life_expectancy_at_birth))
-df_gen$freedom_to_make_life_choices_sc <- as.numeric(scale(df_gen$freedom_to_make_life_choices))
-df_gen$generosity_sc <- as.numeric(scale(df_gen$generosity))
-df_gen$perceptions_of_corruption_sc <- as.numeric(scale(df_gen$perceptions_of_corruption))
-df_gen$positive_affect_sc <- as.numeric(scale(df_gen$positive_affect))
-df_gen$negative_affect_sc <- as.numeric(scale(df_gen$negative_affect))
+df_gen_chatgpt$log_gdp_per_capita_sc <- as.numeric(scale(df_gen_chatgpt$log_gdp_per_capita))
+df_gen_chatgpt$social_support_sc <- as.numeric(scale(df_gen_chatgpt$social_support))
+df_gen_chatgpt$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_gen_chatgpt$healthy_life_expectancy_at_birth))
+df_gen_chatgpt$freedom_to_make_life_choices_sc <- as.numeric(scale(df_gen_chatgpt$freedom_to_make_life_choices))
+df_gen_chatgpt$generosity_sc <- as.numeric(scale(df_gen_chatgpt$generosity))
+df_gen_chatgpt$perceptions_of_corruption_sc <- as.numeric(scale(df_gen_chatgpt$perceptions_of_corruption))
+df_gen_chatgpt$positive_affect_sc <- as.numeric(scale(df_gen_chatgpt$positive_affect))
+df_gen_chatgpt$negative_affect_sc <- as.numeric(scale(df_gen_chatgpt$negative_affect))
 
 
-sapply(df_gen[c(numeric_vars)], function(x) sum(is.na(x)))
+sapply(df_gen_chatgpt[c(numeric_vars)], function(x) sum(is.na(x)))
 
 
 
 #Statistica descrittiva
 # Seleziona solo le variabili numeriche
-num_df_gen <- df_gen[sapply(df_gen, is.numeric)]
+num_df_gen_chatgpt <- df_gen_chatgpt[sapply(df_gen_chatgpt, is.numeric)]
 
 # Calcolo delle statistiche descrittive:
 # Media, deviazione standard, minimo e massimo per ciascuna variabile numerica
 descrittive <- data.frame(
-  Variabile = names(num_df_gen),
-  Media = sapply(num_df_gen, mean, na.rm = TRUE),
-  Deviazione_Standard = sapply(num_df_gen, sd, na.rm = TRUE),
-  Minimo = sapply(num_df_gen, min, na.rm = TRUE),
-  Massimo = sapply(num_df_gen, max, na.rm = TRUE)
+  Variabile = names(num_df_gen_chatgpt),
+  Media = sapply(num_df_gen_chatgpt, mean, na.rm = TRUE),
+  Deviazione_Standard = sapply(num_df_gen_chatgpt, sd, na.rm = TRUE),
+  Minimo = sapply(num_df_gen_chatgpt, min, na.rm = TRUE),
+  Massimo = sapply(num_df_gen_chatgpt, max, na.rm = TRUE)
 ) ##Qui però sono rimossi i NA
 
 # Visualizza la tabella delle statistichee
@@ -41,7 +41,7 @@ print(descrittive)
 
 
 # Calcolo media, min e max per paese
-happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_gen,
+happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_gen_chatgpt,
                                FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                    min = min(x, na.rm = TRUE),
                                                    max = max(x, na.rm = TRUE)))
@@ -77,10 +77,10 @@ numeric_vars <- c("log_gdp_per_capita",
 )
 
 # Numero totale di missing values per paese
-na_mat <- is.na(df_gen[, numeric_vars])
+na_mat <- is.na(df_gen_chatgpt[, numeric_vars])
 
 missing_by_country_initial <- aggregate(na_mat,
-                                        by=list(country=df_gen$country),
+                                        by=list(country=df_gen_chatgpt$country),
                                         FUN=sum)
 missing_by_country_initial
 
@@ -109,7 +109,7 @@ lines(bar_positions, top50$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
 #Legenda chiara e compatta
-legend("topleft",
+legend("topright",
        legend = c("Minimo", "Massimo"),
        col = c("red", "blue"),
        pch = 19,
@@ -152,7 +152,7 @@ legend("topleft",
 
 #Serie temporale della felicità
 
-media_annuale_gen <- aggregate(happiness_score ~ year, df_gen, mean)
+media_annuale_gen <- aggregate(happiness_score ~ year, df_gen_chatgpt, mean)
 
 ts_media_gen <- ts(media_annuale_gen$happiness_score,
                start = min(media_annuale_gen$year),
@@ -188,11 +188,11 @@ vars <- c("log_gdp_per_capita",
 for (var in vars) {
   
   # Rimozione valori mancanti
-  df_gen_plot <- df_gen[!is.na(df_gen[[var]]) & !is.na(df_gen$happiness_score), ]
+  df_gen_chatgpt_plot <- df_gen_chatgpt[!is.na(df_gen_chatgpt[[var]]) & !is.na(df_gen_chatgpt$happiness_score), ]
   
   #scatterplot
-  plot(df_gen_plot[[var]],
-       df_gen_plot$happiness_score,
+  plot(df_gen_chatgpt_plot[[var]],
+       df_gen_chatgpt_plot$happiness_score,
        main = paste("Relazione tra", var, "e punteggio di felicità generato"),
        xlab = var,
        ylab = "Punteggio di felicità",
@@ -201,7 +201,7 @@ for (var in vars) {
        cex = 0.5)
   
   # Modello lineare
-  lm_model_gen <- lm(happiness_score ~ df_gen_plot[[var]], data = df_gen_plot)
+  lm_model_gen <- lm(happiness_score ~ df_gen_chatgpt_plot[[var]], data = df_gen_chatgpt_plot)
   abline(lm_model_gen, col = "#00441b", lwd = 2, lty = 2)
   grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
   
@@ -218,8 +218,8 @@ for (var in vars) {
   print(sd(lm_model_gen$residuals))
   cat("\n")
   
-  cor_val <- cor(df_gen_plot[[var]], df_gen_plot$happiness_score, use = "complete.obs")
-  cov_val <- cov(df_gen_plot[[var]], df_gen_plot$happiness_score, use = "complete.obs")
+  cor_val <- cor(df_gen_chatgpt_plot[[var]], df_gen_chatgpt_plot$happiness_score, use = "complete.obs")
+  cov_val <- cov(df_gen_chatgpt_plot[[var]], df_gen_chatgpt_plot$happiness_score, use = "complete.obs")
   
   cat("Variabile:", var, "\n")
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
@@ -239,3 +239,4 @@ for (var in vars) {
 #  abline(h = 0, col = "blue", lty = 2, lwd = 2)  # linea orizzontale a 0
 #  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
 }
+
