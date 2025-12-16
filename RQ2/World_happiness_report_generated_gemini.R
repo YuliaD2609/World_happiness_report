@@ -1,4 +1,5 @@
 df_gen_gemini <- read.csv(file.choose(), header = TRUE, sep = ",")
+names(df_gen_gemini) <- gsub(" ", "_", names(df_gen_gemini))
 
 post_n_missing <- sapply(df_gen_gemini[numeric_vars], function(x) sum(is.na(x)))
 post_missing_df_gen_gemini <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
@@ -6,6 +7,7 @@ print(post_missing_df_gen_gemini)
 View(df_gen_gemini)
 
 #ricostruzione sc
+df_gen_gemini$happiness_score_sc <- as.numeric(scale(df_gen_gemini$happiness_score))
 df_gen_gemini$log_gdp_per_capita_sc <- as.numeric(scale(df_gen_gemini$log_gdp_per_capita))
 df_gen_gemini$social_support_sc <- as.numeric(scale(df_gen_gemini$social_support))
 df_gen_gemini$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_gen_gemini$healthy_life_expectancy_at_birth))
@@ -42,9 +44,9 @@ print(descrittive)
 
 # Calcolo media, min e max per paese
 happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_gen_gemini,
-                               FUN = function(x) c(mean = mean(x, na.rm = TRUE),
-                                                   min = min(x, na.rm = TRUE),
-                                                   max = max(x, na.rm = TRUE)))
+                                   FUN = function(x) c(mean = mean(x, na.rm = TRUE),
+                                                       min = min(x, na.rm = TRUE),
+                                                       max = max(x, na.rm = TRUE)))
 
 #Trasformazione in dataframe leggibile
 happiness_summary_gen <- data.frame(
@@ -152,12 +154,12 @@ legend("topleft",
 
 #Serie temporale della felicità
 
-media_annuale_gen <- aggregate(happiness_score ~ year, df_gen_gemini, mean)
+media_annuale_gemini_gen <- aggregate(happiness_score ~ year, df_gen_gemini, mean)
 
-ts_media_gen <- ts(media_annuale_gen$happiness_score,
-               start = min(media_annuale_gen$year),
-               end   = max(media_annuale_gen$year),
-               frequency = 1)
+ts_media_gen <- ts(media_annuale_gemini_gen$happiness_score,
+                   start = min(media_annuale_gemini_gen$year),
+                   end   = max(media_annuale_gemini_gen$year),
+                   frequency = 1)
 
 plot(ts_media_gen,
      type = "o",
@@ -168,7 +170,7 @@ plot(ts_media_gen,
      main = "Serie Temporale della Felicità")
 
 
-trend <- lm(media_annuale_gen$happiness_score ~ media_annuale_gen$year)
+trend <- lm(media_annuale_gemini_gen$happiness_score ~ media_annuale_gemini_gen$year)
 summary(trend)
 
 
@@ -184,59 +186,146 @@ vars <- c("log_gdp_per_capita",
           "positive_affect",
           "negative_affect")
 
+vars_sc
+vars_sc %in% names(df_gen_gemini)
+
+
 # Ciclo per generare scatterplot + grafico dei residui
-for (var in vars) {
+plot_scatter_gen <- function(df, vars) {
   
-  # Rimozione valori mancanti
-  df_gen_gemini_plot <- df_gen_gemini[!is.na(df_gen_gemini[[var]]) & !is.na(df_gen_gemini$happiness_score), ]
+  par(mfrow = c(2, 4),       # 2 righe x 4 colonne
+      mar = c(4, 4, 3, 1))   # margini compatti
   
-  #scatterplot
-  plot(df_gen_gemini_plot[[var]],
-       df_gen_gemini_plot$happiness_score,
-       main = paste("Relazione tra", var, "e punteggio di felicità generato"),
-       xlab = var,
-       ylab = "Punteggio di felicità",
-       col = rgb(27/255, 158/255, 119/255, 0.4),
-       pch = 16,
-       cex = 0.5)
+  for (var in vars) {
+    
+    df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
+    
+    plot(df_plot[[var]],
+         df_plot$happiness_score,
+         main = var,
+         xlab = var,
+         ylab = "Happiness Score",
+         col = rgb(27/255, 158/255, 119/255, 0.4),
+         pch = 16,
+         cex = 0.5)
+    
+    lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
+    abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
+    
+    grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  }
   
-  # Modello lineare
-  lm_model_gen <- lm(happiness_score ~ df_gen_gemini_plot[[var]], data = df_gen_gemini_plot)
-  abline(lm_model_gen, col = "#00441b", lwd = 2, lty = 2)
-  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
-  
-  # Calcolo e stampa informazioni sintetiche
-  cat("lm model: \n")
-  print(lm_model_gen$coefficients)
-  cat("\n")
-  
-  cat("Media residui:\n")
-  print(median(lm_model_gen$residuals))
-  cat("\nVarianza residui:\n")
-  print(var(lm_model_gen$residuals))
-  cat("\nDeviazione standard residui:\n")
-  print(sd(lm_model_gen$residuals))
-  cat("\n")
-  
-  cor_val <- cor(df_gen_gemini_plot[[var]], df_gen_gemini_plot$happiness_score, use = "complete.obs")
-  cov_val <- cov(df_gen_gemini_plot[[var]], df_gen_gemini_plot$happiness_score, use = "complete.obs")
-  
-  cat("Variabile:", var, "\n")
-  cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
-  print(summary(lm_model_gen))
-  
-  #Grafico residui
-#  maintext <- paste("Diagramma dei residui generato ", var)
-#  maintext
-#  plot(lm_model_gen$fitted.values, lm_model_gen$residuals,
-#       main = maintext,
-#       xlab = "Valori stimati (Medie)",
-#       ylab = "Residui",
-#       col = rgb(1, 0, 0, 0.6),
-#       pch = 4,   # crocette
-#       cex = 1.2)
-  
-#  abline(h = 0, col = "blue", lty = 2, lwd = 2)  # linea orizzontale a 0
-#  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  par(mfrow = c(1, 1))  # reset layout
 }
+
+plot_residuals_gen <- function(df, vars) {
+  
+  par(mfrow = c(2, 4),
+      mar = c(4, 4, 3, 1))
+  
+  for (var in vars) {
+    
+    df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
+    
+    lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
+    
+    plot(lm_model$fitted.values,
+         lm_model$residuals,
+         main = paste("Residui:", var),
+         xlab = "Valori stimati",
+         ylab = "Residui",
+         col = rgb(1, 0, 0, 0.6),
+         pch = 16,
+         cex = 0.5)
+    
+    abline(h = 0, col = "blue", lty = 2, lwd = 2)
+    grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
+  }
+  
+  par(mfrow = c(1, 1))
+}
+
+# Scatterplot (2x4)
+plot_scatter_gen(df_gen_gemini, vars)
+
+# Grafici dei residui (2x4)
+plot_residuals_gen(df_gen_gemini, vars)
+
+
+
+#multivariata
+vars_sc <- c(
+  "happiness_score_sc",
+  "log_gdp_per_capita_sc",
+  "social_support_sc",
+  "generosity_sc",
+  "positive_affect_sc",
+  "negative_affect_sc",
+  "freedom_to_make_life_choices_sc",
+  "healthy_life_expectancy_at_birth_sc",
+  "perceptions_of_corruption_sc"
+)
+
+media_annuale_gemini <- aggregate(
+  df_gen_gemini[, vars_sc],
+  by = list(year = df_gen_gemini$year),
+  FUN = mean,
+  na.rm = TRUE
+)
+
+
+plot(media_annuale_gemini$year,
+     media_annuale_gemini$happiness_score_sc,
+     type = "o",
+     pch = 16,
+     lwd = 2,
+     col = "darkgreen",
+     ylim = range(media_annuale_gemini[, vars_sc]),
+     xlab = "Anno",
+     ylab = "Valori medi (standardizzati)",
+     main = "Serie temporali delle variabili (2005–2022) gemini")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$log_gdp_per_capita_sc,
+      type = "o", pch = 16, col = "blue")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$social_support_sc,
+      type = "o", pch = 16, col = "orange")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$generosity_sc,
+      type = "o", pch = 16, col = "purple")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$positive_affect_sc,
+      type = "o", pch = 16, col = "red")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$negative_affect_sc,
+      type = "o", pch = 16, col = "brown")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$freedom_to_make_life_choices_sc,
+      type = "o", pch = 16, col = "darkolivegreen")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$healthy_life_expectancy_at_birth_sc,
+      type = "o", pch = 16, col = "darkcyan")
+
+lines(media_annuale_gemini$year, media_annuale_gemini$perceptions_of_corruption_sc,
+      type = "o", pch = 16, col = "grey40")
+
+legend("topright",
+       inset = c(0.35, 0),
+       cex = (0.7),
+       legend = c("Happiness Score",
+                  "Log GDP",
+                  "Social Support",
+                  "Generosity",
+                  "Positive Affect",
+                  "Negative Affect",
+                  "Freedom of Choice",
+                  "Healthy Life Expectancy",
+                  "Perception of Corruption"),
+       col = c("darkgreen", "blue", "orange", "purple",
+               "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
+       pch = c(16, 17, 15, 18, 16, 16, 17, 15, 18),
+       lty = 1,
+       lwd = 2,
+       bty = "n")
+
 
