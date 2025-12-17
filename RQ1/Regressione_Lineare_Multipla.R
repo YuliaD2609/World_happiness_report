@@ -3,7 +3,7 @@ df <- read.csv(file.choose(), header = TRUE, sep = ",")
 colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
 
 library(dplyr)
-#medie per ogni variabili
+#medie per ogni variabile
 df_mean <- df %>%
   group_by(country) %>%
   summarise(

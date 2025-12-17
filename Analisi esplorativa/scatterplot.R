@@ -36,28 +36,6 @@ for (var in vars) {
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
 }
 
-# Residui
-
-for (var in vars) {
-  
-  df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
-  
-  lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
-  
-  maintext <- paste("Diagramma dei residui:", var)
-  
-  plot(lm_model$fitted.values,
-       lm_model$residuals,
-       main = maintext,
-       xlab = "Valori stimati",
-       ylab = "Residui",
-       col = rgb(1, 0, 0, 0.6),
-       pch = 19,
-       cex = 0.5)
-  
-  abline(h = 0, col = "blue", lty = 2, lwd = 2)
-  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
-}
 
 # Matrice di scatterplot
 pairs(df[vars], cex = 0.1, pch = 16, col="darkgreen",
