@@ -79,7 +79,7 @@ pareto.chart(
   ylab = "Influenza (|correlazione|)",
   main = "Diagramma di Pareto – Influenza delle variabili sulla felicità",
   col = "darkgreen",
-  cex.names = 0.8
+  cex.names = 0.6
 )
 
 
