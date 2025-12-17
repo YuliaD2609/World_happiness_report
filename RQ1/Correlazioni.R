@@ -71,7 +71,13 @@ pareto_cor <- abs(cor_results$Correlazione)
 names(pareto_cor) <- cor_results$Variabile
 
 # Diagramma di Pareto
-pareto.chart(pareto_cor,
-             main = "Diagramma di Pareto",
-             ylab = "Valore assoluto della correlazione",
-             col = "lightblue")
+pareto.chart(
+  pareto_cor,
+  ylab = "Influenza (|correlazione|)",
+  main = "Diagramma di Pareto – Influenza delle variabili sulla felicità",
+  col = "darkgreen",
+  cex.names = 0.8
+)
+
+
+
