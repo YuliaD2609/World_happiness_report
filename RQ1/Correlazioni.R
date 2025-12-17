@@ -66,6 +66,9 @@ cov_results
 #install.packages("qcc")
 library(qcc)
 
+par(mfrow = c(1, 1))
+    
+
 # Valori assoluti delle correlazioni
 pareto_cor <- abs(cor_results$Correlazione)
 names(pareto_cor) <- cor_results$Variabile
