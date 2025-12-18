@@ -10,6 +10,17 @@ numeric_vars <- c("log_gdp_per_capita",
                   "negative_affect"
 )
 
+var_labels <- c(
+  log_gdp_per_capita = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  perceptions_of_corruption = "Percezione della corruzione"
+)
+
 # Numero totale di missing values per paese
 na_mat <- is.na(df[, numeric_vars])
 
@@ -54,10 +65,8 @@ for(val in unique_vals){
 }
 
 
-
-
 # Calcolo del numero di NA per ogni colonna
-missing_counts <- colSums(is.na(df))
+missing_counts <- colSums(na_mat)
 
 # Creazione dataframe
 missing_df <- data.frame(
@@ -69,6 +78,16 @@ missing_df <- data.frame(
 missing_df <- missing_df[!grepl("_sc$", missing_df$Variabile), ]
 missing_df <- missing_df[order(-missing_df$Valori_Mancanti), ]
 
+var_labels <- c(
+  perceptions_of_corruption = "Percezione della corruzione",
+  generosity = "Generosità",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  positive_affect = "Emozioni positive",
+  log_gdp_per_capita = "PIL pro capite",
+  negative_affect = "Emozioni negative",
+  social_support = "Supporto sociale"
+)
 
 # Barplot
 bp <- barplot(missing_df$Valori_Mancanti,
@@ -83,7 +102,7 @@ bp <- barplot(missing_df$Valori_Mancanti,
 par(xpd = TRUE)
 text(x = bp,
      y = par("usr")[3] - 10,           
-     labels = missing_df$Variabile,
+     labels = var_labels,
      srt = 15,                         
      adj = 1,
      cex = 0.7)

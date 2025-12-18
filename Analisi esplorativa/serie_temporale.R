@@ -1,5 +1,16 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
+var_labels <- c(
+  log_gdp_per_capita_sc = "PIL pro capite",
+  social_support_sc = "Supporto sociale",
+  positive_affect_sc = "Emozioni positive",
+  negative_affect_sc = "Emozioni negative",
+  healthy_life_expectancy_at_birth_sc = "Aspettativa di vita sana",
+  freedom_to_make_life_choices_sc = "Libertà di scelta nella vita",
+  generosity_sc = "Generosità",
+  perceptions_of_corruption_sc = "Percezione della corruzione"
+)
+
 # Media annuale della felicità
 media_annuale <- aggregate(happiness_score ~ year, df, mean)
 
@@ -40,7 +51,6 @@ media_annuale <- aggregate(
   na.rm = TRUE
 )
 
-
 plot(media_annuale$year,
      media_annuale$happiness_score_sc,
      type = "o",
@@ -77,16 +87,9 @@ lines(media_annuale$year, media_annuale$perceptions_of_corruption_sc,
       type = "o", pch = 16, col = "grey40")
 
 legend("topright",
-       inset = c(0.25, 0),
-       legend = c("Happiness Score",
-                  "Log GDP",
-                  "Social Support",
-                  "Generosity",
-                  "Positive Affect",
-                  "Negative Affect",
-                  "Freedom of Choice",
-                  "Healthy Life Expectancy",
-                  "Perception of Corruption"),
+       inset = c(0.35, 0),
+       cex = (0.7),
+       legend = var_labels,
        col = c("darkgreen", "blue", "orange", "purple",
                "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
        pch = c(16, 17, 15, 18, 16, 16, 17, 15, 18),

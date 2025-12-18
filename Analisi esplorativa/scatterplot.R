@@ -1,4 +1,4 @@
-df <- read.csv(file.choose(), header = TRUE, sep = ",")
+#df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
 vars <- c("log_gdp_per_capita",
           "social_support",
@@ -9,15 +9,26 @@ vars <- c("log_gdp_per_capita",
           "positive_affect",
           "negative_affect")
 
+var_labels <- c(
+  log_gdp_per_capita = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  perceptions_of_corruption = "Percezione della corruzione"
+)
+
 # Scatterplot
 for (var in vars) {
-  
+  text = var_labels[var]
   df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
   
   plot(df_plot[[var]],
        df_plot$happiness_score,
-       main = paste("Relazione tra", var, "e punteggio di felicità"),
-       xlab = var,
+       main = paste("Relazione tra", text, "e punteggio di felicità"),
+       xlab = text,
        ylab = "Punteggio di felicità",
        col = rgb(27/255, 158/255, 119/255, 0.4),
        pch = 16,
@@ -38,6 +49,6 @@ for (var in vars) {
 
 
 # Matrice di scatterplot
-pairs(df[vars], cex = 0.1, pch = 16, col="darkgreen",
+pairs(df[vars], labels = var_labels[vars], cex = 0.1, pch = 16, col="darkgreen",
       main = "Scatterplot matrix delle variabili")
 
