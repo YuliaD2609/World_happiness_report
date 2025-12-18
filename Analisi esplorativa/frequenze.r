@@ -17,7 +17,7 @@ par(mgp = c(4, 0, -1))
 
 barplot(freq_ass,
         main = "Distribuzione di frequenza assoluta del punteggio di felicità",
-        xlab = "Classi di Happiness Score",
+        xlab = "Classi di felicità",
         ylab = "Frequenza assoluta",
         las = 2,
         ylim = c(-10,150),
@@ -25,7 +25,7 @@ barplot(freq_ass,
 
 barplot(freq_rel,
         main = "Distribuzione di frequenza relativa del punteggio di felicità",
-        xlab = "Classi di Happiness Score",
+        xlab = "Classi di felicità",
         ylab = "Frequenza relativa",
         las = 2,
         col = "#56B117")
@@ -37,7 +37,7 @@ plot(freq_rel_cum,
      pch = 19,
      col = "#238B45",
      xaxt = "n",
-     xlab = "Classi di Happiness Score",
+     xlab = "Classi di felicità",
      ylab = "Frequenza relativa cumulata",
      main = "Funzione di distribuzione empirica continua della Felicità")
 
@@ -81,8 +81,8 @@ legend("topright",
 dens <- density(df$happiness_score)
 
 plot(dens,
-     main = "Stima kernel density plot del Happiness Score",
-     xlab = "Happiness Score",
+     main = "Stima kernel density plot di felicità",
+     xlab = "Felicità",
      ylab = "Densità",
      lwd = 2,
      col = "#238B45")
