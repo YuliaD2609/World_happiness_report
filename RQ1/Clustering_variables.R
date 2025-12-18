@@ -22,6 +22,30 @@ vars_sc <- c("log_gdp_per_capita_sc",
              "perceptions_of_corruption_sc"
 )
 
+
+var_labels <- c(
+  log_gdp_per_capita_sc = "PIL pro capite",
+  social_support_sc = "Supporto sociale",
+  positive_affect_sc = "Emozioni positive",
+  negative_affect_sc = "Emozioni negative",
+  healthy_life_expectancy_at_birth_sc = "Aspettativa di vita sana",
+  freedom_to_make_life_choices_sc = "Libertà di scelta nella vita",
+  generosity_sc = "Generosità",
+  perceptions_of_corruption_sc = "Percezione della corruzione"
+)
+
+all_var_labels <- c(
+  log_gdp_per_capita_sc = "PIL pro capite",
+  social_support_sc = "Supporto sociale",
+  positive_affect_sc = "Emozioni positive",
+  negative_affect_sc = "Emozioni negative",
+  healthy_life_expectancy_at_birth_sc = "Aspettativa di vita sana",
+  freedom_to_make_life_choices_sc = "Libertà di scelta nella vita",
+  generosity_sc = "Generosità",
+  perceptions_of_corruption_sc = "Percezione della corruzione",
+  happiness_score_sc = "Felicità"
+)
+
 X <- df[all_sc]
 
 # Rimozione di righe con NA
@@ -31,6 +55,8 @@ X_scaled <- scale(X_complete)
 # Matrice di correlazione
 cat("Matrice di correlazione: ")
 mat_cor <- cor(X_scaled)
+colnames(mat_cor) <- all_var_labels
+rownames(mat_cor) <- all_var_labels
 round(mat_cor, 3)
 pheatmap(mat_cor,
          main = "Matrice di correlazione",
@@ -73,6 +99,8 @@ round(mat_similarity[1:10, 1:10], 3)
 
 # Matrice di covarianza
 mat_cov <- cov(X_scaled)
+colnames(mat_cov) <- var_labels
+rownames(mat_cov) <- var_labels
 round(mat_cov, 3)
 pheatmap(mat_cov,
          main = "Matrice di covarianza",

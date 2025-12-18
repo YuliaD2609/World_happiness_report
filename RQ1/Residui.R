@@ -8,6 +8,16 @@ vars <- c("log_gdp_per_capita",
           "perceptions_of_corruption",
           "positive_affect",
           "negative_affect")
+var_labels <- c(
+  log_gdp_per_capita = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  perceptions_of_corruption = "Percezione della corruzione"
+)
 
 for (var in vars) {
   
@@ -16,8 +26,8 @@ for (var in vars) {
   
   plot(df_plot[[var]],
        df_plot$happiness_score,
-       main = paste("Relazione tra", var, "e punteggio di felicità"),
-       xlab = var,
+       main = paste("Relazione tra", var_labels[v], "e punteggio di felicità"),
+       xlab = var_labels[v],
        ylab = "Punteggio di felicità",
        col = rgb(27/255, 158/255, 119/255, 0.4),
        pch = 16,

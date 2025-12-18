@@ -11,6 +11,17 @@ vars <- c("log_gdp_per_capita",
           "generosity",
           "perceptions_of_corruption",
           "negative_affect")
+var_labels <- c(
+  log_gdp_per_capita = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  perceptions_of_corruption = "Percezione della corruzione"
+)
+
 
 # Data frame risultati
 cor_results <- data.frame(
@@ -72,12 +83,13 @@ par(mfrow = c(1, 1))
 # Valori assoluti delle correlazioni
 pareto_cor <- abs(cor_results$Correlazione)
 names(pareto_cor) <- cor_results$Variabile
+names(pareto_cor) <- var_labels[names(pareto_cor)]
 
 # Diagramma di Pareto
 pareto.chart(
   pareto_cor,
-  ylab = "Influenza (|correlazione|)",
-  main = "Diagramma di Pareto – Influenza delle variabili sulla felicità",
+  ylab = "Influenza",
+  main = "Diagramma di Pareto",
   col = "darkgreen",
   cex.names = 0.7
 )

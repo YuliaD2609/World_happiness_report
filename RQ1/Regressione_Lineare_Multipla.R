@@ -1,6 +1,16 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
 colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
+var_labels <- c(
+  log_gdp = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life = "Aspettativa di vita sana",
+  freedom = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  corruption = "Percezione della corruzione"
+)
 
 library(dplyr)
 #medie per ogni variabile
@@ -33,6 +43,12 @@ summary(model)
 
 # grafico dei coefficienti
 coef <- summary(model)$coefficients[-1,1]
+# Sostituzione dei nomi tecnici con le label testuali
+print(coef)
+
+names(coef) <- var_labels[names(coef)]
+print(coef)
+
 barplot(coef,
         las=2,
         col=colors_green,
