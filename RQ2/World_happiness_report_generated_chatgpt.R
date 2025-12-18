@@ -11,6 +11,7 @@ print(post_missing_df_gen_chatgpt)
 View(df_gen_chatgpt)
 
 #ricostruzione sc
+df_gen_chatgpt$happiness_score_sc <- as.numeric(scale(df_gen_chatgpt$happiness_score))
 df_gen_chatgpt$log_gdp_per_capita_sc <- as.numeric(scale(df_gen_chatgpt$log_gdp_per_capita))
 df_gen_chatgpt$social_support_sc <- as.numeric(scale(df_gen_chatgpt$social_support))
 df_gen_chatgpt$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_gen_chatgpt$healthy_life_expectancy_at_birth))
