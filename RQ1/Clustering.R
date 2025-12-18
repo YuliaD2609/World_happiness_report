@@ -48,7 +48,7 @@ all_var_labels <- c(
 df_country <- aggregate(df[, all_sc],
                         by = list(country = df$country),
                         FUN = mean)
-df_country <- df_country[complete.cases(X), ]
+df_country <- df_country[complete.cases(df_country), ]
 X <- df_country[all_sc]
 
 # rimozione di righe con NA
