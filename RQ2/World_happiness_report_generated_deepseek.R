@@ -1,43 +1,39 @@
-df_gen_chatgpt <- read.csv(file.choose(), header = TRUE, sep = ",")
-names(df_gen_chatgpt) <- gsub(" ", "_", names(df_gen_chatgpt))
+df_gen_deepseek <- read.csv(file.choose(), header = TRUE, sep = ",")
+names(df_gen_deepseek) <- gsub(" ", "_", names(df_gen_deepseek))
 
-vars_sc
-vars_sc %in% names(df_gen_chatgpt)
-
-
-post_n_missing <- sapply(df_gen_chatgpt[numeric_vars], function(x) sum(is.na(x)))
-post_missing_df_gen_chatgpt <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
-print(post_missing_df_gen_chatgpt)
-View(df_gen_chatgpt)
+post_n_missing <- sapply(df_gen_deepseek[numeric_vars], function(x) sum(is.na(x)))
+post_missing_df_gen_deepseek <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
+print(post_missing_df_gen_deepseek)
+View(df_gen_deepseek)
 
 #ricostruzione sc
-df_gen_chatgpt$happiness_score_sc <- as.numeric(scale(df_gen_chatgpt$happiness_score))
-df_gen_chatgpt$log_gdp_per_capita_sc <- as.numeric(scale(df_gen_chatgpt$log_gdp_per_capita))
-df_gen_chatgpt$social_support_sc <- as.numeric(scale(df_gen_chatgpt$social_support))
-df_gen_chatgpt$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_gen_chatgpt$healthy_life_expectancy_at_birth))
-df_gen_chatgpt$freedom_to_make_life_choices_sc <- as.numeric(scale(df_gen_chatgpt$freedom_to_make_life_choices))
-df_gen_chatgpt$generosity_sc <- as.numeric(scale(df_gen_chatgpt$generosity))
-df_gen_chatgpt$perceptions_of_corruption_sc <- as.numeric(scale(df_gen_chatgpt$perceptions_of_corruption))
-df_gen_chatgpt$positive_affect_sc <- as.numeric(scale(df_gen_chatgpt$positive_affect))
-df_gen_chatgpt$negative_affect_sc <- as.numeric(scale(df_gen_chatgpt$negative_affect))
+df_gen_deepseek$happiness_score_sc <- as.numeric(scale(df_gen_deepseek$happiness_score))
+df_gen_deepseek$log_gdp_per_capita_sc <- as.numeric(scale(df_gen_deepseek$log_gdp_per_capita))
+df_gen_deepseek$social_support_sc <- as.numeric(scale(df_gen_deepseek$social_support))
+df_gen_deepseek$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_gen_deepseek$healthy_life_expectancy_at_birth))
+df_gen_deepseek$freedom_to_make_life_choices_sc <- as.numeric(scale(df_gen_deepseek$freedom_to_make_life_choices))
+df_gen_deepseek$generosity_sc <- as.numeric(scale(df_gen_deepseek$generosity))
+df_gen_deepseek$perceptions_of_corruption_sc <- as.numeric(scale(df_gen_deepseek$perceptions_of_corruption))
+df_gen_deepseek$positive_affect_sc <- as.numeric(scale(df_gen_deepseek$positive_affect))
+df_gen_deepseek$negative_affect_sc <- as.numeric(scale(df_gen_deepseek$negative_affect))
 
 
-sapply(df_gen_chatgpt[c(numeric_vars)], function(x) sum(is.na(x)))
+sapply(df_gen_deepseek[c(numeric_vars)], function(x) sum(is.na(x)))
 
 
 
 #Statistica descrittiva
 # Seleziona solo le variabili numeriche
-num_df_gen_chatgpt <- df_gen_chatgpt[sapply(df_gen_chatgpt, is.numeric)]
+num_df_gen_deepseek <- df_gen_deepseek[sapply(df_gen_deepseek, is.numeric)]
 
 # Calcolo delle statistiche descrittive:
 # Media, deviazione standard, minimo e massimo per ciascuna variabile numerica
 descrittive <- data.frame(
-  Variabile = names(num_df_gen_chatgpt),
-  Media = sapply(num_df_gen_chatgpt, mean, na.rm = TRUE),
-  Deviazione_Standard = sapply(num_df_gen_chatgpt, sd, na.rm = TRUE),
-  Minimo = sapply(num_df_gen_chatgpt, min, na.rm = TRUE),
-  Massimo = sapply(num_df_gen_chatgpt, max, na.rm = TRUE)
+  Variabile = names(num_df_gen_deepseek),
+  Media = sapply(num_df_gen_deepseek, mean, na.rm = TRUE),
+  Deviazione_Standard = sapply(num_df_gen_deepseek, sd, na.rm = TRUE),
+  Minimo = sapply(num_df_gen_deepseek, min, na.rm = TRUE),
+  Massimo = sapply(num_df_gen_deepseek, max, na.rm = TRUE)
 ) ##Qui però sono rimossi i NA
 
 # Visualizza la tabella delle statistichee
@@ -47,10 +43,10 @@ print(descrittive)
 
 
 # Calcolo media, min e max per paese
-happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_gen_chatgpt,
-                               FUN = function(x) c(mean = mean(x, na.rm = TRUE),
-                                                   min = min(x, na.rm = TRUE),
-                                                   max = max(x, na.rm = TRUE)))
+happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_gen_deepseek,
+                                   FUN = function(x) c(mean = mean(x, na.rm = TRUE),
+                                                       min = min(x, na.rm = TRUE),
+                                                       max = max(x, na.rm = TRUE)))
 
 #Trasformazione in dataframe leggibile
 happiness_summary_gen <- data.frame(
@@ -83,10 +79,10 @@ numeric_vars <- c("log_gdp_per_capita",
 )
 
 # Numero totale di missing values per paese
-na_mat <- is.na(df_gen_chatgpt[, numeric_vars])
+na_mat <- is.na(df_gen_deepseek[, numeric_vars])
 
 missing_by_country_initial <- aggregate(na_mat,
-                                        by=list(country=df_gen_chatgpt$country),
+                                        by=list(country=df_gen_deepseek$country),
                                         FUN=sum)
 missing_by_country_initial
 
@@ -158,12 +154,12 @@ legend("topleft",
 
 #Serie temporale della felicità
 
-media_annuale_chatgpt_gen <- aggregate(happiness_score ~ year, df_gen_chatgpt, mean)
+media_annuale_deepseek_gen <- aggregate(happiness_score ~ year, df_gen_deepseek, mean)
 
-ts_media_gen <- ts(media_annuale_chatgpt_gen$happiness_score,
-               start = min(media_annuale_chatgpt_gen$year),
-               end   = max(media_annuale_chatgpt_gen$year),
-               frequency = 1)
+ts_media_gen <- ts(media_annuale_deepseek_gen$happiness_score,
+                   start = min(media_annuale_deepseek_gen$year),
+                   end   = max(media_annuale_deepseek_gen$year),
+                   frequency = 1)
 
 plot(ts_media_gen,
      type = "o",
@@ -174,7 +170,7 @@ plot(ts_media_gen,
      main = "Serie Temporale della Felicità")
 
 
-trend <- lm(media_annuale_chatgpt_gen$happiness_score ~ media_annuale_chatgpt_gen$year)
+trend <- lm(media_annuale_deepseek_gen$happiness_score ~ media_annuale_deepseek_gen$year)
 summary(trend)
 
 
@@ -189,6 +185,10 @@ vars <- c("log_gdp_per_capita",
           "perceptions_of_corruption",
           "positive_affect",
           "negative_affect")
+
+vars_sc
+vars_sc %in% names(df_gen_deepseek)
+
 
 # Ciclo per generare scatterplot + grafico dei residui
 plot_scatter_gen <- function(df, vars) {
@@ -246,10 +246,10 @@ plot_residuals_gen <- function(df, vars) {
 }
 
 # Scatterplot (2x4)
-plot_scatter_gen(df_gen_chatgpt, vars)
+plot_scatter_gen(df_gen_deepseek, vars)
 
 # Grafici dei residui (2x4)
-plot_residuals_gen(df_gen_chatgpt, vars)
+plot_residuals_gen(df_gen_deepseek, vars)
 
 
 
@@ -266,47 +266,47 @@ vars_sc <- c(
   "perceptions_of_corruption_sc"
 )
 
-media_annuale_chatgpt <- aggregate(
-  df_gen_chatgpt[, vars_sc],
-  by = list(year = df_gen_chatgpt$year),
+media_annuale_deepseek <- aggregate(
+  df_gen_deepseek[, vars_sc],
+  by = list(year = df_gen_deepseek$year),
   FUN = mean,
   na.rm = TRUE
 )
 
 
-plot(media_annuale_chatgpt$year,
-     media_annuale_chatgpt$happiness_score_sc,
+plot(media_annuale_deepseek$year,
+     media_annuale_deepseek$happiness_score_sc,
      type = "o",
      pch = 16,
      lwd = 2,
      col = "darkgreen",
-     ylim = range(media_annuale_chatgpt[, vars_sc]),
+     ylim = range(media_annuale_deepseek[, vars_sc]),
      xlab = "Anno",
      ylab = "Valori medi (standardizzati)",
-     main = "Serie temporali delle variabili (2005–2022) chatgpt")
+     main = "Serie temporali delle variabili (2005–2022) deepseek")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$log_gdp_per_capita_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$log_gdp_per_capita_sc,
       type = "o", pch = 16, col = "blue")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$social_support_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$social_support_sc,
       type = "o", pch = 16, col = "orange")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$generosity_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$generosity_sc,
       type = "o", pch = 16, col = "purple")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$positive_affect_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$positive_affect_sc,
       type = "o", pch = 16, col = "red")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$negative_affect_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$negative_affect_sc,
       type = "o", pch = 16, col = "brown")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$freedom_to_make_life_choices_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$freedom_to_make_life_choices_sc,
       type = "o", pch = 16, col = "darkolivegreen")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$healthy_life_expectancy_at_birth_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$healthy_life_expectancy_at_birth_sc,
       type = "o", pch = 16, col = "darkcyan")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$perceptions_of_corruption_sc,
+lines(media_annuale_deepseek$year, media_annuale_deepseek$perceptions_of_corruption_sc,
       type = "o", pch = 16, col = "grey40")
 
 legend("topright",
