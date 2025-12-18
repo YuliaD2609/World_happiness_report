@@ -1,23 +1,23 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-vars_sc <- c("log_gdp_per_capita_sc",
-             "social_support_sc",
-             "positive_affect_sc",
-             "negative_affect_sc",
-             "healthy_life_expectancy_at_birth_sc",
-             "freedom_to_make_life_choices_sc",
-             "generosity_sc",
-             "perceptions_of_corruption_sc")
+vars_sc <- c("log_gdp_per_capita",
+             "social_support",
+             "positive_affect",
+             "negative_affect",
+             "healthy_life_expectancy_at_birth",
+             "freedom_to_make_life_choices",
+             "generosity",
+             "perceptions_of_corruption")
 
 var_labels <- c(
-  log_gdp_per_capita_sc = "PIL pro capite",
-  social_support_sc = "Supporto sociale",
-  positive_affect_sc = "Emozioni positive",
-  negative_affect_sc = "Emozioni negative",
-  healthy_life_expectancy_at_birth_sc = "Aspettativa di vita sana",
-  freedom_to_make_life_choices_sc = "Libertà di scelta nella vita",
-  generosity_sc = "Generosità",
-  perceptions_of_corruption_sc = "Percezione della corruzione"
+  log_gdp_per_capita = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  perceptions_of_corruption = "Percezione della corruzione"
 )
 
 
