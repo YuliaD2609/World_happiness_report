@@ -78,4 +78,4 @@ df$negative_affect_sc <- as.numeric(scale(df$negative_affect))
 sapply(df[c(numeric_vars)], function(x) sum(is.na(x)))
 
 # cambiare path a seconda dell'utente
-write.csv(df, "C:/Users/vince/Documents/World_happiness_report/Datasests/world_happiness_clean.csv", row.names = FALSE)
+write.csv(df, "C:/Users/vince/Documents/World_happiness_report/Datasets/world_happiness_clean.csv", row.names = FALSE)

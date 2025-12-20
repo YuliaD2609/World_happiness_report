@@ -27,3 +27,4 @@ boxplot(skew_by_year,
         notch = TRUE)
 
 summary(df$happiness_score)
+

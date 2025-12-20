@@ -24,13 +24,18 @@ par(mar = c(10, 5, 4, 2))
 y_min <- min(top50$min) - 0.2
 y_max <- max(top50$max) + 0.5
 
-colors_green <- colorRampPalette(c("#00441b", "#238b45", "#74c476", "#c7e9c0", "#f7fcf5"))(nrow(missing_by_country_initial))
+cols <- colorRampPalette(
+  c("#c7e9c0", "#74c476", "#238b45", "#00441b")
+)(length(top50$mean))
+
+# ordina colori secondo i valori
+cols <- cols[rank(top50$mean)]
 
 # Barplot
 bar_positions <- barplot(top50$mean,
               names.arg = top50$country,
               las = 2,
-              col = colors_green,
+              col = cols,
               ylim = c(0, 9),
               main = expression(bold("Top 50 Paesi per Felicità Media (2005–2023)")),
               ylab = "Felicità",
@@ -61,7 +66,7 @@ y_max <- max(bottom50$max) + 0.5
 bar_positions <- barplot(bottom50$mean,
                          names.arg = bottom50$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0, 9),
                          main = expression(bold("Bottom 50 Paesi per Felicità Media (2005–2023)")),
                          ylab = "Felicità",
@@ -99,7 +104,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(top50_gdp$mean,
                          names.arg = top50_gdp$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,14),
                          main = expression(bold("Top 50 Paesi per log(GDP pro capite) medio")),
                          ylab = "PIL pro capite",
@@ -123,7 +128,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(bottom50_gdp$mean,
                          names.arg = bottom50_gdp$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,15),
                          main = expression(bold("Bottom 50 Paesi per log(GDP pro capite) medio")),
                          ylab = "PIL pro capite",
@@ -157,7 +162,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(top50_social$mean,
                          names.arg = top50_social$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,1.2),
                          main = expression(bold("Top 50 Paesi per Social Support medio")),
                          ylab = "Supporto sociale",
@@ -179,7 +184,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(bottom50_social$mean,
                          names.arg = bottom50_social$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,1),
                          main = expression(bold("Bottom 50 Paesi per Social Support medio")),
                          ylab = "Supporto sociale",
@@ -212,7 +217,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(top50_health$mean,
                          names.arg = top50_health$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,90),
                          main = expression(bold("Top 50 Paesi per Aspettativa di Vita Sana alla Nascita")),
                          ylab = "Aspettativa di vita sana",
@@ -233,7 +238,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(bottom50_health$mean,
                          names.arg = bottom50_health$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,80),
                          main = expression(bold("Bottom 50 Paesi per Aspettativa di Vita Sana alla Nascita")),
                          ylab = "Aspettativa di vita sana",
@@ -246,7 +251,7 @@ legend("topleft",
        pch = 19,
        lty = 1,
        lwd = 2,
-       bty = "n"))
+       bty = "n")
 
 # Freedom summary
 freedom_summary <- aggregate(freedom_to_make_life_choices ~ country, data = df,
@@ -269,7 +274,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(top50_freedom$mean,
                          names.arg = top50_freedom$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0, 1.2),
                          main = expression(bold("Top 50 Paesi per Libertà di Scelta nella Vita")),
                          ylab = "Libertà di scelta nella vita",
@@ -290,7 +295,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(bottom50_freedom$mean,
                          names.arg = bottom50_freedom$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0, 1.2),
                          main = expression(bold("Bottom 50 Paesi per Libertà di Scelta nella Vita")),
                          ylab = "Libertà di scelta nella vita",
@@ -327,7 +332,7 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(top50_generosity$mean,
                          names.arg = top50_generosity$country,
                          las = 2,
-                         col = colors_green,
+                         col = cols,
                          ylim = c(0,0.8),
                          main = expression(bold("Top 50 Paesi per Generosità Media")),
                          ylab = "Generosità",
@@ -348,12 +353,19 @@ par(mar = c(10, 5, 4, 2))
 bar_positions <- barplot(bottom50_generosity$mean,
                          names.arg = bottom50_generosity$country,
                          las = 2,
-                         col = colors_green,
-                         ylim = c(min(bottom50_generosity$mean) - 0.05, max(bottom50_generosity$mean) + 0.05),
+                         col = cols,
+                         ylim = c(min(bottom50_generosity$mean) - 0.15, max(bottom50_generosity$mean) + 0.05),
                          main = expression(bold("Bottom 50 Paesi per Generosità Media")),
                          ylab = "Generosità",
                          cex.names = 0.8)
 lines(bar_positions, bottom50_generosity$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, bottom50_generosity$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
+legend("bottomright",
+       legend = c("Minimo", "Massimo"),
+       col = c("red", "blue"),
+       pch = 19,
+       lty = 1,
+       lwd = 2,
+       bty = "n")
 
