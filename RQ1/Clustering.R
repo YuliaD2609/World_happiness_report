@@ -168,3 +168,15 @@ k <- 2
 ch <- (bcss / (k - 1)) / (wcss / (n - k))
 ch
 
+wcss <- numeric()
+for (k in 1:8) {
+  km <- kmeans(scores, centers = k, nstart = 25)
+  wcss[k] <- km$tot.withinss
+}
+
+# Elbow method
+plot(1:8, wcss, type="b", pch=19, frame=FALSE,
+     xlab="Numero di cluster",
+     ylab="WCSS",
+     main="Metodo del gomito")
+
