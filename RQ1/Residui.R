@@ -22,7 +22,7 @@ var_labels <- c(
   negative_affect = "Emozioni negative"
 )
 
-par(mfrow = c(1, 1))
+par(mfrow = c(2, 4))
 
 for (var in vars) {
   
@@ -44,17 +44,23 @@ for (var in vars) {
   cat("Variabile:", var, "\n")
   cat("Coefficienti:\n")
   print(coef(lm_model))
-  
   cat("Mediana residui:", median(residuals(lm_model)), "\n")
   cat("Varianza residui:", var(residuals(lm_model)), "\n")
   cat("Deviazione standard residui:", sd(residuals(lm_model)), "\n")
-  
   cor_val <- cor(df_plot[[var]], df_plot$happiness_score, use = "complete.obs")
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n")
-  
   print(summary(lm_model))
+}
+
+par(mfrow = c(2, 4))
+
+for (var in vars) {
   
-  plot(lm_model$fitted.values, residuals(lm_model),
+  df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
+  lm_model <- lm(as.formula(paste("happiness_score ~", var)), data = df_plot)
+  
+  plot(lm_model$fitted.values,
+       residuals(lm_model),
        main = paste("Residui:", var_labels[var]),
        xlab = "Valori stimati",
        ylab = "Residui",
@@ -65,6 +71,9 @@ for (var in vars) {
   abline(h = 0, col = "blue", lty = 2, lwd = 2)
   grid(col = "gray80", lty = "dotted")
 }
+
+par(mfrow = c(1, 1))
+
 
 
 # Modello di regressione lineare

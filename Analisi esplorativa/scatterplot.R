@@ -19,33 +19,36 @@ var_labels <- c(
   generosity = "Generosità",
   perceptions_of_corruption = "Percezione della corruzione"
 )
+par(mfrow = c(2, 2),
+    mar = c(4, 4, 2.5, 1))  
 
-# Scatterplot
 for (var in vars) {
-  text = var_labels[var]
+  
+  lab <- var_labels[var]
   df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
   
   plot(df_plot[[var]],
        df_plot$happiness_score,
-       main = paste("Relazione tra", text, "e punteggio di felicità"),
-       xlab = text,
+       main = "",
+       xlab = lab,
        ylab = "Punteggio di felicità",
        col = rgb(27/255, 158/255, 119/255, 0.4),
        pch = 16,
        cex = 0.5)
   
-  # Modello lineare
+  title(
+    main = paste("Relazione tra", lab, "e punteggio di felicità"),
+    line = 1.5,
+    cex.main = 0.9
+  )
+  
   lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
   abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
-  grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
   
-  # Statistiche sintetiche
-  cat("Modello per:", var, "\n")
-  print(summary(lm_model))
-  
-  cor_val <- cor(df_plot[[var]], df_plot$happiness_score)
-  cat("Correlazione (Pearson):", round(cor_val, 3), "\n\n")
+  grid(col = "gray80", lty = "dotted")
 }
+
+par(mfrow = c(1, 1))
 
 
 # Matrice di scatterplot
