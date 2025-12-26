@@ -47,7 +47,7 @@ lines(bar_positions, top50$min, type = "o", col = "red", lwd = 2, pch = 19)
 lines(bar_positions, top50$max, type = "o", col = "blue", lwd = 2, pch = 19)
 
 # Legenda 
-legend("topleft",
+legend("topright",
        legend = c("Minimo", "Massimo"),
        col = c("red", "blue"),
        pch = 19,

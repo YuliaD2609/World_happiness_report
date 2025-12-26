@@ -88,7 +88,7 @@ lines(media_annuale$year, media_annuale$perceptions_of_corruption_sc,
 
 legend("topright",
        inset = c(0.35, 0),
-       cex = (0.7),
+       cex = (1),
        legend = var_labels,
        col = c("darkgreen", "blue", "orange", "purple",
                "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
