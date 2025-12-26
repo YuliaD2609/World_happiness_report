@@ -180,3 +180,19 @@ plot(1:8, wcss, type="b", pch=19, frame=FALSE,
      ylab="WCSS",
      main="Metodo del gomito")
 
+
+happiness_cluster <- aggregate(df_country$happiness_score_sc,
+                               by = list(cluster = df_country$cluster),
+                               FUN = mean)
+
+colnames(happiness_cluster) <- c("cluster", "mean_happiness")
+happiness_cluster
+
+barplot(happiness_cluster$mean_happiness,
+        names.arg = paste("Cluster", happiness_cluster$cluster),
+        col = c("tomato", "#238B45"),
+        ylab = "Happiness score medio",
+        xlab = "Cluster",
+        main = "Confronto del livello medio di felicità tra cluster",
+        ylim = range(c(-0.5, 1.5)))
+
