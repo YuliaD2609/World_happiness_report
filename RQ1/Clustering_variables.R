@@ -81,7 +81,7 @@ round(pca$rotation, 3)
 plot(pca, type = "l",  main="Screeplot PCA")
 
 # Si prendono in considerazione i primi
-scores <- pca$x[,1:3]
+scores <- pca$x[,c(1,3)]
 # Matrice delle distanze
 cat("Matrice distanze: ")
 dist_euclidea <- dist(scores, method = "euclidean")
@@ -133,6 +133,8 @@ for (k in 2:8) {
   sil <- silhouette(km$cluster, dist(scores))
   sil_width[k] <- mean(sil[, 3])
 }
+
+summary(sil)
 
 plot(2:8, sil_width[2:8], type = "b",
      xlab = "Numero di cluster (k)",

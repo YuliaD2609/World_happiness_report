@@ -83,7 +83,7 @@ round(pca$rotation, 3)
 plot(pca, type = "l",  main="Screeplot PCA")
 
 # si prendono in considerazione i primi
-scores <- pca$x[,1:3]
+scores <- pca$x[,c(1,3)]
 # matrice delle distanze
 dist_euclidea <- dist(scores, method = "euclidean")
 dist_euclidea[1:10] # si stampano solo le prime 10 per avere una visione iniziale dei valori
