@@ -199,7 +199,7 @@ legend("topleft",
        lwd = 2,
        bty = "n")
 
-# Healthn summary
+# Health summary
 health_summary <- aggregate(healthy_life_expectancy_at_birth ~ country, data = df,
                             FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                 min = min(x, na.rm = TRUE),
