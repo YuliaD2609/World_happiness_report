@@ -195,4 +195,4 @@ barplot(happiness_cluster$mean_happiness,
         xlab = "Cluster",
         main = "Confronto del livello medio di felicità tra cluster",
         ylim = range(c(-0.5, 1.5)))
-
+abline(h = 0, lty = 1, lwd = 2)
