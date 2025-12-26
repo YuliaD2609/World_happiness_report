@@ -191,7 +191,7 @@ happiness_cluster
 barplot(happiness_cluster$mean_happiness,
         names.arg = paste("Cluster", happiness_cluster$cluster),
         col = c("tomato", "#238B45"),
-        ylab = "Happiness score medio",
+        ylab = "Livello di felicità medio",
         xlab = "Cluster",
         main = "Confronto del livello medio di felicità tra cluster",
         ylim = range(c(-0.5, 1.5)))
