@@ -180,7 +180,7 @@ plot(1:8, wcss, type="b", pch=19, frame=FALSE,
      ylab="WCSS",
      main="Metodo del gomito")
 
-
+# analisi felicità nei cluster
 happiness_cluster <- aggregate(df_country$happiness_score_sc,
                                by = list(cluster = df_country$cluster),
                                FUN = mean)
