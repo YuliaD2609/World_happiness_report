@@ -1,5 +1,48 @@
 df_gen_gemini <- read.csv(file.choose(), header = TRUE, sep = ",")
 names(df_gen_gemini) <- gsub(" ", "_", names(df_gen_gemini))
+par(mfrow = c(1,1))
+
+vars_sc <- c("log_gdp_per_capita_sc",
+             "social_support_sc",
+             "positive_affect_sc",
+             "negative_affect_sc",
+             "healthy_life_expectancy_at_birth_sc",
+             "freedom_to_make_life_choices_sc",
+             "generosity_sc",
+             "perceptions_of_corruption_sc"
+)
+
+vars <- c("log_gdp_per_capita",
+          "social_support",
+          "healthy_life_expectancy_at_birth",
+          "freedom_to_make_life_choices",
+          "generosity",
+          "perceptions_of_corruption",
+          "positive_affect",
+          "negative_affect")
+
+
+var_labels <- c(
+  log_gdp_per_capita = "PIL pro capite",
+  social_support = "Supporto sociale",
+  positive_affect = "Emozioni positive",
+  negative_affect = "Emozioni negative",
+  healthy_life_expectancy_at_birth = "Aspettativa di vita sana",
+  freedom_to_make_life_choices = "Libertà di scelta nella vita",
+  generosity = "Generosità",
+  perceptions_of_corruption = "Percezione della corruzione"
+)
+
+# Variabili numeriche
+numeric_vars <- names(df_gen_gemini)[sapply(df_gen_gemini, is.numeric)]
+numeric_vars
+
+# Variabili categoriche (fattori o caratteri)
+categorical_vars <- names(df_gen_gemini)[sapply(df_gen_gemini, function(x) is.factor(x) || is.character(x))]
+categorical_vars
+
+vars_sc
+vars_sc %in% names(df_gen_gemini)
 
 post_n_missing <- sapply(df_gen_gemini[numeric_vars], function(x) sum(is.na(x)))
 post_missing_df_gen_gemini <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
@@ -17,9 +60,7 @@ df_gen_gemini$perceptions_of_corruption_sc <- as.numeric(scale(df_gen_gemini$per
 df_gen_gemini$positive_affect_sc <- as.numeric(scale(df_gen_gemini$positive_affect))
 df_gen_gemini$negative_affect_sc <- as.numeric(scale(df_gen_gemini$negative_affect))
 
-
 sapply(df_gen_gemini[c(numeric_vars)], function(x) sum(is.na(x)))
-
 
 
 #Statistica descrittiva
@@ -102,7 +143,7 @@ bar_positions <- barplot(top50$mean,
                          col = colors_green,
                          ylim = c(0, 11),
                          main = expression(bold("Top 50 Paesi per Felicità Media (2005–2023)")),
-                         ylab = "Happiness Score",
+                         ylab = "Punteggio della felicità",
                          cex.names = 0.8,
 )
 
@@ -136,7 +177,7 @@ bar_positions <- barplot(bottom50$mean,
                          col = colors_green,
                          ylim = c(0, 9),
                          main = expression(bold("Bottom 50 Paesi per Felicità Media (2005–2023)")),
-                         ylab = "Happiness Score",
+                         ylab = "Punteggio della felicità",
                          cex.names = 0.8)
 
 # Linee min/max
@@ -186,70 +227,56 @@ vars <- c("log_gdp_per_capita",
           "positive_affect",
           "negative_affect")
 
-vars_sc
-vars_sc %in% names(df_gen_gemini)
-
-
 # Ciclo per generare scatterplot + grafico dei residui
-plot_scatter_gen <- function(df, vars) {
-  
-  par(mfrow = c(2, 4),       # 2 righe x 4 colonne
-      mar = c(4, 4, 3, 1))   # margini compatti
-  
+plot_scatter_gen <- function(df, vars, var_labels) {
+  par(mfrow = c(2, 4), mar = c(4, 4, 3, 1))
   for (var in vars) {
-    
+    lab <- var_labels[[var]]
     df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
-    
-    plot(df_plot[[var]],
-         df_plot$happiness_score,
-         main = var,
-         xlab = var,
-         ylab = "Happiness Score",
-         col = rgb(27/255, 158/255, 119/255, 0.4),
-         pch = 16,
-         cex = 0.5)
-    
+    plot(
+      df_plot[[var]],
+      df_plot$happiness_score,
+      main = lab,
+      xlab = lab,
+      ylab = "Punteggio della felicità",
+      col = rgb(27/255, 158/255, 119/255, 0.4),
+      pch = 16,
+      cex = 0.5
+    )
     lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
     abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
-    
     grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
   }
-  
-  par(mfrow = c(1, 1))  # reset layout
+  par(mfrow = c(1, 1))
 }
 
-plot_residuals_gen <- function(df, vars) {
-  
-  par(mfrow = c(2, 4),
-      mar = c(4, 4, 3, 1))
-  
+plot_residuals_gen <- function(df, vars, var_labels) {
+  par(mfrow = c(2, 4), mar = c(4, 4, 3, 1))
   for (var in vars) {
-    
+    lab <- var_labels[[var]]
     df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
-    
     lm_model <- lm(happiness_score ~ df_plot[[var]], data = df_plot)
-    
-    plot(lm_model$fitted.values,
-         lm_model$residuals,
-         main = paste("Residui:", var),
-         xlab = "Valori stimati",
-         ylab = "Residui",
-         col = rgb(1, 0, 0, 0.6),
-         pch = 16,
-         cex = 0.5)
-    
+    plot(
+      lm_model$fitted.values,
+      lm_model$residuals,
+      main = paste("Residui:", lab),
+      xlab = "Valori stimati",
+      ylab = "Residui",
+      col = rgb(1, 0, 0, 0.6),
+      pch = 16,
+      cex = 0.5
+    )
     abline(h = 0, col = "blue", lty = 2, lwd = 2)
     grid(nx = NULL, ny = NULL, col = "gray80", lty = "dotted")
   }
-  
   par(mfrow = c(1, 1))
 }
 
 # Scatterplot (2x4)
-plot_scatter_gen(df_gen_gemini, vars)
+plot_scatter_gen(df_gen_gemini, vars, var_labels)
 
 # Grafici dei residui (2x4)
-plot_residuals_gen(df_gen_gemini, vars)
+plot_residuals_gen(df_gen_gemini, vars, var_labels)
 
 
 
@@ -283,7 +310,7 @@ plot(media_annuale_gemini$year,
      ylim = range(media_annuale_gemini[, vars_sc]),
      xlab = "Anno",
      ylab = "Valori medi (standardizzati)",
-     main = "Serie temporali delle variabili (2005–2022) gemini")
+     main = "Serie temporali delle variabili (2005–2022) chatgpt")
 
 lines(media_annuale_gemini$year, media_annuale_gemini$log_gdp_per_capita_sc,
       type = "o", pch = 16, col = "blue")
@@ -311,12 +338,12 @@ lines(media_annuale_gemini$year, media_annuale_gemini$perceptions_of_corruption_
 
 legend("topright",
        inset = c(0.35, 0),
-       cex = (0.7),
+       cex = (1),
        legend = c("Happiness Score",
                   "Log GDP",
                   "Social Support",
                   "Generosity",
-                  "Positive Affect",
+                  "Positive Affect",s
                   "Negative Affect",
                   "Freedom of Choice",
                   "Healthy Life Expectancy",

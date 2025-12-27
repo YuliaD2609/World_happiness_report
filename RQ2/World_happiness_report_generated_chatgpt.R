@@ -338,7 +338,7 @@ lines(media_annuale_chatgpt$year, media_annuale_chatgpt$perceptions_of_corruptio
 
 legend("topright",
        inset = c(0.35, 0),
-       cex = (0.7),
+       cex = (1),
        legend = c("Happiness Score",
                   "Log GDP",
                   "Social Support",
