@@ -343,7 +343,7 @@ legend("topright",
                   "Log GDP",
                   "Social Support",
                   "Generosity",
-                  "Positive Affect",s
+                  "Positive Affect",
                   "Negative Affect",
                   "Freedom of Choice",
                   "Healthy Life Expectancy",
