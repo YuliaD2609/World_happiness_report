@@ -4,9 +4,25 @@ df <- read.csv(file.choose(), header = TRUE, sep = ",")
 library(moments)
 par(mfrow = c(1,1))
 sk <- skewness(df$happiness_score, na.rm = TRUE)
+cat("Skewness: " , sk)
 kt <- kurtosis(df$happiness_score, na.rm = TRUE)
-sk
-kt
+cat("Curtosi: " , kt)
+
+library(ggplot2)
+
+ggplot(df, aes(x = happiness_score)) +
+  geom_histogram(aes(y = ..density..),
+                 bins = 30,
+                 fill = "#238b45",
+                 color = "black") +
+  geom_density(linewidth = 1) +
+  labs(
+    title = "Distribuzione del punteggio di felicità",
+    subtitle = paste("Skewness =", round(sk, 3)),
+    x = "Happiness score",
+    y = "Densità"
+  ) +
+  theme_minimal()
 
 # Divisione per anno per l'asimmetria calcolata sugli anni
 skew_by_year <- tapply(df$happiness_score, df$year, skewness, na.rm = TRUE)
