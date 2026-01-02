@@ -1,5 +1,5 @@
-df_fixed_chatgpt <- read.csv(file.choose(), header = TRUE, sep = ",")
-names(df_fixed_chatgpt) <- gsub(" ", "_", names(df_fixed_chatgpt))
+df_chatgpt_fixed <- read.csv(file.choose(), header = TRUE, sep = ",")
+names(df_chatgpt_fixed) <- gsub(" ", "_", names(df_chatgpt_fixed))
 par(mfrow = c(1,1))
 
 vars_sc <- c("log_gdp_per_capita_sc",
@@ -34,47 +34,47 @@ var_labels <- c(
 )
 
 # Variabili numeriche
-numeric_vars <- names(df_fixed_chatgpt)[sapply(df_fixed_chatgpt, is.numeric)]
+numeric_vars <- names(df_chatgpt_fixed)[sapply(df_chatgpt_fixed, is.numeric)]
 numeric_vars
 
 # Variabili categoriche (fattori o caratteri)
-categorical_vars <- names(df_fixed_chatgpt)[sapply(df_fixed_chatgpt, function(x) is.factor(x) || is.character(x))]
+categorical_vars <- names(df_chatgpt_fixed)[sapply(df_chatgpt_fixed, function(x) is.factor(x) || is.character(x))]
 categorical_vars
 
 vars_sc
-vars_sc %in% names(df_fixed_chatgpt)
+vars_sc %in% names(df_chatgpt_fixed)
 
-post_n_missing <- sapply(df_fixed_chatgpt[numeric_vars], function(x) sum(is.na(x)))
-post_missing_df_fixed_chatgpt <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
-print(post_missing_df_fixed_chatgpt)
-View(df_fixed_chatgpt)
+post_n_missing <- sapply(df_chatgpt_fixed[numeric_vars], function(x) sum(is.na(x)))
+post_missing_df_chatgpt_fixed <- data.frame(var = names(post_n_missing), n_missing = as.integer(post_n_missing))
+print(post_missing_df_chatgpt_fixed)
+View(df_chatgpt_fixed)
 
 #ricostruzione sc
-df_fixed_chatgpt$happiness_score_sc <- as.numeric(scale(df_fixed_chatgpt$happiness_score))
-df_fixed_chatgpt$log_gdp_per_capita_sc <- as.numeric(scale(df_fixed_chatgpt$log_gdp_per_capita))
-df_fixed_chatgpt$social_support_sc <- as.numeric(scale(df_fixed_chatgpt$social_support))
-df_fixed_chatgpt$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_fixed_chatgpt$healthy_life_expectancy_at_birth))
-df_fixed_chatgpt$freedom_to_make_life_choices_sc <- as.numeric(scale(df_fixed_chatgpt$freedom_to_make_life_choices))
-df_fixed_chatgpt$generosity_sc <- as.numeric(scale(df_fixed_chatgpt$generosity))
-df_fixed_chatgpt$perceptions_of_corruption_sc <- as.numeric(scale(df_fixed_chatgpt$perceptions_of_corruption))
-df_fixed_chatgpt$positive_affect_sc <- as.numeric(scale(df_fixed_chatgpt$positive_affect))
-df_fixed_chatgpt$negative_affect_sc <- as.numeric(scale(df_fixed_chatgpt$negative_affect))
+df_chatgpt_fixed$happiness_score_sc <- as.numeric(scale(df_chatgpt_fixed$happiness_score))
+df_chatgpt_fixed$log_gdp_per_capita_sc <- as.numeric(scale(df_chatgpt_fixed$log_gdp_per_capita))
+df_chatgpt_fixed$social_support_sc <- as.numeric(scale(df_chatgpt_fixed$social_support))
+df_chatgpt_fixed$healthy_life_expectancy_at_birth_sc <- as.numeric(scale(df_chatgpt_fixed$healthy_life_expectancy_at_birth))
+df_chatgpt_fixed$freedom_to_make_life_choices_sc <- as.numeric(scale(df_chatgpt_fixed$freedom_to_make_life_choices))
+df_chatgpt_fixed$generosity_sc <- as.numeric(scale(df_chatgpt_fixed$generosity))
+df_chatgpt_fixed$perceptions_of_corruption_sc <- as.numeric(scale(df_chatgpt_fixed$perceptions_of_corruption))
+df_chatgpt_fixed$positive_affect_sc <- as.numeric(scale(df_chatgpt_fixed$positive_affect))
+df_chatgpt_fixed$negative_affect_sc <- as.numeric(scale(df_chatgpt_fixed$negative_affect))
 
-sapply(df_fixed_chatgpt[c(numeric_vars)], function(x) sum(is.na(x)))
+sapply(df_chatgpt_fixed[c(numeric_vars)], function(x) sum(is.na(x)))
 
 
 #Statistica descrittiva
 # Seleziona solo le variabili numeriche
-num_df_fixed_chatgpt <- df_fixed_chatgpt[sapply(df_fixed_chatgpt, is.numeric)]
+num_df_chatgpt_fixed <- df_chatgpt_fixed[sapply(df_chatgpt_fixed, is.numeric)]
 
 # Calcolo delle statistiche descrittive:
 # Media, deviazione standard, minimo e massimo per ciascuna variabile numerica
 descrittive <- data.frame(
-  Variabile = names(num_df_fixed_chatgpt),
-  Media = sapply(num_df_fixed_chatgpt, mean, na.rm = TRUE),
-  Deviazione_Standard = sapply(num_df_fixed_chatgpt, sd, na.rm = TRUE),
-  Minimo = sapply(num_df_fixed_chatgpt, min, na.rm = TRUE),
-  Massimo = sapply(num_df_fixed_chatgpt, max, na.rm = TRUE)
+  Variabile = names(num_df_chatgpt_fixed),
+  Media = sapply(num_df_chatgpt_fixed, mean, na.rm = TRUE),
+  Deviazione_Standard = sapply(num_df_chatgpt_fixed, sd, na.rm = TRUE),
+  Minimo = sapply(num_df_chatgpt_fixed, min, na.rm = TRUE),
+  Massimo = sapply(num_df_chatgpt_fixed, max, na.rm = TRUE)
 ) ##Qui però sono rimossi i NA
 
 # Visualizza la tabella delle statistichee
@@ -84,7 +84,7 @@ print(descrittive)
 
 
 # Calcolo media, min e max per paese
-happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_fixed_chatgpt,
+happiness_summary_gen <- aggregate(happiness_score ~ country, data = df_chatgpt_fixed,
                                    FUN = function(x) c(mean = mean(x, na.rm = TRUE),
                                                        min = min(x, na.rm = TRUE),
                                                        max = max(x, na.rm = TRUE)))
@@ -120,10 +120,10 @@ numeric_vars <- c("log_gdp_per_capita",
 )
 
 # Numero totale di missing values per paese
-na_mat <- is.na(df_fixed_chatgpt[, numeric_vars])
+na_mat <- is.na(df_chatgpt_fixed[, numeric_vars])
 
 missing_by_country_initial <- aggregate(na_mat,
-                                        by=list(country=df_fixed_chatgpt$country),
+                                        by=list(country=df_chatgpt_fixed$country),
                                         FUN=sum)
 missing_by_country_initial
 
@@ -195,11 +195,11 @@ legend("topleft",
 
 #Serie temporale della felicità
 
-media_annuale_chatgpt_gen <- aggregate(happiness_score ~ year, df_fixed_chatgpt, mean)
+media_annuale_chatgpt_fixed_gen <- aggregate(happiness_score ~ year, df_chatgpt_fixed, mean)
 
-ts_media_gen <- ts(media_annuale_chatgpt_gen$happiness_score,
-                   start = min(media_annuale_chatgpt_gen$year),
-                   end   = max(media_annuale_chatgpt_gen$year),
+ts_media_gen <- ts(media_annuale_chatgpt_fixed_gen$happiness_score,
+                   start = min(media_annuale_chatgpt_fixed_gen$year),
+                   end   = max(media_annuale_chatgpt_fixed_gen$year),
                    frequency = 1)
 
 plot(ts_media_gen,
@@ -211,7 +211,7 @@ plot(ts_media_gen,
      main = "Serie Temporale della Felicità")
 
 
-trend <- lm(media_annuale_chatgpt_gen$happiness_score ~ media_annuale_chatgpt_gen$year)
+trend <- lm(media_annuale_chatgpt_fixed_gen$happiness_score ~ media_annuale_chatgpt_fixed_gen$year)
 summary(trend)
 
 
@@ -273,10 +273,10 @@ plot_residuals_gen <- function(df, vars, var_labels) {
 }
 
 # Scatterplot (2x4)
-plot_scatter_gen(df_fixed_chatgpt, vars, var_labels)
+plot_scatter_gen(df_chatgpt_fixed, vars, var_labels)
 
 # Grafici dei residui (2x4)
-plot_residuals_gen(df_fixed_chatgpt, vars, var_labels)
+plot_residuals_gen(df_chatgpt_fixed, vars, var_labels)
 
 
 
@@ -293,66 +293,224 @@ vars_sc <- c(
   "perceptions_of_corruption_sc"
 )
 
-media_annuale_chatgpt <- aggregate(
-  df_fixed_chatgpt[, vars_sc],
-  by = list(year = df_fixed_chatgpt$year),
+media_annuale_chatgpt_fixed <- aggregate(
+  df_chatgpt_fixed[, vars_sc],
+  by = list(year = df_chatgpt_fixed$year),
   FUN = mean,
   na.rm = TRUE
 )
 
 
-plot(media_annuale_chatgpt$year,
-     media_annuale_chatgpt$happiness_score_sc,
+plot(media_annuale_chatgpt_fixed$year,
+     media_annuale_chatgpt_fixed$happiness_score_sc,
      type = "o",
      pch = 16,
      lwd = 2,
      col = "darkgreen",
-     ylim = range(media_annuale_chatgpt[, vars_sc]),
+     ylim = range(media_annuale_chatgpt_fixed[, vars_sc]),
      xlab = "Anno",
      ylab = "Valori medi (standardizzati)",
-     main = "Serie temporali delle variabili (2005–2022) chatgpt")
+     main = "Serie temporali delle variabili (2005–2022) chatgpt_fixed")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$log_gdp_per_capita_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$log_gdp_per_capita_sc,
       type = "o", pch = 16, col = "blue")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$social_support_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$social_support_sc,
       type = "o", pch = 16, col = "orange")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$generosity_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$generosity_sc,
       type = "o", pch = 16, col = "purple")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$positive_affect_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$positive_affect_sc,
       type = "o", pch = 16, col = "red")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$negative_affect_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$negative_affect_sc,
       type = "o", pch = 16, col = "brown")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$freedom_to_make_life_choices_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$freedom_to_make_life_choices_sc,
       type = "o", pch = 16, col = "darkolivegreen")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$healthy_life_expectancy_at_birth_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$healthy_life_expectancy_at_birth_sc,
       type = "o", pch = 16, col = "darkcyan")
 
-lines(media_annuale_chatgpt$year, media_annuale_chatgpt$perceptions_of_corruption_sc,
+lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$perceptions_of_corruption_sc,
       type = "o", pch = 16, col = "grey40")
 
 legend("topright",
-       inset = c(0.40, 0),
+       inset = c(0.35, 0),
        cex = (1),
-       legend = c("Happiness Score",
-                  "Log GDP",
-                  "Social Support",
-                  "Generosity",
-                  "Positive Affect",
-                  "Negative Affect",
-                  "Freedom of Choice",
-                  "Healthy Life Expectancy",
-                  "Perception of Corruption"),
+       legend = c("Punteggio della Felicità",
+                  "PIL pro capite",
+                  "Supporto sociale",
+                  "Generosità",
+                  "Emozioni positive",
+                  "Emnozioni negative",
+                  "Libertà di scelta nella vita",
+                  "Aspettativa di vita sana",
+                  "Percezione della corruzione"),
        col = c("darkgreen", "blue", "orange", "purple",
                "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
        pch = c(16, 16, 16, 16, 16, 16, 16, 16, 16),
        lty = 1,
        lwd = 2,
        bty = "n")
+
+
+
+# Frequenza assoluta
+freq_ass_chatgpt_fixed <- table(cut(df_chatgpt_fixed$happiness_score, breaks = 40, right = FALSE))
+cat("Frequenza assoluta: ", freq_ass_chatgpt_fixed)
+# Frequenza relativa
+freq_rel_chatgpt_fixed <- prop.table(freq_ass_chatgpt_fixed)
+cat("Frequenza relativa: ", freq_rel_chatgpt_fixed)
+# Frequenza relativa cumulata
+freq_rel_cum_chatgpt_fixed <- cumsum(freq_rel_chatgpt_fixed)
+cat("Frequenza relativa cumulata: ", freq_rel_cum_chatgpt_fixed)
+
+# Minimo, media, mediana, quantili
+summary(df_chatgpt_fixed$happiness_score)
+
+par(mgp = c(4, 0, -1))
+
+barplot(freq_ass_chatgpt_fixed,
+        main = "Distribuzione di frequenza assoluta del punteggio di felicità chatgpt_fixed",
+        xlab = "Classi di felicità",
+        ylab = "Frequenza assoluta",
+        las = 2,
+        ylim = c(-10,220),
+        col = "#56B117")
+
+barplot(freq_rel_chatgpt_fixed,
+        main = "Distribuzione di frequenza relativa del punteggio di felicità chatgpt_fixed",
+        xlab = "Classi di felicità",
+        ylab = "Frequenza relativa",
+        las = 2,
+        col = "#56B117")
+
+par(mgp = c(3, 0.5, 0))
+
+plot(freq_rel_cum_chatgpt_fixed,
+     type = "b",
+     pch = 19,
+     col = "#238B45",
+     xaxt = "n",
+     xlab = "Classi di felicità",
+     ylab = "Frequenza relativa cumulata",
+     main = "Funzione di distribuzione empirica continua della Felicità chatgpt_fixed")
+
+
+
+axis(1, at = 1:length(freq_rel_cum_chatgpt_fixed), labels = names(freq_rel_cum_chatgpt_fixed), las = 2, cex.axis = 0.6)
+
+
+# Istogramma
+hist_data_chatgpt_fixed <- hist(df_chatgpt_fixed$happiness_score,
+                          breaks = 40,                         
+                          col = "#56B117",                     
+                          border = "white",                    
+                          main = "Distribuzione della variabile Happiness Score chatgpt_fixed",
+                          xlab = "Punteggio di felicità",
+                          ylab = "Frequenza",
+                          cex.main = 1.3,
+                          cex.lab = 1,
+                          cex.axis = 0.9)
+
+# Aggiunta curva 
+dens_chatgpt_fixed <- density(df_chatgpt_fixed$happiness_score)
+scale_factor_chatgpt_fixed <- max(hist_data_chatgpt_fixed$counts) / max(dens_chatgpt_fixed$y)     
+
+lines(dens_chatgpt_fixed$x, dens_chatgpt_fixed$y * scale_factor_chatgpt_fixed, 
+      col = "red", 
+      lwd = 2)
+
+legend("topright",
+       legend = c("Istogramma", "Densità"),
+       fill = c("#56B117", NA),
+       border = c("white", NA),
+       lty = c(NA, 1),
+       col = c("black", "red"),
+       bty = "n",
+       cex = 0.9)
+
+
+# Kernel density plot
+
+dens_chatgpt_fixed <- density(df_chatgpt_fixed$happiness_score)
+
+plot(dens_chatgpt_fixed,
+     main = "Stima kernel density plot di felicità chatgpt_fixed",
+     xlab = "Felicità",
+     ylab = "Densità",
+     lwd = 2,
+     col = "#238B45")
+
+polygon(dens_chatgpt_fixed,
+        col = rgb(35/255, 139/255, 69/255, 0.3),
+        border = "#238B45")
+
+
+
+
+
+library(dplyr)
+library(leaflet)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(tmap)
+
+# Calcolo media felicità per paese
+
+
+library(dplyr)
+
+happiness_mean_chatgpt_fixed <- df_chatgpt_fixed %>%
+  mutate(country = case_when(
+    country == "Bosnia and Herzegovina" ~ "Bosnia and Herz.",
+    country == "Central African Republic" ~ "Central African Rep.",
+    country == "Congo (Brazzaville)" ~ "Congo",
+    country == "Congo (Kinshasa)" ~ "Dem. Rep. Congo",
+    country == "Dominican Republic" ~ "Dominican Rep.",
+    country == "Eswatini" ~ "eSwatini",
+    country == "Hong Kong S.A.R. of China" ~ "Hong Kong",
+    country == "Ivory Coast" ~ "Côte d'Ivoire",
+    country == "State of Palestine" ~ "Palestine",
+    country == "Taiwan Province of China" ~ "Taiwan",
+    country == "Turkiye" ~ "Turkey",
+    country == "United States" ~ "United States of America",
+    TRUE ~ country
+  ))
+
+happiness_mean_chatgpt_fixed <- happiness_mean_chatgpt_fixed %>%
+  group_by(country) %>%
+  summarise(mean_happiness = mean(happiness_score, na.rm = TRUE))
+
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Join tra la geometria e la media calcolata
+world_happiness_chatgpt_fixed <- world %>%
+  left_join(happiness_mean_chatgpt_fixed, by = c("name" = "country"))
+
+setdiff(happiness_mean_chatgpt_fixed$country, world$name)
+
+# Mappa statica
+tmap_mode("plot") 
+map_static_chatgpt_fixed <- tm_shape(world_happiness_chatgpt_fixed) +
+  tm_polygons(
+    col = "mean_happiness",
+    palette = "YlGnBu",
+    title = "Media Felicità",
+    colorNA = "lightgray",
+    textNA = "Nessun dato"
+  ) +
+  tm_layout(
+    legend.title.size = 0.7,
+    legend.text.size = 0.55,
+    frame = FALSE,
+    legend.position = c("left", "center")
+  )
+
+map_static_chatgpt_fixed 
 
 

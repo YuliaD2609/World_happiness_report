@@ -339,20 +339,178 @@ lines(media_annuale_chatgpt$year, media_annuale_chatgpt$perceptions_of_corruptio
 legend("topright",
        inset = c(0.35, 0),
        cex = (1),
-       legend = c("Happiness Score",
-                  "Log GDP",
-                  "Social Support",
-                  "Generosity",
-                  "Positive Affect",
-                  "Negative Affect",
-                  "Freedom of Choice",
-                  "Healthy Life Expectancy",
-                  "Perception of Corruption"),
+       legend = c("Punteggio della Felicità",
+                  "PIL pro capite",
+                  "Supporto sociale",
+                  "Generosità",
+                  "Emozioni positive",
+                  "Emnozioni negative",
+                  "Libertà di scelta nella vita",
+                  "Aspettativa di vita sana",
+                  "Percezione della corruzione"),
        col = c("darkgreen", "blue", "orange", "purple",
                "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
-       pch = c(16, 17, 15, 18, 16, 16, 17, 15, 18),
+       pch = c(16, 16, 16, 16, 16, 16, 16, 16, 16),
        lty = 1,
        lwd = 2,
        bty = "n")
+
+
+
+# Frequenza assoluta
+freq_ass_chatgpt <- table(cut(df_gen_chatgpt$happiness_score, breaks = 40, right = FALSE))
+cat("Frequenza assoluta: ", freq_ass_chatgpt)
+# Frequenza relativa
+freq_rel_chatgpt <- prop.table(freq_ass_chatgpt)
+cat("Frequenza relativa: ", freq_rel_chatgpt)
+# Frequenza relativa cumulata
+freq_rel_cum_chatgpt <- cumsum(freq_rel_chatgpt)
+cat("Frequenza relativa cumulata: ", freq_rel_cum_chatgpt)
+
+# Minimo, media, mediana, quantili
+summary(df_gen_chatgpt$happiness_score)
+
+par(mgp = c(4, 0, -1))
+
+barplot(freq_ass_chatgpt,
+        main = "Distribuzione di frequenza assoluta del punteggio di felicità chatgpt",
+        xlab = "Classi di felicità",
+        ylab = "Frequenza assoluta",
+        las = 2,
+        ylim = c(-10,220),
+        col = "#56B117")
+
+barplot(freq_rel_chatgpt,
+        main = "Distribuzione di frequenza relativa del punteggio di felicità chatgpt",
+        xlab = "Classi di felicità",
+        ylab = "Frequenza relativa",
+        las = 2,
+        col = "#56B117")
+
+par(mgp = c(3, 0.5, 0))
+
+plot(freq_rel_cum_chatgpt,
+     type = "b",
+     pch = 19,
+     col = "#238B45",
+     xaxt = "n",
+     xlab = "Classi di felicità",
+     ylab = "Frequenza relativa cumulata",
+     main = "Funzione di distribuzione empirica continua della Felicità chatgpt")
+
+
+
+axis(1, at = 1:length(freq_rel_cum_chatgpt), labels = names(freq_rel_cum_chatgpt), las = 2, cex.axis = 0.6)
+
+
+# Istogramma
+hist_data_chatgpt <- hist(df_gen_chatgpt$happiness_score,
+                  breaks = 40,                         
+                  col = "#56B117",                     
+                  border = "white",                    
+                  main = "Distribuzione della variabile Happiness Score chatgpt",
+                  xlab = "Punteggio di felicità",
+                  ylab = "Frequenza",
+                  cex.main = 1.3,
+                  cex.lab = 1,
+                  cex.axis = 0.9)
+
+# Aggiunta curva 
+dens_chatgpt <- density(df_gen_chatgpt$happiness_score)
+scale_factor_chatgpt <- max(hist_data_chatgpt$counts) / max(dens_chatgpt$y)     
+
+lines(dens_chatgpt$x, dens_chatgpt$y * scale_factor_chatgpt, 
+      col = "red", 
+      lwd = 2)
+
+legend("topright",
+       legend = c("Istogramma", "Densità"),
+       fill = c("#56B117", NA),
+       border = c("white", NA),
+       lty = c(NA, 1),
+       col = c("black", "red"),
+       bty = "n",
+       cex = 0.9)
+
+
+# Kernel density plot
+
+dens_chatgpt <- density(df_gen_chatgpt$happiness_score)
+
+plot(dens_chatgpt,
+     main = "Stima kernel density plot di felicità chatgpt",
+     xlab = "Felicità",
+     ylab = "Densità",
+     lwd = 2,
+     col = "#238B45")
+
+polygon(dens_chatgpt,
+        col = rgb(35/255, 139/255, 69/255, 0.3),
+        border = "#238B45")
+
+
+
+
+
+library(dplyr)
+library(leaflet)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(tmap)
+
+# Calcolo media felicità per paese
+
+
+library(dplyr)
+
+happiness_mean_chatgpt <- df_gen_chatgpt %>%
+  mutate(country = case_when(
+    country == "Bosnia and Herzegovina" ~ "Bosnia and Herz.",
+    country == "Central African Republic" ~ "Central African Rep.",
+    country == "Congo (Brazzaville)" ~ "Congo",
+    country == "Congo (Kinshasa)" ~ "Dem. Rep. Congo",
+    country == "Dominican Republic" ~ "Dominican Rep.",
+    country == "Eswatini" ~ "eSwatini",
+    country == "Hong Kong S.A.R. of China" ~ "Hong Kong",
+    country == "Ivory Coast" ~ "Côte d'Ivoire",
+    country == "State of Palestine" ~ "Palestine",
+    country == "Taiwan Province of China" ~ "Taiwan",
+    country == "Turkiye" ~ "Turkey",
+    country == "United States" ~ "United States of America",
+    TRUE ~ country
+  ))
+
+happiness_mean_chatgpt <- happiness_mean_chatgpt %>%
+  group_by(country) %>%
+  summarise(mean_happiness = mean(happiness_score, na.rm = TRUE))
+
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Join tra la geometria e la media calcolata
+world_happiness_chatgpt <- world %>%
+  left_join(happiness_mean_chatgpt, by = c("name" = "country"))
+
+setdiff(happiness_mean_chatgpt$country, world$name)
+
+# Mappa statica
+tmap_mode("plot") 
+map_static_chatgpt <- tm_shape(world_happiness_chatgpt) +
+  tm_polygons(
+    col = "mean_happiness",
+    palette = "YlGnBu",
+    title = "Media Felicità",
+    colorNA = "lightgray",
+    textNA = "Nessun dato"
+  ) +
+  tm_layout(
+    legend.title.size = 0.7,
+    legend.text.size = 0.55,
+    frame = FALSE,
+    legend.position = c("left", "center")
+  )
+
+map_static_chatgpt 
 
 
