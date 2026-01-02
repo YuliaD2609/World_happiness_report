@@ -337,7 +337,7 @@ lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$perceptions_
       type = "o", pch = 16, col = "grey40")
 
 legend("topright",
-       inset = c(0.35, 0),
+       inset = c(0.40, 0),
        cex = (1),
        legend = c("Punteggio della Felicità",
                   "PIL pro capite",
