@@ -310,7 +310,7 @@ plot(media_annuale_chatgpt_fixed$year,
      ylim = range(media_annuale_chatgpt_fixed[, vars_sc]),
      xlab = "Anno",
      ylab = "Valori medi (standardizzati)",
-     main = "Serie temporali delle variabili (2005–2022) chatgpt_fixed")
+     main = "Serie temporali delle variabili (2005–2022)")
 
 lines(media_annuale_chatgpt_fixed$year, media_annuale_chatgpt_fixed$log_gdp_per_capita_sc,
       type = "o", pch = 16, col = "blue")
@@ -373,7 +373,7 @@ summary(df_chatgpt_fixed$happiness_score)
 par(mgp = c(4, 0, -1))
 
 barplot(freq_ass_chatgpt_fixed,
-        main = "Distribuzione di frequenza assoluta del punteggio di felicità chatgpt_fixed",
+        main = "Distribuzione di frequenza assoluta del punteggio di felicità",
         xlab = "Classi di felicità",
         ylab = "Frequenza assoluta",
         las = 2,
@@ -381,7 +381,7 @@ barplot(freq_ass_chatgpt_fixed,
         col = "#56B117")
 
 barplot(freq_rel_chatgpt_fixed,
-        main = "Distribuzione di frequenza relativa del punteggio di felicità chatgpt_fixed",
+        main = "Distribuzione di frequenza relativa del punteggio di felicità",
         xlab = "Classi di felicità",
         ylab = "Frequenza relativa",
         las = 2,
@@ -396,7 +396,7 @@ plot(freq_rel_cum_chatgpt_fixed,
      xaxt = "n",
      xlab = "Classi di felicità",
      ylab = "Frequenza relativa cumulata",
-     main = "Funzione di distribuzione empirica continua della Felicità chatgpt_fixed")
+     main = "Funzione di distribuzione empirica continua della Felicità")
 
 
 
@@ -408,7 +408,7 @@ hist_data_chatgpt_fixed <- hist(df_chatgpt_fixed$happiness_score,
                           breaks = 40,                         
                           col = "#56B117",                     
                           border = "white",                    
-                          main = "Distribuzione della variabile Happiness Score chatgpt_fixed",
+                          main = "Distribuzione della variabile Happiness Score",
                           xlab = "Punteggio di felicità",
                           ylab = "Frequenza",
                           cex.main = 1.3,
@@ -438,7 +438,7 @@ legend("topright",
 dens_chatgpt_fixed <- density(df_chatgpt_fixed$happiness_score)
 
 plot(dens_chatgpt_fixed,
-     main = "Stima kernel density plot di felicità chatgpt_fixed",
+     main = "Stima kernel density plot di felicità",
      xlab = "Felicità",
      ylab = "Densità",
      lwd = 2,
