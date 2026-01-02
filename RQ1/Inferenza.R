@@ -16,7 +16,7 @@ df_country <- aggregate(df[, Allvars],
 df_country_cc <- df_country[complete.cases(df_country[, Allvars]), ]
 
 # Parametri
-alpha <- 0.05
+alpha <- 0.0001
 n <- nrow(df_country)    # numero di paesi
 sigma <- 0.53            # residual standard error
 beta_true <- 0.30        # effetto reale (es. GDP)
@@ -41,7 +41,7 @@ plot(x, f_H0, type="l", lwd=2, col="blue",
      main="Compromesso tra errore di Tipo I e Tipo II")
 lines(x, f_H1, lwd=2, col="red")
 
-abline(v = x_int, col="black", lty=2)
+abline(v = alpha, col="black", lty=2)
 
 polygon(c(x_int, x[x > x_int], max(x)),
         c(0, dnorm(x[x > x_int],0,sigma), 0),
@@ -96,4 +96,60 @@ for (v in vars) {
   cat("p-value:", round(pval, 5), "\n")
   cat("IC 95%: [", round(ci[1],3), ",", round(ci[2],3), "]\n")
 }
+
+
+
+
+
+
+
+
+# Parametri
+alpha <- 0.05                 # errore di I tipo
+delta <- 1                    # dimensione dell'effetto sotto H1
+
+# Valori della statistica
+z <- seq(-4, 6, length.out = 1000)
+
+# Densità sotto H0 e H1
+dens_h0 <- dnorm(z, mean = 0, sd = 1)
+dens_h1 <- dnorm(z, mean = delta, sd = 1)
+
+# Valore critico (test a una coda)
+z_crit <- qnorm(1 - alpha)
+
+# Grafico
+plot(z, dens_h0, type = "l", lwd = 2, col = "blue",
+     xlab = "Valore della statistica",
+     ylab = "Densità di probabilità",
+     main = "Compromesso tra errore di Tipo I e Tipo II")
+
+lines(z, dens_h1, lwd = 2, col = "red")
+
+# Area errore di tipo I (alpha)
+z_alpha <- z[z >= z_crit]
+polygon(c(z_alpha, rev(z_alpha)),
+        c(dnorm(z_alpha, 0, 1), rep(0, length(z_alpha))),
+        col = rgb(0,0,1,0.25),
+        border = NA)
+
+# Area errore di tipo II (beta)
+z_beta <- z[z < z_crit]
+polygon(c(z_beta, rev(z_beta)),
+        c(dnorm(z_beta, delta, 1), rep(0, length(z_beta))),
+        col = rgb(1,0,0,0.25),
+        border = NA)
+
+# Linea del valore critico
+abline(v = z_crit, lwd = 2, lty = 3)
+
+# Legenda
+legend("topright",
+       legend = c("H0", "H1", "Errore di tipo I (α)", "Errore di tipo II (β)"),
+       col = c("blue", "red", rgb(0,0,1,0.25), rgb(1,0,0,0.25)),
+       lty = c(1, 1, NA, NA),
+       lwd = c(2, 1, NA, NA),
+       pch = c(NA, NA, 15, 15),
+       pt.cex = 2,
+       bty = "n")
 
