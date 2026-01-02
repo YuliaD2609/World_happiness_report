@@ -120,7 +120,7 @@ hc <- hclust(dist_vars, method="complete")
 par(mfrow = c(1, 2)) 
 # Dendrogramma
 plot(hc, main="Dendrogramma",
-     xlab="Variabili", ylab="Distanza", cex=0.6)
+     xlab="Variabili", ylab="Distanza", cex=1)
 rect.hclust(hc, k=2, border="red")
 rect.hclust(hc, k=3, border="green")
 par(mfrow = c(1, 1))
