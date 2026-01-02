@@ -178,6 +178,7 @@ for (k in 1:8) {
 plot(1:8, wcss, type="b", pch=19, frame=FALSE,
      xlab="Numero di cluster",
      ylab="WCSS",
+     ylim = c(1, 700),
      main="Metodo del gomito")
 
 # analisi felicità nei cluster
