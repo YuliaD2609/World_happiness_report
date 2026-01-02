@@ -145,11 +145,14 @@ abline(v = z_crit, lwd = 2, lty = 3)
 
 # Legenda
 legend("topright",
+       inset = 0.02,          # più vicina all'angolo
+       cex = 0.75,            # rende la legenda più piccola
+       x.intersp = 0.6,       # spazio orizzontale compatto
+       y.intersp = 0.8,       # spazio verticale compatto
        legend = c("H0", "H1", "Errore di tipo I (α)", "Errore di tipo II (β)"),
        col = c("blue", "red", rgb(0,0,1,0.25), rgb(1,0,0,0.25)),
        lty = c(1, 1, NA, NA),
        lwd = c(2, 1, NA, NA),
        pch = c(NA, NA, 15, 15),
-       pt.cex = 2,
+       pt.cex = 1.3,
        bty = "n")
-
