@@ -310,7 +310,7 @@ plot(media_annuale_gemini$year,
      ylim = range(media_annuale_gemini[, vars_sc]),
      xlab = "Anno",
      ylab = "Valori medi (standardizzati)",
-     main = "Serie temporali delle variabili (2005–2022) chatgpt")
+     main = "Serie temporali delle variabili (2005–2022) gemini")
 
 lines(media_annuale_gemini$year, media_annuale_gemini$log_gdp_per_capita_sc,
       type = "o", pch = 16, col = "blue")
@@ -339,20 +339,178 @@ lines(media_annuale_gemini$year, media_annuale_gemini$perceptions_of_corruption_
 legend("topright",
        inset = c(0.35, 0),
        cex = (1),
-       legend = c("Happiness Score",
-                  "Log GDP",
-                  "Social Support",
-                  "Generosity",
-                  "Positive Affect",
-                  "Negative Affect",
-                  "Freedom of Choice",
-                  "Healthy Life Expectancy",
-                  "Perception of Corruption"),
+       legend = c("Punteggio della Felicità",
+                  "PIL pro capite",
+                  "Supporto sociale",
+                  "Generosità",
+                  "Emozioni positive",
+                  "Emnozioni negative",
+                  "Libertà di scelta nella vita",
+                  "Aspettativa di vita sana",
+                  "Percezione della corruzione"),
        col = c("darkgreen", "blue", "orange", "purple",
                "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
-       pch = c(16, 17, 15, 18, 16, 16, 17, 15, 18),
+       pch = c(16, 16, 16, 16, 16, 16, 16, 16, 16),
        lty = 1,
        lwd = 2,
        bty = "n")
+
+
+
+# Frequenza assoluta
+freq_ass_gemini <- table(cut(df_gen_gemini$happiness_score, breaks = 40, right = FALSE))
+cat("Frequenza assoluta: ", freq_ass_gemini)
+# Frequenza relativa
+freq_rel_gemini <- prop.table(freq_ass_gemini)
+cat("Frequenza relativa: ", freq_rel_gemini)
+# Frequenza relativa cumulata
+freq_rel_cum_gemini <- cumsum(freq_rel_gemini)
+cat("Frequenza relativa cumulata: ", freq_rel_cum_gemini)
+
+# Minimo, media, mediana, quantili
+summary(df_gen_gemini$happiness_score)
+
+par(mgp = c(4, 0, -1))
+
+barplot(freq_ass_gemini,
+        main = "Distribuzione di frequenza assoluta del punteggio di felicità gemini",
+        xlab = "Classi di felicità",
+        ylab = "Frequenza assoluta",
+        las = 2,
+        ylim = c(-10,250),
+        col = "#56B117")
+
+barplot(freq_rel_gemini,
+        main = "Distribuzione di frequenza relativa del punteggio di felicità gemini",
+        xlab = "Classi di felicità",
+        ylab = "Frequenza relativa",
+        las = 2,
+        col = "#56B117")
+
+par(mgp = c(3, 0.5, 0))
+
+plot(freq_rel_cum_gemini,
+     type = "b",
+     pch = 19,
+     col = "#238B45",
+     xaxt = "n",
+     xlab = "Classi di felicità",
+     ylab = "Frequenza relativa cumulata",
+     main = "Funzione di distribuzione empirica continua della Felicità gemini")
+
+
+
+axis(1, at = 1:length(freq_rel_cum_gemini), labels = names(freq_rel_cum_gemini), las = 2, cex.axis = 0.6)
+
+
+# Istogramma
+hist_data_gemini <- hist(df_gen_gemini$happiness_score,
+                          breaks = 40,                         
+                          col = "#56B117",                     
+                          border = "white",                    
+                          main = "Distribuzione della variabile Happiness Score gemini",
+                          xlab = "Punteggio di felicità",
+                          ylab = "Frequenza",
+                          cex.main = 1.3,
+                          cex.lab = 1,
+                          cex.axis = 0.9)
+
+# Aggiunta curva 
+dens_gemini <- density(df_gen_gemini$happiness_score)
+scale_factor_gemini <- max(hist_data_gemini$counts) / max(dens_gemini$y)     
+
+lines(dens_gemini$x, dens_gemini$y * scale_factor_gemini, 
+      col = "red", 
+      lwd = 2)
+
+legend("topright",
+       legend = c("Istogramma", "Densità"),
+       fill = c("#56B117", NA),
+       border = c("white", NA),
+       lty = c(NA, 1),
+       col = c("black", "red"),
+       bty = "n",
+       cex = 0.9)
+
+
+# Kernel density plot
+
+dens_gemini <- density(df_gen_gemini$happiness_score)
+
+plot(dens_gemini,
+     main = "Stima kernel density plot di felicità gemini",
+     xlab = "Felicità",
+     ylab = "Densità",
+     lwd = 2,
+     col = "#238B45")
+
+polygon(dens_gemini,
+        col = rgb(35/255, 139/255, 69/255, 0.3),
+        border = "#238B45")
+
+
+
+
+
+library(dplyr)
+library(leaflet)
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(sf)
+library(tmap)
+
+# Calcolo media felicità per paese
+
+
+library(dplyr)
+
+happiness_mean_gemini <- df_gen_gemini %>%
+  mutate(country = case_when(
+    country == "Bosnia and Herzegovina" ~ "Bosnia and Herz.",
+    country == "Central African Republic" ~ "Central African Rep.",
+    country == "Congo (Brazzaville)" ~ "Congo",
+    country == "Congo (Kinshasa)" ~ "Dem. Rep. Congo",
+    country == "Dominican Republic" ~ "Dominican Rep.",
+    country == "Eswatini" ~ "eSwatini",
+    country == "Hong Kong S.A.R. of China" ~ "Hong Kong",
+    country == "Ivory Coast" ~ "Côte d'Ivoire",
+    country == "State of Palestine" ~ "Palestine",
+    country == "Taiwan Province of China" ~ "Taiwan",
+    country == "Turkiye" ~ "Turkey",
+    country == "United States" ~ "United States of America",
+    TRUE ~ country
+  ))
+
+happiness_mean_gemini <- happiness_mean_gemini %>%
+  group_by(country) %>%
+  summarise(mean_happiness = mean(happiness_score, na.rm = TRUE))
+
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+
+# Join tra la geometria e la media calcolata
+world_happiness_gemini <- world %>%
+  left_join(happiness_mean_gemini, by = c("name" = "country"))
+
+setdiff(happiness_mean_gemini$country, world$name)
+
+# Mappa statica
+tmap_mode("plot") 
+map_static_gemini <- tm_shape(world_happiness_gemini) +
+  tm_polygons(
+    col = "mean_happiness",
+    palette = "YlGnBu",
+    title = "Media Felicità",
+    colorNA = "lightgray",
+    textNA = "Nessun dato"
+  ) +
+  tm_layout(
+    legend.title.size = 0.7,
+    legend.text.size = 0.55,
+    frame = FALSE,
+    legend.position = c("left", "center")
+  )
+
+map_static_gemini 
 
 
