@@ -155,3 +155,44 @@ plot(scores[,1], scores[,2],
      xlab="PC1", ylab="PC2",
      main="Clusters")
 
+
+
+extract_clusters <- function(hc, step) {
+  cutree(hc, k = nrow(hc$merge) + 1 - step)
+}
+n <- length(hc$labels)
+
+results <- data.frame(
+  n_cluster = integer(),
+  clusters = character(),
+  height = numeric(),
+  stringsAsFactors = FALSE
+)
+
+for (i in 0:(n - 1)) {
+  
+  k <- n - i
+  
+  cl <- cutree(hc, k = k)
+  
+  # Costruzione rappresentazione testuale dei cluster
+  cluster_list <- split(names(cl), cl)
+  cluster_str <- paste(
+    sapply(cluster_list, function(x) {
+      paste0("{", paste(x, collapse = ", "), "}")
+    }),
+    collapse = ", "
+  )
+  
+  h <- if (k == n) 0 else hc$height[n - k]
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n_cluster = k,
+      clusters = cluster_str,
+      height = round(h, 4)
+    )
+  )
+}
+results
