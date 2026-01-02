@@ -22,20 +22,27 @@ var_labels <- c(
   negative_affect = "Emozioni negative"
 )
 
-par(mfrow = c(2, 4))
+par(
+  mfrow = c(2, 4),
+  mar = c(5.1, 4.1, 2.5, 2.1),
+  oma = c(0, 0, 3, 0)       
+)
 
 for (var in vars) {
   
   df_plot <- df[!is.na(df[[var]]) & !is.na(df$happiness_score), ]
   
-  plot(df_plot[[var]],
-       df_plot$happiness_score,
-       main = paste("Relazione tra", var_labels[var], "e punteggio di felicità"),
-       xlab = var_labels[var],
-       ylab = "Punteggio di felicità",
-       col = rgb(27/255, 158/255, 119/255, 0.4),
-       pch = 16,
-       cex = 0.5)
+  plot(
+    df_plot[[var]],
+    df_plot$happiness_score,
+    xlab = var_labels[var],
+    ylab = "Punteggio di felicità",
+    col = rgb(27/255, 158/255, 119/255, 0.4),
+    pch = 16,
+    cex = 0.5,
+    cex.lab = 1.5,   # aumenta dimensione delle label degli assi
+    cex.axis = 1 
+  )
   
   lm_model <- lm(as.formula(paste("happiness_score ~", var)), data = df_plot)
   abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
@@ -51,6 +58,18 @@ for (var in vars) {
   cat("Correlazione (Pearson):", round(cor_val, 3), "\n")
   print(summary(lm_model))
 }
+
+# Titolo unico globale
+mtext(
+  "Relazione tra variabili e punteggio di felicità",
+  outer = TRUE,
+  side = 3,
+  line = 1,
+  cex = 1.3,
+  font = 2
+)
+
+
 
 par(mfrow = c(2, 4))
 

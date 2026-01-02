@@ -52,6 +52,6 @@ par(mfrow = c(1, 1))
 
 
 # Matrice di scatterplot
-pairs(df[vars], labels = var_labels[vars], cex = 0.1, pch = 16, col="darkgreen",
+pairs(df[vars], labels = var_labels[vars], cex = 0.1, pch = 1, col="darkgreen",
       main = "Scatterplot matrix delle variabili")
 
