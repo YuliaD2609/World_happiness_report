@@ -80,6 +80,20 @@ round(pca$rotation, 3)
 # Screeplot
 plot(pca, type = "l",  main="Screeplot PCA")
 
+
+# Matrice di correlazione
+cat("Matrice di correlazione: ")
+mat_cor <- cor(X_scaled)
+colnames(mat_cor) <- var_labels
+rownames(mat_cor) <- var_labels
+round(mat_cor, 3)
+pheatmap(mat_cor,
+         main = "Matrice di correlazione",
+         fontsize = 7,
+         angle_col = 45,
+         display_numbers = TRUE,
+         number_format = "%.2f")
+
 # Si prendono in considerazione i primi
 scores <- pca$x[,c(1,3)]
 # Matrice delle distanze
