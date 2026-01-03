@@ -141,6 +141,16 @@ plot(hc, main="Dendrogramma",
 rect.hclust(hc, k=3, border="green")
 par(mfrow = c(1, 1))
 
+plot( c(0, hc$height),
+  seq(8,1),
+  type = "b",          # linee + punti
+  col = "red",         # linea rossa
+  pch = 1,             # pallini vuoti
+  xlab = "Distanza di aggregazione",
+  ylab = "Numero di cluster",
+  main = "Screeplot"
+)
+
 # Dendrogramma
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=1)
