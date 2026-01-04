@@ -80,6 +80,20 @@ round(pca$rotation, 3)
 # Screeplot
 plot(pca, type = "l",  main="Screeplot PCA")
 
+
+# Matrice di correlazione
+cat("Matrice di correlazione: ")
+mat_cor <- cor(X_scaled)
+colnames(mat_cor) <- var_labels
+rownames(mat_cor) <- var_labels
+round(mat_cor, 3)
+pheatmap(mat_cor,
+         main = "Matrice di correlazione",
+         fontsize = 7,
+         angle_col = 45,
+         display_numbers = TRUE,
+         number_format = "%.2f")
+
 # Si prendono in considerazione i primi
 scores <- pca$x[,c(1,3)]
 # Matrice delle distanze
@@ -122,12 +136,24 @@ par(mfrow = c(1, 2))
 plot(hc, main="Dendrogramma",
      xlab="Variabili", ylab="Distanza", cex=1)
 rect.hclust(hc, k=2, border="red")
+plot(hc, main="Dendrogramma",
+     xlab="Variabili", ylab="Distanza", cex=1)
 rect.hclust(hc, k=3, border="green")
 par(mfrow = c(1, 1))
 
+plot( c(0, hc$height),
+  seq(8,1),
+  type = "b",          # linee + punti
+  col = "red",         # linea rossa
+  pch = 1,             # pallini vuoti
+  xlab = "Distanza di aggregazione",
+  ylab = "Numero di cluster",
+  main = "Screeplot"
+)
+
 # Dendrogramma
 plot(hc, main="Dendrogramma",
-     xlab="Variabili", ylab="Distanza", cex=0.6)
+     xlab="Variabili", ylab="Distanza", cex=1)
 
 # Metodo della silhouette
 library(cluster)
@@ -155,3 +181,44 @@ plot(scores[,1], scores[,2],
      xlab="PC1", ylab="PC2",
      main="Clusters")
 
+
+
+extract_clusters <- function(hc, step) {
+  cutree(hc, k = nrow(hc$merge) + 1 - step)
+}
+n <- length(hc$labels)
+
+results <- data.frame(
+  n_cluster = integer(),
+  clusters = character(),
+  height = numeric(),
+  stringsAsFactors = FALSE
+)
+
+for (i in 0:(n - 1)) {
+  
+  k <- n - i
+  
+  cl <- cutree(hc, k = k)
+  
+  # Costruzione rappresentazione testuale dei cluster
+  cluster_list <- split(names(cl), cl)
+  cluster_str <- paste(
+    sapply(cluster_list, function(x) {
+      paste0("{", paste(x, collapse = ", "), "}")
+    }),
+    collapse = ", "
+  )
+  
+  h <- if (k == n) 0 else hc$height[n - k]
+  
+  results <- rbind(
+    results,
+    data.frame(
+      n_cluster = k,
+      clusters = cluster_str,
+      height = round(h, 4)
+    )
+  )
+}
+results
