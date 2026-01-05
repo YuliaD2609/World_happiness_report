@@ -124,8 +124,8 @@ pheatmap(mat_cov,
          number_format = "%.2f")
 
 # matrice di non omogeneità
-non_omogeneity <- apply(X_scaled, 1, var)
-summary(non_omogeneity)
+#non_omogeneity <- apply(X_scaled, 1, var)
+#summary(non_omogeneity)
 
 # clustering gerarchico
 hc <- hclust(dist_euclidea, method="complete")
