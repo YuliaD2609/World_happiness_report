@@ -15,7 +15,7 @@ all_sc <- c("log_gdp_per_capita_sc",
 vars_sc <- c("log_gdp_per_capita_sc",
              "social_support_sc",
              "positive_affect_sc",
-             "negative_affect_sc",
+             #"negative_affect_sc",
              "healthy_life_expectancy_at_birth_sc",
              "freedom_to_make_life_choices_sc",
              #"generosity_sc",
@@ -182,13 +182,13 @@ ch <- (bcss / (k - 1)) / (wcss / (n - k))
 ch
 
 wcss <- numeric()
-for (k in 1:8) {
+for (k in 1:7) {
   km <- kmeans(scores, centers = k, nstart = 25)
   wcss[k] <- km$tot.withinss
 }
 
 # Elbow method
-plot(1:8, wcss, type="b", pch=19, frame=FALSE,
+plot(1:7, wcss, type="b", pch=19, frame=FALSE,
      xlab="Numero di cluster",
      ylab="WCSS",
      ylim = c(1, 700),
@@ -208,6 +208,6 @@ barplot(happiness_cluster$mean_happiness,
         ylab = "Livello di felicità medio",
         xlab = "Cluster",
         main = "Confronto del livello medio di felicità tra cluster",
-        ylim = range(c(-0.5, 1.5)))
+        ylim = range(c(-1, 1)))
 abline(h = 0, lty = 1, lwd = 2)
 

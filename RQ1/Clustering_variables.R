@@ -154,7 +154,7 @@ plot(hc, main="Dendrogramma",
 # Metodo della silhouette
 library(cluster)
 sil_width <- numeric()
-for (k in 2:8) {
+for (k in 2:7) {
   km <- kmeans(scores, centers = k, nstart = 25)
   sil <- silhouette(km$cluster, dist(scores))
   sil_width[k] <- mean(sil[, 3])
@@ -162,7 +162,7 @@ for (k in 2:8) {
 
 summary(sil)
 
-plot(2:8, sil_width[2:8], type = "b",
+plot(2:7, sil_width[2:7], type = "b",
      xlab = "Numero di cluster (k)",
      ylab = "Silhouette media",
      main = "Silhouette Method")
