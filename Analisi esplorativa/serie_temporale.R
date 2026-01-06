@@ -92,7 +92,7 @@ legend("topright",
        legend = var_labels,
        col = c("darkgreen", "blue", "orange", "purple",
                "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
-       pch = c(16, 17, 15, 18, 16, 16, 17, 15, 18),
+       pch = c(16, 16, 16, 16, 16, 16, 16, 16, 16),
        lty = 1,
        lwd = 2,
        bty = "n")
