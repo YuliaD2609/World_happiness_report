@@ -93,5 +93,14 @@ abline(h=0, col="black")
 
 confint(model)
 
+residui <- model$residuals
+fitted <- fitted(model)
+plot(fitted(model), residuals(model),
+     xlab = "Valori stimati della felicità",
+     ylab = "Residui",
+     main = "Residui vs Valori stimati (regressione multipla)",
+     pch = 1, col = "#238b45", cex=0.5)
+abline(h = 0, col = "red")
+
 
 
