@@ -18,7 +18,7 @@ vars_sc <- c("log_gdp_per_capita_sc",
              "negative_affect_sc",
              "healthy_life_expectancy_at_birth_sc",
              "freedom_to_make_life_choices_sc",
-             "generosity_sc",
+             #"generosity_sc",
              "perceptions_of_corruption_sc"
 )
 
@@ -29,7 +29,7 @@ var_labels <- c(
   negative_affect_sc = "Emozioni negative",
   healthy_life_expectancy_at_birth_sc = "Aspettativa di vita sana",
   freedom_to_make_life_choices_sc = "Libertà di scelta nella vita",
-  generosity_sc = "Generosità",
+  #generosity_sc = "Generosità",
   perceptions_of_corruption_sc = "Percezione della corruzione"
 )
 
