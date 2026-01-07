@@ -22,6 +22,13 @@ var_labels <- c(
 par(mfrow = c(2, 2),
     mar = c(4, 4, 2.5, 1))  
 
+results_coef <- data.frame(
+  Variabile = character(),
+  Intercetta = numeric(),
+  Coefficiente = numeric(),
+  stringsAsFactors = FALSE
+)
+
 for (var in vars) {
   
   lab <- var_labels[var]
@@ -46,10 +53,21 @@ for (var in vars) {
   abline(lm_model, col = "#00441b", lwd = 2, lty = 2)
   
   grid(col = "gray80", lty = "dotted")
+  
+  results_coef <- rbind(
+    results_coef,
+    data.frame(
+      Variabile = lab,
+      Intercetta = coef(lm_model)[1],
+      Coefficiente = coef(lm_model)[2]
+    )
+  )
+  
 }
 
 par(mfrow = c(1, 1))
 
+results_coef
 
 # Matrice di scatterplot
 pairs(df[vars], labels = var_labels[vars], cex = 0.1, pch = 1, col="darkgreen",
