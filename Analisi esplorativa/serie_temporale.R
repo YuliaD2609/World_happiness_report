@@ -1,6 +1,7 @@
 df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
 var_labels <- c(
+  haappiness_score_sc= "Felicità",
   log_gdp_per_capita_sc = "PIL pro capite",
   social_support_sc = "Supporto sociale",
   positive_affect_sc = "Emozioni positive",
@@ -78,7 +79,7 @@ lines(media_annuale$year, media_annuale$negative_affect_sc,
       type = "o", pch = 16, col = "brown")
 
 lines(media_annuale$year, media_annuale$freedom_to_make_life_choices_sc,
-      type = "o", pch = 16, col = "darkolivegreen")
+      type = "o", pch = 16, col = "pink")
 
 lines(media_annuale$year, media_annuale$healthy_life_expectancy_at_birth_sc,
       type = "o", pch = 16, col = "darkcyan")
@@ -90,10 +91,10 @@ legend("topright",
        inset = c(0.35, 0),
        cex = (1),
        legend = var_labels,
-       col = c("darkgreen", "blue", "orange", "purple",
-               "red", "brown", "darkolivegreen", "darkcyan", "grey40"),
+       col = c("darkgreen","blue","orange","red","brown","darkcyan","pink","purple","gray40"),
        pch = c(16, 16, 16, 16, 16, 16, 16, 16, 16),
        lty = 1,
        lwd = 2,
        bty = "n")
+
 
