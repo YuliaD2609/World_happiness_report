@@ -1,14 +1,14 @@
-df <- read.csv(file.choose(), header = TRUE, sep = ",")
+#df <- read.csv(file.choose(), header = TRUE, sep = ",")
 
-Allvars <- c("log_gdp_per_capita",
-          "social_support",
-          "healthy_life_expectancy_at_birth",
-          "freedom_to_make_life_choices",
-          "generosity",
-          "perceptions_of_corruption",
-          "positive_affect",
-          "negative_affect",
-          "happiness_score")
+Allvars <- c("log_gdp_per_capita_sc",
+             "social_support_sc",
+             "positive_affect_sc",
+             "negative_affect_sc",
+             "healthy_life_expectancy_at_birth_sc",
+             "freedom_to_make_life_choices_sc",
+             "generosity_sc",
+             "perceptions_of_corruption_sc",
+             "happiness_score_sc")
 
 df_country <- aggregate(df[, Allvars],
                         by = list(country = df$country),
@@ -71,14 +71,14 @@ legend("topright",
        bty = "n")
 
 
-vars <- c("log_gdp_per_capita",
-          "social_support",
-          "healthy_life_expectancy_at_birth",
-          "freedom_to_make_life_choices",
-          "generosity",
-          "perceptions_of_corruption",
-          "positive_affect",
-          "negative_affect")
+vars <- c("log_gdp_per_capita_sc",
+          "social_support_sc",
+          "positive_affect_sc",
+          "negative_affect_sc",
+          "healthy_life_expectancy_at_birth_sc",
+          "freedom_to_make_life_choices_sc",
+          "generosity_sc",
+          "perceptions_of_corruption_sc")
 
 results <- list()
 
@@ -86,9 +86,9 @@ for (v in vars) {
   
   cat("\n Variabile:", v, "\n")
   
-  df_tmp <- df_country_cc[, c(v, "happiness_score")]
+  df_tmp <- df_country_cc[, c(v, "happiness_score_sc")]
   
-  model <- lm(happiness_score ~ df_tmp[[v]], data = df_tmp)
+  model <- lm(happiness_score_sc ~ df_tmp[[v]], data = df_tmp)
   summ <- summary(model)
   
   beta_hat <- summ$coefficients[2, 1]
