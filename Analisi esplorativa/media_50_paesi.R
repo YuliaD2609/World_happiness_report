@@ -37,7 +37,7 @@ bar_positions <- barplot(top50$mean,
               las = 2,
               col = cols,
               ylim = c(0, 9),
-              main = expression(bold("Top 50 Paesi per Felicità Media (2005–2023)")),
+              main = expression(bold("Top 50 Paesi per Felicità Media")),
               ylab = "Felicità",
               cex.names = 0.8,
               )
@@ -68,7 +68,7 @@ bar_positions <- barplot(bottom50$mean,
                          las = 2,
                          col = cols,
                          ylim = c(0, 9),
-                         main = expression(bold("Bottom 50 Paesi per Felicità Media (2005–2023)")),
+                         main = expression(bold("Bottom 50 Paesi per Felicità Media")),
                          ylab = "Felicità",
                          cex.names = 0.8)
 
